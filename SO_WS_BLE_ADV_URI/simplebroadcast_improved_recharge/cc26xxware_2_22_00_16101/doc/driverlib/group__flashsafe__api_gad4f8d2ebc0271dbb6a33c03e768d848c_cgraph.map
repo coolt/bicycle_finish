@@ -1,0 +1,9 @@
+<map id="FlashsafeIntUnregister" name="FlashsafeIntUnregister">
+<area shape="rect" id="node2" href="$group__flashsafe__api.html#ga3b400f672752b8ba1798bb2ce313fe82" title="Aquire the flash semaphore. " alt="" coords="219,5,404,32"/>
+<area shape="rect" id="node4" href="$group__interrupt__api.html#ga9af6b00884dc44e92b3d05ff821b5334" title="Disables an interrupt. " alt="" coords="269,56,354,83"/>
+<area shape="rect" id="node5" href="$group__interrupt__api.html#ga5dffc81c27c005f83e9bfc30f775982a" title="Unregisters the function to be called when an interrupt occurs. " alt="" coords="259,107,364,133"/>
+<area shape="rect" id="node7" href="$group__flashsafe__api.html#ga7a07e537eb0207e4004bbf79f7874be5" title="Release the flash semaphore. " alt="" coords="227,157,396,184"/>
+<area shape="rect" id="node3" href="$group__mcusemaphore__api.html#gad93496e0580b9983fcff65f31778632f" title="Try to Acquire a semaphore. " alt="" coords="457,5,582,32"/>
+<area shape="rect" id="node6" href="$interrupt_8c.html#ac62d95950fb9f007b01e80b27290ee43" title="The default interrupt handler. " alt="" coords="452,107,587,133"/>
+<area shape="rect" id="node8" href="$group__mcusemaphore__api.html#gaed11d8e4592fbbf77b090d970371f1d3" title="Release a semaphore. " alt="" coords="465,157,574,184"/>
+</map>

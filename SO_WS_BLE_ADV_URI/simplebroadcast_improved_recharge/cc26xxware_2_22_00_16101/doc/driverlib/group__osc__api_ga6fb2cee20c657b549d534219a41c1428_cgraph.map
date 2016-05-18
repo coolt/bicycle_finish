@@ -1,0 +1,6 @@
+<map id="OSCInterfaceEnable" name="OSCInterfaceEnable">
+<area shape="rect" id="node2" href="$group__aonwuc__api.html#gaf0a713d626998a6f5ad49f654421e238" title="Control the wake up procedure of the AUX domain. " alt="" coords="203,5,393,32"/>
+<area shape="rect" id="node3" href="$group__aonwuc__api.html#gaee3e5c44fddebab2d6168331c3dd47a4" title="Get the power status of the device. " alt="" coords="206,56,390,83"/>
+<area shape="rect" id="node4" href="$group__auxwuc__api.html#ga8be983bd28860e59b88ddad4c5933885" title="Enable clocks for peripherals in the AUX domain. " alt="" coords="220,107,376,133"/>
+<area shape="rect" id="node5" href="$group__auxwuc__api.html#ga511ec7aac98504fc449b788d67d438c9" title="Get the status of a clock. " alt="" coords="221,157,375,184"/>
+</map>

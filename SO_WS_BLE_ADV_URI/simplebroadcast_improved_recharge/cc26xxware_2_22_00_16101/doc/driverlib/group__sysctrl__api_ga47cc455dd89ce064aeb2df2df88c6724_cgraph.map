@@ -1,0 +1,37 @@
+<map id="SysCtrlPowerdown" name="SysCtrlPowerdown">
+<area shape="rect" id="node2" href="$group__osc__api.html#ga6fb2cee20c657b549d534219a41c1428" title="Enable System CPU access to the OSC_DIG module. " alt="" coords="194,157,343,184"/>
+<area shape="rect" id="node7" href="$group__osc__api.html#ga37a02687fbd8680396550f682a7f046f" title="Configure the oscillator input to the a source clock. " alt="" coords="193,715,344,741"/>
+<area shape="rect" id="node12" href="$group__osc__api.html#ga279bd3a34548bd4c5e2fc6939f7be228" title="Get the source clock settings. " alt="" coords="193,664,345,691"/>
+<area shape="rect" id="node15" href="$group__osc__api.html#gac21e7c4532672c8fa7b90e493359ddc2" title="Switch the high frequency clock. " alt="" coords="193,765,344,792"/>
+<area shape="rect" id="node16" href="$group__osc__api.html#ga16a6436817d18fdeef1fa514bb805047" title="Disable System CPU access to the OSC_DIG module. " alt="" coords="192,56,345,83"/>
+<area shape="rect" id="node18" href="$group__pwrctrl__api.html#ga71fb4e997668bd11df9f3781da48c7cd" title="Force the system into low power modes. " alt="" coords="199,613,338,640"/>
+<area shape="rect" id="node3" href="$group__aonwuc__api.html#gaf0a713d626998a6f5ad49f654421e238" title="Control the wake up procedure of the AUX domain. " alt="" coords="421,56,612,83"/>
+<area shape="rect" id="node4" href="$group__aonwuc__api.html#gaee3e5c44fddebab2d6168331c3dd47a4" title="Get the power status of the device. " alt="" coords="425,208,609,235"/>
+<area shape="rect" id="node5" href="$group__auxwuc__api.html#ga8be983bd28860e59b88ddad4c5933885" title="Enable clocks for peripherals in the AUX domain. " alt="" coords="439,157,595,184"/>
+<area shape="rect" id="node6" href="$group__auxwuc__api.html#ga511ec7aac98504fc449b788d67d438c9" title="Get the status of a clock. " alt="" coords="439,107,594,133"/>
+<area shape="rect" id="node8" href="$group__ddi__api.html#ga492326c095c70621a247fe02a2cb09e4" title="Write a bitfield via the DDI using 16&#45;bit maskable write. " alt="" coords="449,1120,584,1147"/>
+<area shape="rect" id="node9" href="$group__ddi__api.html#ga06d6b1eee2c8757b8431eb6e1ab98f68" title="Safely write to AUX ADI/DDI interfaces using a semaphore. " alt="" coords="701,1120,848,1147"/>
+<area shape="rect" id="node10" href="$group__cpu__api.html#ga491d851c4f7fff1f9f66aa778b0671b0" title="Disable all external interrupts. " alt="" coords="909,1069,992,1096"/>
+<area shape="rect" id="node11" href="$group__cpu__api.html#ga6922d401cbc951632f495ffcf2e71dfc" title="Enable all external interrupts. " alt="" coords="909,1120,992,1147"/>
+<area shape="rect" id="node13" href="$group__ddi__api.html#gac86ccf0590b9dbdc88eb1a6c856c78a4" title="Read a bitfield via the DDI using 16&#45;bit read. " alt="" coords="449,1069,584,1096"/>
+<area shape="rect" id="node14" href="$group__ddi__api.html#ga8175a094afd96e5f440a276c4cc7fe44" title="Safely read from AUX ADI/DDI interfaces using a semaphore. " alt="" coords="701,1069,848,1096"/>
+<area shape="rect" id="node17" href="$group__auxwuc__api.html#ga0e3e51e71bb3529c6ab0ef39e89ef8ca" title="Disable clocks for peripherals in the AUX domain. " alt="" coords="437,5,597,32"/>
+<area shape="rect" id="node19" href="$group__prcm__api.html#ga04bc50902d188d77442027c96b971f06" title="Turn off a specific power domain. " alt="" coords="435,512,598,539"/>
+<area shape="rect" id="node20" href="$group__aonwuc__api.html#ga410ff6945e9cdf43d1cf722c05a44724" title="Request power off of the JTAG domain. " alt="" coords="436,563,597,589"/>
+<area shape="rect" id="node21" href="$group__aonwuc__api.html#gae0097cb0eeeaa8a26d102b5c8b790eff" title="Configure the power down clock for the MCU domain. " alt="" coords="407,613,627,640"/>
+<area shape="rect" id="node22" href="$group__aonwuc__api.html#gae98bfd0df765fe4af7629fd84197ac4e" title="Configure the power down mode for the AUX domain. " alt="" coords="407,664,626,691"/>
+<area shape="rect" id="node23" href="$group__aonwuc__api.html#ga9dd0e5ab6619e069f30c4eea845c7670" title="Configure the recharge controller. " alt="" coords="405,715,629,741"/>
+<area shape="rect" id="node24" href="$group__auxwuc__api.html#ga39271f2108f39cf60c48dbab14533f41" title="Control the power to the AUX domain. " alt="" coords="447,765,586,792"/>
+<area shape="rect" id="node25" href="$group__pwrctrl__api.html#gacc02b5de151e646d5c1b640a1e077b4e" title="Set (Request) the main power source. " alt="" coords="442,816,591,843"/>
+<area shape="rect" id="node27" href="$group__prcm__api.html#ga33c5410febc5f2af059a8a88e96b9736" title="Put the processor into deep&#45;sleep mode. " alt="" coords="453,968,580,995"/>
+<area shape="rect" id="node29" href="$group__aonioc__api.html#ga415be9a200650b0c093366100fb25277" title="Freeze the IOs. " alt="" coords="695,892,854,919"/>
+<area shape="rect" id="node30" href="$group__aonwuc__api.html#gaf269ebe0eb94a75a5a0981add462c508" title="Configure the retention on the block RAM in the MCU domain. " alt="" coords="424,1019,609,1045"/>
+<area shape="rect" id="node31" href="$group__prcm__api.html#gab16908f56ddcdc846294fde45aa356c3" title="Request a power off of the MCU voltage domain. " alt="" coords="447,259,586,285"/>
+<area shape="rect" id="node32" href="$group__aonwuc__api.html#ga04ca4980c636bba3a5c3ea0d57cf4392" title="Configure the wake&#45;up procedure for the MCU domain. " alt="" coords="417,309,616,336"/>
+<area shape="rect" id="node33" href="$group__aonwuc__api.html#gafb4927d556809918d4ad619e9b0e3170" title="Configure the power down mode for the MCU domain. " alt="" coords="415,360,618,387"/>
+<area shape="rect" id="node34" href="$group__aonwuc__api.html#ga093ffc0c926206a4148e9b05d2ee6f2f" title="Enable power down mode on AUX and MCU domain. " alt="" coords="393,411,640,437"/>
+<area shape="rect" id="node35" href="$group__pwrctrl__api.html#ga98eb6231075838978da0c86de58ea204" title="Close the latches in the AON IOC interface and in padring. " alt="" coords="427,867,607,893"/>
+<area shape="rect" id="node36" href="$group__aonwuc__api.html#ga25dbb6ecc9be2c29442cb0e0e231dd4b" title="Enable shut&#45;down of the device. " alt="" coords="422,461,611,488"/>
+<area shape="rect" id="node26" href="$group__prcm__api.html#ga78e14cb1fe91b590efa50701c67a02c5" title="Assert or de&#45;assert a request for the uLDO. " alt="" coords="688,816,861,843"/>
+<area shape="rect" id="node28" href="$group__cpu__api.html#ga28849d778ab8d1eb9dd29ad07fc7c845" title="Wait for interrupt. " alt="" coords="742,968,807,995"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="FlashsafeIntDisable" name="FlashsafeIntDisable">
+<area shape="rect" id="node2" href="$group__flashsafe__api.html#ga3b400f672752b8ba1798bb2ce313fe82" title="Aquire the flash semaphore. " alt="" coords="199,5,384,32"/>
+<area shape="rect" id="node4" href="$group__flashsafe__api.html#ga7a07e537eb0207e4004bbf79f7874be5" title="Release the flash semaphore. " alt="" coords="207,56,376,83"/>
+<area shape="rect" id="node3" href="$group__mcusemaphore__api.html#gad93496e0580b9983fcff65f31778632f" title="Try to Acquire a semaphore. " alt="" coords="432,5,557,32"/>
+<area shape="rect" id="node5" href="$group__mcusemaphore__api.html#gaed11d8e4592fbbf77b090d970371f1d3" title="Release a semaphore. " alt="" coords="440,56,549,83"/>
+</map>

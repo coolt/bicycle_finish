@@ -1,0 +1,8 @@
+<map id="FlashsafeDisableSectorsForWrite" name="FlashsafeDisableSectorsForWrite">
+<area shape="rect" id="node2" href="$group__flashsafe__api.html#ga3b400f672752b8ba1798bb2ce313fe82" title="Aquire the flash semaphore. " alt="" coords="261,5,446,32"/>
+<area shape="rect" id="node4" href="$group__flash__api.html#ga09fccd53e3a5c8eb359618faa2c837cf" title="Disables all sectors for erase and programming on the active bank. " alt="" coords="252,56,455,83"/>
+<area shape="rect" id="node6" href="$group__flashsafe__api.html#ga7a07e537eb0207e4004bbf79f7874be5" title="Release the flash semaphore. " alt="" coords="269,107,438,133"/>
+<area shape="rect" id="node3" href="$group__mcusemaphore__api.html#gad93496e0580b9983fcff65f31778632f" title="Try to Acquire a semaphore. " alt="" coords="503,5,628,32"/>
+<area shape="rect" id="node5" href="$flash_8c.html#a9421b0f12637bc3822b45e5f662d59b4" title="SetReadMode" alt="" coords="510,56,621,83"/>
+<area shape="rect" id="node7" href="$group__mcusemaphore__api.html#gaed11d8e4592fbbf77b090d970371f1d3" title="Release a semaphore. " alt="" coords="511,107,620,133"/>
+</map>

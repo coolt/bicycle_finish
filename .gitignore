@@ -6,7 +6,7 @@ composer.phar
 # composer.lock
 *.lock
 Dario_wake_up/.metadata/.log
-*.xml
+
 Dario_wake_up/.metadata/.plugins/org.eclipse.cdt.core/.log
 *.index
 Dario_wake_up/.metadata/.plugins/org.eclipse.core.resources/.projects/simplebroadcast_improved_recharge/com.ti.ccstudio.project.core/Debug/linkerFlags.txt
@@ -18,8 +18,21 @@ Dario_wake_up/.metadata/.plugins/org.eclipse.rse.core/.log
 *.obj
 *.d
 Dario_wake_up/simplebroadcast_improved_recharge/Debug/cc26xxware_2_22_00_16101/driverLib/bin/ccs/subdir_rules.mk
-*.mk
+
 *.opt
 *.out
 Dario_wake_up/simplebroadcast_improved_recharge/Debug/makefile
 *.xmi
+SO_WS_BLE_ADV_URI/.metadata/.plugins/org.eclipse.core.resources/.history/0/60211055ce1c00161f89b84534f8389a
+SO_WS_BLE_ADV_URI/.metadata/.plugins/org.eclipse.core.resources/.history/1/00b49254ce1c00161f89b84534f8389a
+SO_WS_BLE_ADV_URI/.metadata/.plugins/org.eclipse.core.resources/.history/10/201bf754ce1c00161f89b84534f8389a
+SO_WS_BLE_ADV_URI/.metadata/.plugins/org.eclipse.core.resources/.history/**
+
+SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/Debug
+*.xml
+*.snap
+*.version
+
+SO_WS_BLE_ADV_URI/.metadata/.plugins/**
+SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/.launches/**
+SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/.settings/**

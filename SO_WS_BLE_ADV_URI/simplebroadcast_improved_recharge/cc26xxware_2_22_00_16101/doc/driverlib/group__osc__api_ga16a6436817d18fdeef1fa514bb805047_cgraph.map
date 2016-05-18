@@ -1,0 +1,4 @@
+<map id="OSCInterfaceDisable" name="OSCInterfaceDisable">
+<area shape="rect" id="node2" href="$group__auxwuc__api.html#ga0e3e51e71bb3529c6ab0ef39e89ef8ca" title="Disable clocks for peripherals in the AUX domain. " alt="" coords="222,5,382,32"/>
+<area shape="rect" id="node3" href="$group__aonwuc__api.html#gaf0a713d626998a6f5ad49f654421e238" title="Control the wake up procedure of the AUX domain. " alt="" coords="207,56,397,83"/>
+</map>

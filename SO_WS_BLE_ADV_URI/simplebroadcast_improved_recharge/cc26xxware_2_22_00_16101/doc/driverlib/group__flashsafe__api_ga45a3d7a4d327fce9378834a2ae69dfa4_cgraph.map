@@ -1,0 +1,13 @@
+<map id="FlashsafeProtectionSave" name="FlashsafeProtectionSave">
+<area shape="rect" id="node2" href="$group__flashsafe__api.html#gaff881276fa19eee486e9dd28ed9c97e5" title="Get the size of the flash. " alt="" coords="471,96,603,122"/>
+<area shape="rect" id="node5" href="$group__flashsafe__api.html#gadbb7e7d05ab2c557684324b2aac7f140" title="Get size of a flash sector in no of bytes. " alt="" coords="656,70,831,97"/>
+<area shape="rect" id="node6" href="$group__flashsafe__api.html#ga3b400f672752b8ba1798bb2ce313fe82" title="Aquire the flash semaphore. " alt="" coords="232,45,417,72"/>
+<area shape="rect" id="node8" href="$group__flash__api.html#gae6ceb528432984b641ee26078e088675" title="Save sector protection to make it permanent. " alt="" coords="249,197,401,224"/>
+<area shape="rect" id="node11" href="$group__flashsafe__api.html#ga7a07e537eb0207e4004bbf79f7874be5" title="Release the flash semaphore. " alt="" coords="240,298,409,325"/>
+<area shape="rect" id="node3" href="$group__flash__api.html#ga47a87d4753facd8d55e0d0e542e5d518" title="Get the size of the flash. " alt="" coords="691,197,796,224"/>
+<area shape="rect" id="node4" href="$group__flash__api.html#gaa1d1b6c1345a8c66a505cd7321b8588c" title="Get size of a flash sector in number of bytes. " alt="" coords="879,222,1025,249"/>
+<area shape="rect" id="node7" href="$group__mcusemaphore__api.html#gad93496e0580b9983fcff65f31778632f" title="Try to Acquire a semaphore. " alt="" coords="474,45,599,72"/>
+<area shape="rect" id="node9" href="$group__flash__api.html#gaca0d39806f2d9bec6a341712d242647d" title="Get sector protection. " alt="" coords="465,248,608,274"/>
+<area shape="rect" id="node10" href="$group__flash__api.html#ga0d891d79df6dbba0288b15a8c30c1331" title="Programs unprotected main bank flash sectors. " alt="" coords="481,197,592,224"/>
+<area shape="rect" id="node12" href="$group__mcusemaphore__api.html#gaed11d8e4592fbbf77b090d970371f1d3" title="Release a semaphore. " alt="" coords="482,349,591,376"/>
+</map>
