@@ -110,7 +110,7 @@ void GPIOIntHandler(void){
 
 	static uint32_t value_1 = 0, value_2 = 0, timediff = 0;
 	value_1 = value_2;
-	value_2 = AONRTCCurrentCompareValueGet();  // once: when used: Power on problem Z. 284 !!
+	// value_2 = AONRTCCurrentCompareValueGet();  // once: when used: Power on problem Z. 284 !!
 	timediff = value_2 - value_1;
 
 	/* Clear the interrupt flags */
