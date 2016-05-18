@@ -46,6 +46,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 /*---------------------------------------------------------------------------*/
+
+bool accessible(void);
+
 /**
  * \brief Initialize the SPI interface
  * \param bit_rate The bit rate to use

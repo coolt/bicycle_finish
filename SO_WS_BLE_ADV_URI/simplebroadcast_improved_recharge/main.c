@@ -92,21 +92,31 @@ extern volatile bool rfAdvertisingDone;
 void GPIOIntHandler(void){
 	uint32_t pin_mask;
 
+	IntDisable(INT_EDGE_DETECT);
+
 	powerEnablePeriph();
 	powerEnableGPIOClockRunMode();
 
 	/* Wait for domains to power on */
 	while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
-	IntDisable(INT_EDGE_DETECT);
+
 
 	/* Read interrupt flags */
 	pin_mask = (HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK);
 
+	// *** Handler
+	//if(pin_mask == GPIO_DOUT31_0_DIO25 )
+
+	static uint32_t value_1 = 0, value_2 = 0, timediff = 0;
+	value_1 = value_2;
+	value_2 = AONRTCCurrentCompareValueGet();  // once: when used: Power on problem Z. 284 !!
+	timediff = value_2 - value_1;
+
 	/* Clear the interrupt flags */
 	HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) = pin_mask;
 
-
+	//IntEnable(INT_EDGE_DETECT);
 
 	powerDisablePeriph();
 	// Disable clock for GPIO in CPU run mode
@@ -179,7 +189,6 @@ int main(void) {
   powerEnableRFC();
 
   powerEnableXtalInterface();
-  //powerConfigureRecharge(); --> Optimized version later in this code (brts)
   
   // Divide INF clk to save Idle mode power (increases interrupt latency)
   powerDivideInfClkDS(PRCM_INFRCLKDIVDS_RATIO_DIV32);
@@ -273,8 +282,7 @@ int main(void) {
 
     powerEnablePeriph();
     powerEnableGPIOClockRunMode();
-
-     /* Wait for domains to power on */
+     /* Wait for domains to power on */  // CRASH HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
      sensorsInit();
@@ -345,15 +353,15 @@ int main(void) {
 /*****************************************************************************************/
 //Todo: Set payload and transmit
 
-#define VENDOR		9
-#define SENSOR_ID	200
+//#define VENDOR		9
+//#define SENSOR_ID	200
 	uint8_t p;
     p = 0;
     /*URI-Payload length=29 ADV_LEN = 30*/
-//    payload[p++] = 29;         /* len */
-//    payload[p++] = 0x24;		  /* Type URI */
-//    payload[p++] = 0x17;		/* UTF-8 code point for */
-/*    payload[p++] = '/';
+/*payload[p++] = 29;         /* len */
+//  payload[p++] = 0x24;		  /* Type URI */
+//  payload[p++] = 0x17;		/* UTF-8 code point for */
+/*   payload[p++] = '/';
     payload[p++] = '/';
     payload[p++] = 's';
     payload[p++] = 'k';
