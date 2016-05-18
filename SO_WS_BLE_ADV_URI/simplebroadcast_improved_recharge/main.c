@@ -98,17 +98,23 @@ void GPIOIntHandler(void){
 	/* Wait for domains to power on */
 	while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
+	IntDisable(INT_EDGE_DETECT);
+
 	/* Read interrupt flags */
 	pin_mask = (HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK);
 
 	/* Clear the interrupt flags */
 	HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) = pin_mask;
 
+
+
 	powerDisablePeriph();
 	// Disable clock for GPIO in CPU run mode
 	HWREGBITW(PRCM_BASE + PRCM_O_GPIOCLKGR, PRCM_GPIOCLKGR_CLK_EN_BITN) = 0;
 	// Load clock settings
 	HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
+
+	IntEnable(INT_EDGE_DETECT);
 
 	//To avoid second interupt with register = 0 (its not fast enough!!)
 	__asm(" nop");
@@ -194,7 +200,7 @@ int main(void) {
   //Config IOID4 for external interrupt on rising edge and wake up
   //IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
   // Reed input
-  IOCPortConfigureSet(BOARD_IOID_DP0, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
+  IOCPortConfigureSet(BOARD_IOID_DP0, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
   //Set device to wake MCU from standby on PIN 4 (BUTTON1)
   HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_PAD | AON_EVENT_MCUWUSEL_WU1_EV_RTC_CH2;  //Does not work with AON_EVENT_MCUWUSEL_WU0_EV_PAD4 --> WHY??
 
@@ -231,6 +237,7 @@ int main(void) {
     //Wait until RF Core PD is ready before accessing radio
     waitUntilRFCReady();
     initRadioInts();
+
     runRadio();
 
     //Wait until AUX is ready before configuring oscillators
@@ -337,15 +344,16 @@ int main(void) {
 
 /*****************************************************************************************/
 //Todo: Set payload and transmit
+
 #define VENDOR		9
 #define SENSOR_ID	200
 	uint8_t p;
     p = 0;
     /*URI-Payload length=29 ADV_LEN = 30*/
-    payload[p++] = 29;         /* len */
-    payload[p++] = 0x24;		  /* Type URI */
-    payload[p++] = 0x17;		/* UTF-8 code point for */
-    payload[p++] = '/';
+//    payload[p++] = 29;         /* len */
+//    payload[p++] = 0x24;		  /* Type URI */
+//    payload[p++] = 0x17;		/* UTF-8 code point for */
+/*    payload[p++] = '/';
     payload[p++] = '/';
     payload[p++] = 's';
     payload[p++] = 'k';
@@ -373,7 +381,7 @@ int main(void) {
    	payload[p++] = 10; //char_hum[2];
    	payload[p++] = '#';
    	payload[p++] = SENSOR_ID;
-
+*/
     /*URI-Payload length=2+21 ADV_LEN = 25*/
 //    payload[p++] = 2;          /* len */
 //	payload[p++] = 0x01;		  /* Type flags */
@@ -405,7 +413,7 @@ int main(void) {
 
     //Start radio setup and linked advertisment
     radioUpdateAdvData(p, payload);
-
+    CPUdelay(100000);
     //Start radio setup and linked advertisment
     radioSetupAndTransmit();
 
@@ -430,44 +438,41 @@ int main(void) {
 
     //Request radio to not force on system bus any more
     radioCmdBusRequest(false);
-    
+    CPUdelay(100000);
     //
     // Standby procedure
     //
-    
+    IntEnable(INT_EDGE_DETECT);
     powerDisableXtal();
-
     // Turn off radio
     powerDisableRFC();
-    
     // Switch to RCOSC_HF
     OSCHfSourceSwitch();
-
     // Allow AUX to turn off again. No longer need oscillator interface
     powerDisableAuxForceOn();
-
     // Goto Standby. MCU will now request to be powered down on DeepSleep
     powerEnableMcuPdReq();
-
     // Disable cache and retention
     powerDisableCache();
     powerDisableCacheRetention();
 
     //Calculate next recharge
     SysCtrlSetRechargeBeforePowerDown(XOSC_IN_HIGH_POWER_MODE);
-
+    CPUdelay(100000);
     // Synchronize transactions to AON domain to ensure AUX has turned off
     SysCtrlAonSync();
-
+    CPUdelay(100000);
     //
     // Enter Standby
     //
 
     powerDisableCPU();
     PRCMDeepSleep();
-
+    CPUdelay(100000);
     SysCtrlAonUpdate();
+    CPUdelay(100000);
     SysCtrlAdjustRechargeAfterPowerDown();
+    CPUdelay(100000);
     SysCtrlAonSync();
 
     //
@@ -475,6 +480,7 @@ int main(void) {
 	//
    
     powerEnableRFC();
+    CPUdelay(100000);
     powerEnableAuxForceOn();
 
     //Re-enable cache and retention
