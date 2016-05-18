@@ -4,3 +4,22 @@ composer.phar
 # Commit your application's lock file http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
+*.lock
+Dario_wake_up/.metadata/.log
+*.xml
+Dario_wake_up/.metadata/.plugins/org.eclipse.cdt.core/.log
+*.index
+Dario_wake_up/.metadata/.plugins/org.eclipse.core.resources/.projects/simplebroadcast_improved_recharge/com.ti.ccstudio.project.core/Debug/linkerFlags.txt
+*.txt
+Dario_wake_up/.metadata/.plugins/org.eclipse.core.resources/.root/.indexes/properties.version
+*.tree
+Dario_wake_up/.metadata/.plugins/org.eclipse.rse.core/.log
+*.log
+*.obj
+*.d
+Dario_wake_up/simplebroadcast_improved_recharge/Debug/cc26xxware_2_22_00_16101/driverLib/bin/ccs/subdir_rules.mk
+*.mk
+*.opt
+*.out
+Dario_wake_up/simplebroadcast_improved_recharge/Debug/makefile
+*.xmi
