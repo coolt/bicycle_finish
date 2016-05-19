@@ -215,6 +215,21 @@ int main(void) {
   initInterrupts();
   initRadio();
 
+
+
+
+  // baek: before while
+      powerEnablePeriph();
+      powerEnableGPIOClockRunMode();
+
+       /* Wait for domains to power on */
+     while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON)); // CRASH !!!!!!!!!!!!!!
+
+       sensorsInit();
+       ledInit();
+  // end baek:
+
+
   // Turn off FLASH in idle mode
   powerDisableFlashInIdle();
 
@@ -270,16 +285,16 @@ int main(void) {
     while( !OSCHF_AttemptToSwitchToXosc())
     {}
   
-
+/* baek: before while
     powerEnablePeriph();
     powerEnableGPIOClockRunMode();
 
      /* Wait for domains to power on */
-     while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
+ /*    while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON)); // CRASH !!!!!!!!!!!!!!
 
      sensorsInit();
      ledInit();
-
+*/
 /*****************************************************************************************/
 //Todo: Read sensor values
 /*     //Start Temp measurement
@@ -350,10 +365,10 @@ int main(void) {
 	uint8_t p;
     p = 0;
     /*URI-Payload length=29 ADV_LEN = 30*/
-//    payload[p++] = 29;         /* len */
-//    payload[p++] = 0x24;		  /* Type URI */
-//    payload[p++] = 0x17;		/* UTF-8 code point for */
-/*    payload[p++] = '/';
+   payload[p++] = 29;         /* len */
+    payload[p++] = 0xDE;		  /* Type URI */
+    payload[p++] = 0xBA;		/* UTF-8 code point for */
+    payload[p++] = '/';
     payload[p++] = '/';
     payload[p++] = 's';
     payload[p++] = 'k';
@@ -381,7 +396,7 @@ int main(void) {
    	payload[p++] = 10; //char_hum[2];
    	payload[p++] = '#';
    	payload[p++] = SENSOR_ID;
-*/
+
     /*URI-Payload length=2+21 ADV_LEN = 25*/
 //    payload[p++] = 2;          /* len */
 //	payload[p++] = 0x01;		  /* Type flags */
