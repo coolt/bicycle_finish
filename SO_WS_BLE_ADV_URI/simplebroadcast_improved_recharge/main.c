@@ -90,6 +90,7 @@ extern volatile bool rfAdvertisingDone;
 
 // interrupts -----------------------------------------------------------
 void GPIOIntHandler(void){
+
 	uint32_t pin_mask;
 
 	IntDisable(INT_EDGE_DETECT);
@@ -100,18 +101,17 @@ void GPIOIntHandler(void){
 	/* Wait for domains to power on */
 	while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
-
-
 	/* Read interrupt flags */
 	pin_mask = (HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK);
 
-	// *** Handler
-	//if(pin_mask == GPIO_DOUT31_0_DIO25 )
+	// *** Handler (not needed: only 1 interrupt)
+	//if(pin_mask == GPIO_DOUT31_0_DIO25 ){
 
-	static uint32_t value_1 = 0, value_2 = 0, timediff = 0;
-	value_1 = value_2;
-	// value_2 = AONRTCCurrentCompareValueGet();  // once: when used: Power on problem Z. 284 !!
-	timediff = value_2 - value_1;
+		//static uint32_t value_1 = 0, value_2 = 0, timediff = 0;
+		//value_1 = value_2;
+		// value_2 = AONRTCCurrentCompareValueGet();  // once: when used: Power on problem Z. 284 !!
+		//timediff = value_2 - value_1;
+	//}
 
 	/* Clear the interrupt flags */
 	HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) = pin_mask;
@@ -137,8 +137,6 @@ void GPIOIntHandler(void){
 
 void sensorsInit(void)
 {
-	uint16_t success = 0;
-    uint16_t val;
 
 	//Turn off TMP007
     configure_tmp_007(0);
@@ -206,8 +204,19 @@ int main(void) {
   sensorsInit();
   ledInit();
 
+  // baek: moved before while(1): because of crashes
+      powerEnablePeriph();
+      powerEnableGPIOClockRunMode();
+       /* Wait for domains to power on */  // no more crashes   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
+
+       sensorsInit();
+       ledInit();
+  // end: baek
+
   //Config IOID4 for external interrupt on rising edge and wake up
   //IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
+
   // Reed input
   IOCPortConfigureSet(BOARD_IOID_DP0, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
   //Set device to wake MCU from standby on PIN 4 (BUTTON1)
@@ -279,15 +288,15 @@ int main(void) {
     while( !OSCHF_AttemptToSwitchToXosc())
     {}
   
-
+/*  baek: moved before while(1): because of crashes
     powerEnablePeriph();
     powerEnableGPIOClockRunMode();
-     /* Wait for domains to power on */  // CRASH HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     // Wait for domains to power on /  // CRASH HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
      sensorsInit();
      ledInit();
-
+/*
 /*****************************************************************************************/
 //Todo: Read sensor values
 /*     //Start Temp measurement
