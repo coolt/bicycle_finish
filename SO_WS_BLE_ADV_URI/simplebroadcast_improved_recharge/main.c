@@ -179,7 +179,6 @@ void ledInit(void)
 
 int main(void) {
 
-  char payload[ADVLEN];
 
   //Disable JTAG to allow for Standby
   AONWUCJtagPowerOff();
@@ -481,18 +480,18 @@ int main(void) {
 
     // Synchronize transactions to AON domain to ensure AUX has turned off
     SysCtrlAonSync();
-    //CPUdelay(100000);
+
     //
     // Enter Standby
     //
 
     powerDisableCPU();
     PRCMDeepSleep();
-    //CPUdelay(100000);
+
     SysCtrlAonUpdate();
-    //CPUdelay(100000);
+
     SysCtrlAdjustRechargeAfterPowerDown();
-    //CPUdelay(100000);
+
     SysCtrlAonSync();
 
     //
@@ -500,7 +499,7 @@ int main(void) {
 	//
    
     powerEnableRFC();
-    CPUdelay(100000);
+    // CPUdelay(100000);
     powerEnableAuxForceOn();
 
     //Re-enable cache and retention
