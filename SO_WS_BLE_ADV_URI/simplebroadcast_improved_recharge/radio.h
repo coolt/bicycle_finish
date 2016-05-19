@@ -1,4 +1,4 @@
-#define BLE_ADV_PAYLOAD_BUF_LEN     64
+//#define BLE_ADV_PAYLOAD_BUF_LEN     64
 
 void initRadio(void);
 void runRadio(void);

@@ -16,7 +16,7 @@
 #define WAKE_INTERVAL_TICKS WAKE_INTERVAL_MS*65536/1000
 
 //Advertisment payload length in bytes
-//#define ADVLEN 30
+//#define ADVLEN 30  -> redefined later to 24
 
 
 // Sensortag IO Header

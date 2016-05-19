@@ -76,9 +76,11 @@
 
 #include "mbedtls/aes.h"
 
-extern volatile bool rfBootDone;
-extern volatile bool rfSetupDone;
-extern volatile bool rfAdvertisingDone;
+volatile bool rfBootDone;
+volatile bool rfSetupDone;
+volatile bool rfAdvertisingDone;
+
+char payload[ADVLEN];
 
 #define TMP007_REG_ADDR_STATUS          0x04
 #define TMP_007_SENSOR_TYPE_AMBIENT   2
@@ -486,11 +488,11 @@ int main(void) {
 
     powerDisableCPU();
     PRCMDeepSleep();
-    CPUdelay(100000);
+    //CPUdelay(100000);
     SysCtrlAonUpdate();
-    CPUdelay(100000);
+    //CPUdelay(100000);
     SysCtrlAdjustRechargeAfterPowerDown();
-    CPUdelay(100000);
+    //CPUdelay(100000);
     SysCtrlAonSync();
 
     //

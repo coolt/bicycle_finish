@@ -15,9 +15,9 @@
 #include <radio.h>
 #include <system.h>
 
-volatile bool rfBootDone          = 0;
-volatile bool rfSetupDone         = 0;
-volatile bool rfAdvertisingDone   = 0;
+volatile bool rfBootDone          ;
+volatile bool rfSetupDone         ;
+volatile bool rfAdvertisingDone   ;
 
 // Advertisment data. Must be global for other files to access it.
 #pragma data_alignment=4
