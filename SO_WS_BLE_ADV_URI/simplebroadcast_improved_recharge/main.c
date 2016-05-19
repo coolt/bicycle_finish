@@ -244,7 +244,7 @@ int main(void) {
   powerDisableAuxRamRet();
 
   //Clear payload buffer
-    memset(payload, 0, ADVLEN);
+   memset(payload, 0, ADVLEN);
 
   while(1) {
 
@@ -428,9 +428,10 @@ int main(void) {
 
 
     payload[0] = ADVLEN - 1;		// Test
+
     //Start radio setup and linked advertisment
     radioUpdateAdvData(p, payload);
-    //CPUdelay(100000);
+
     //Start radio setup and linked advertisment
     radioSetupAndTransmit();
 
@@ -455,7 +456,7 @@ int main(void) {
 
     //Request radio to not force on system bus any more
     radioCmdBusRequest(false);
-    //CPUdelay(100000);
+
     //
     // Standby procedure
     //
@@ -475,10 +476,10 @@ int main(void) {
 
     //Calculate next recharge
     SysCtrlSetRechargeBeforePowerDown(XOSC_IN_HIGH_POWER_MODE);
-    CPUdelay(100000);
+
     // Synchronize transactions to AON domain to ensure AUX has turned off
     SysCtrlAonSync();
-    CPUdelay(100000);
+    //CPUdelay(100000);
     //
     // Enter Standby
     //
