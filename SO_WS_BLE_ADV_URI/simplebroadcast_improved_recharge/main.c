@@ -426,7 +426,7 @@ int main(void) {
 
     //Start radio setup and linked advertisment
     radioUpdateAdvData(p, payload);
-    CPUdelay(100000);
+
     //Start radio setup and linked advertisment
     radioSetupAndTransmit();
 
@@ -451,7 +451,7 @@ int main(void) {
 
     //Request radio to not force on system bus any more
     radioCmdBusRequest(false);
-    CPUdelay(100000);
+
     //
     // Standby procedure
     //
@@ -471,21 +471,21 @@ int main(void) {
 
     //Calculate next recharge
     SysCtrlSetRechargeBeforePowerDown(XOSC_IN_HIGH_POWER_MODE);
-    CPUdelay(100000);
+
     // Synchronize transactions to AON domain to ensure AUX has turned off
     SysCtrlAonSync();
-    CPUdelay(100000);
+
     //
     // Enter Standby
     //
 
     powerDisableCPU();
     PRCMDeepSleep();
-    CPUdelay(100000);
+
     SysCtrlAonUpdate();
-    CPUdelay(100000);
+
     SysCtrlAdjustRechargeAfterPowerDown();
-    CPUdelay(100000);
+
     SysCtrlAonSync();
 
     //
@@ -493,7 +493,7 @@ int main(void) {
 	//
    
     powerEnableRFC();
-    CPUdelay(100000);
+
     powerEnableAuxForceOn();
 
     //Re-enable cache and retention
