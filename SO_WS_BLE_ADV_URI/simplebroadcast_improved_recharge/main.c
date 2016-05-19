@@ -177,7 +177,7 @@ void ledInit(void)
 
 int main(void) {
 
-  uint8_t payload[ADVLEN];
+  char payload[ADVLEN];
 
   //Disable JTAG to allow for Standby
   AONWUCJtagPowerOff();
@@ -427,7 +427,7 @@ int main(void) {
 //	payload[p++] = output[15];
 
 
-
+    payload[0] = ADVLEN - 1;		// Test
     //Start radio setup and linked advertisment
     radioUpdateAdvData(p, payload);
     //CPUdelay(100000);
@@ -455,7 +455,7 @@ int main(void) {
 
     //Request radio to not force on system bus any more
     radioCmdBusRequest(false);
-    CPUdelay(100000);
+    //CPUdelay(100000);
     //
     // Standby procedure
     //
