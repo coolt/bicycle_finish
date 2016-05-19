@@ -367,12 +367,12 @@ int main(void) {
 	uint8_t p;
     p = 0;
     /*URI-Payload length=29 ADV_LEN = 30*/
-/*payload[p++] = 29;         /* len */
-//  payload[p++] = 0x24;		  /* Type URI */
-//  payload[p++] = 0x17;		/* UTF-8 code point for */
-/*   payload[p++] = '/';
-    payload[p++] = '/';
-    payload[p++] = 's';
+/*payload[p++] = 29;         //len
+ payload[p++] = 0x03;		  // Type URI
+  payload[p++] = 0xBA;		// UTF-8 code point for
+   payload[p++] = 0;
+    payload[p++] = 0;
+    payload[p++] = 0;
     payload[p++] = 'k';
     payload[p++] = 'i';
     payload[p++] = '.';
@@ -397,7 +397,7 @@ int main(void) {
    	payload[p++] = 9; //char_hum[1];
    	payload[p++] = 10; //char_hum[2];
    	payload[p++] = '#';
-   	payload[p++] = SENSOR_ID;
+   	payload[p++] = 0; //SENSOR_ID;
 */
     /*URI-Payload length=2+21 ADV_LEN = 25*/
 //    payload[p++] = 2;          /* len */
@@ -430,7 +430,7 @@ int main(void) {
 
     //Start radio setup and linked advertisment
     radioUpdateAdvData(p, payload);
-    CPUdelay(100000);
+    //CPUdelay(100000);
     //Start radio setup and linked advertisment
     radioSetupAndTransmit();
 
