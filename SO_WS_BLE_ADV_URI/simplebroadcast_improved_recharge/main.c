@@ -291,22 +291,24 @@ void ledInit(void)
      ledInit();
 
 /*****************************************************************************************/
-//Todo: Read sensor values
-     //Start Temp measurement
-//    enable_tmp_007(1);
-//    //start hum measurement
-//    configure_hdc_1000();
-//    start_hdc_1000();
-//    //Wait for, read and calc temperature
+// Read sensor values
 
-   int temperature;
-    do{
+    //Start Temp measurement
+    int temperature;
+    enable_tmp_007(1);
+
+   //Wait for, read and calc temperature
+    //do{
     	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-    }while(temperature==0x80000000);
+    //}while(temperature==0x80000000);
     enable_tmp_007(0);
     char char_temp[5];
-//    sprintf(char_temp, "%3d",temperature/100);
 
+
+
+   //start hum measurement
+    //    configure_hdc_1000();
+    //    start_hdc_1000();
 //    //Wait for, read and calc humidity
 //    while(!read_data_hdc_1000())
 //    	;
@@ -339,22 +341,22 @@ void ledInit(void)
 		payload[p++] = 0;
 
 		// Speed
-		payload[p++] = g_diff >> 24;  // speed
+		payload[p++] = g_diff >> 24;
 		payload[p++] = g_diff >> 16;
 		payload[p++] = g_diff >> 8;
 		payload[p++] = g_diff;
 
 		//pressure
-		payload[p++] = 0;				// pressure
+		payload[p++] = 0;
 		payload[p++] = 0x01;
 		payload[p++] = 0x79;
 		payload[p++] = 0x58;
 
 		//temperature
 		payload[p++] = 0;
-		payload[p++] = 0;//char_temp[0];
-		payload[p++] = 0x59;//char_temp[1];
-		payload[p++] = 0xDA;//char_temp[2];
+		payload[p++] = 0; // char_temp[2];
+		payload[p++] = char_temp[1];
+		payload[p++] = char_temp[0];
 
 		// huminity
 		payload[p++] = 0;
