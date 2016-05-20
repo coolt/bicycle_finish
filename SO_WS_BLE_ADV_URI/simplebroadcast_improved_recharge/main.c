@@ -177,7 +177,7 @@ void ledInit(void)
 }
 
 
-	int main(void) {
+ int main(void) {
 
   uint8_t payload[ADVLEN];
 
@@ -236,6 +236,8 @@ void ledInit(void)
     memset(payload, 0, ADVLEN);
 
   while(1) {
+
+  //if((g_count& 0x04)== 1){
 
     rfBootDone  = 0;
     rfSetupDone = 0;
@@ -355,60 +357,41 @@ void ledInit(void)
 	uint8_t p;
     p = 0;
     /*jedes 5.te mal senden*/
-    //if((g_count % 5)==0){
+
 		/*URI-Payload length=29 ADV_LEN = 30*/
 		payload[p++] = ADVLEN-1;        /* len */
+		payload[p++] = 0x03;
 		payload[p++] = 0xde;
 		payload[p++] = 0xba;
-		payload[p++] = g_diff;
-		payload[p++] = g_diff>>8;
-		payload[p++] =g_diff>>16;
-		payload[p++] =g_diff>>24;
-		payload[p++] = '.';
-		payload[p++] = 'c';
-		payload[p++] = 'h';
+		payload[p++] = 0;			// laufnummer
+		payload[p++] = 0;
 
-		payload[p++] = '?';
-		payload[p++] = 't';
-		payload[p++] = '=';
+		// Speed
+		payload[p++] = g_diff >> 24;  // speed
+		payload[p++] = g_diff >> 16;
+		payload[p++] = g_diff >> 8;
+		payload[p++] = g_diff;
+
+		//pressure
+		payload[p++] = 0;				// pressure
+		payload[p++] = 0x01;
+		payload[p++] = 0x79;
+		payload[p++] = 0x58;
+
+		//temperature
 		payload[p++] = 0;//char_temp[0];
 		payload[p++] = 0;//char_temp[1];
-		payload[p++] = 0;//char_temp[2];
-		payload[p++] = '&';
-		payload[p++] = 'h';
-		payload[p++] = '=';
+		payload[p++] = 0x59;//char_temp[2];
+		payload[p++] = 0xDA;
+
+		// huminity
+		payload[p++] = 0;
 		payload[p++] = 0;//char_hum[0];
 		payload[p++] = 0;//char_hum[1];
 		payload[p++] = 0;//char_hum[2];
-		payload[p++] = '#';
-		payload[p++] = SENSOR_ID;
 
-		/*URI-Payload length=2+21 ADV_LEN = 25*/
-	//    payload[p++] = 2;          /* len */
-	//	payload[p++] = 0x01;		  /* Type flags */
-	//	payload[p++] = 0x05;
-	//	payload[p++] = 21; 	      /* len */
-	//	payload[p++] = 0x03;		  /* Type UUID list */
-	//	payload[p++] = 0x01;
-	//	payload[p++] = 0xDE;
-	//	payload[p++] = VENDOR;
-	//	payload[p++] = SENSOR_ID;
-	//	payload[p++] = output[0];
-	//	payload[p++] = output[1];
-	//	payload[p++] = output[2];
-	//	payload[p++] = output[3];
-	//	payload[p++] = output[4];
-	//	payload[p++] = output[5];
-	//	payload[p++] = output[6];
-	//	payload[p++] = output[7];
-	//	payload[p++] = output[8];
-	//	payload[p++] = output[9];
-	//	payload[p++] = output[10];
-	//	payload[p++] = output[11];
-	//	payload[p++] = output[12];
-	//	payload[p++] = output[13];
-	//	payload[p++] = output[14];
-	//	payload[p++] = output[15];
+		payload[p++] = 0;
+		payload[p++] = 0;
 
 
 
@@ -419,7 +402,7 @@ void ledInit(void)
 		radioSetupAndTransmit();
 	//}
 
-    g_count++;
+
 
 //END: Transmit
 /*****************************************************************************************/
@@ -442,6 +425,8 @@ void ledInit(void)
 
     //Request radio to not force on system bus any more
     radioCmdBusRequest(false);
+ // } // end if
+  g_count++;
 
     //
     // Standby procedure
