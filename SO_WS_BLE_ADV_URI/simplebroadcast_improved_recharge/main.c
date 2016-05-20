@@ -431,7 +431,7 @@ int main(void) {
     payload[0] = ADVLEN - 1;		// Test
 
     //Start radio setup and linked advertisment
-    radioUpdateAdvData(p, payload);
+    radioUpdateAdvData(ADVLEN, payload);
 
     //Start radio setup and linked advertisment
     radioSetupAndTransmit();
