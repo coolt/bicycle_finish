@@ -76,11 +76,9 @@
 
 #include "mbedtls/aes.h"
 
-volatile bool rfBootDone;
-volatile bool rfSetupDone;
-volatile bool rfAdvertisingDone;
-
-char payload[ADVLEN];
+extern volatile bool rfBootDone;
+extern volatile bool rfSetupDone;
+extern volatile bool rfAdvertisingDone;
 
 #define TMP007_REG_ADDR_STATUS          0x04
 #define TMP_007_SENSOR_TYPE_AMBIENT   2
@@ -90,55 +88,57 @@ char payload[ADVLEN];
 #define SWAP(v) ((LO_UINT16(v) << 8) | HI_UINT16(v))
 #define CONV_RDY_BIT                    0x4000
 
+uint32_t g_diff;
+uint8_t g_count=0;
+
 // interrupts -----------------------------------------------------------
 void GPIOIntHandler(void){
+  uint32_t event_flags;
+  static uint32_t time1=0,time2=0;
+  powerEnablePeriph();
+  powerEnableGPIOClockRunMode();
 
-	uint32_t pin_mask;
+  /* Wait for domains to power on */
+  while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
-	IntDisable(INT_EDGE_DETECT);
+  time1=time2;
+ // time2=AONRTCCurrentCompareValueGet();
+  g_diff=time2-time1;
 
-	powerEnablePeriph();
-	powerEnableGPIOClockRunMode();
 
-	/* Wait for domains to power on */
-	while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
-	/* Read interrupt flags */
-	pin_mask = (HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK);
+  /*Disable interrupts while clearing flags*/
+  IntDisable(INT_EDGE_DETECT);
+  /* Read interrupt flags */
+  event_flags = (HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK);
+  if(event_flags){//Is an event flag set? (should always be set)
+    /* Clear the interrupt flags*/
+    HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) = event_flags;
+    /*Wait until the flag is cleared, no new flag possible because interrupt disabled*/
+    while((HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK));
+  }
+  /*Enable after flags cleared*/
+  IntEnable(INT_EDGE_DETECT);
 
-	// *** Handler (not needed: only 1 interrupt)
-	//if(pin_mask == GPIO_DOUT31_0_DIO25 ){
+  powerDisablePeriph();
+  // Disable clock for GPIO in CPU run mode
+  HWREGBITW(PRCM_BASE + PRCM_O_GPIOCLKGR, PRCM_GPIOCLKGR_CLK_EN_BITN) = 0;
+  // Load clock settings
+  HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
 
-		//static uint32_t value_1 = 0, value_2 = 0, timediff = 0;
-		//value_1 = value_2;
-		// value_2 = AONRTCCurrentCompareValueGet();  // once: when used: Power on problem Z. 284 !!
-		//timediff = value_2 - value_1;
-	//}
-
-	/* Clear the interrupt flags */
-	HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) = pin_mask;
-
-	//IntEnable(INT_EDGE_DETECT);
-
-	powerDisablePeriph();
-	// Disable clock for GPIO in CPU run mode
-	HWREGBITW(PRCM_BASE + PRCM_O_GPIOCLKGR, PRCM_GPIOCLKGR_CLK_EN_BITN) = 0;
-	// Load clock settings
-	HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
-
-	IntEnable(INT_EDGE_DETECT);
-
-	//To avoid second interupt with register = 0 (its not fast enough!!)
-	__asm(" nop");
-	__asm(" nop");
-	__asm(" nop");
-	__asm(" nop");
-	__asm(" nop");
-	__asm(" nop");
+  //To avoid second interupt with register = 0 (its not fast enough!!)
+  __asm(" nop");
+  __asm(" nop");
+  __asm(" nop");
+  __asm(" nop");
+  __asm(" nop");
+  __asm(" nop");
 }
 
 void sensorsInit(void)
 {
+	uint16_t success = 0;
+    uint16_t val;
 
 	//Turn off TMP007
     configure_tmp_007(0);
@@ -177,8 +177,9 @@ void ledInit(void)
 }
 
 
-int main(void) {
+	int main(void) {
 
+  uint8_t payload[ADVLEN];
 
   //Disable JTAG to allow for Standby
   AONWUCJtagPowerOff();
@@ -188,13 +189,12 @@ int main(void) {
   powerEnableRFC();
 
   powerEnableXtalInterface();
+  //powerConfigureRecharge(); --> Optimized version later in this code (brts)
   
   // Divide INF clk to save Idle mode power (increases interrupt latency)
   powerDivideInfClkDS(PRCM_INFRCLKDIVDS_RATIO_DIV32);
 
-  //initRTC();
-  //Enable RTC
-   AONRTCEnable();
+  initRTC();
 
   powerEnablePeriph();
   powerEnableGPIOClockRunMode();
@@ -205,23 +205,11 @@ int main(void) {
   sensorsInit();
   ledInit();
 
-  // baek: moved before while(1): because of crashes
-      powerEnablePeriph();
-      powerEnableGPIOClockRunMode();
-       /* Wait for domains to power on */  // no more crashes   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-       while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
-
-       sensorsInit();
-       ledInit();
-  // end: baek
-
   //Config IOID4 for external interrupt on rising edge and wake up
   //IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
-
-  // Reed input
   IOCPortConfigureSet(BOARD_IOID_DP0, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
   //Set device to wake MCU from standby on PIN 4 (BUTTON1)
-  HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_PAD | AON_EVENT_MCUWUSEL_WU1_EV_RTC_CH2;  //Does not work with AON_EVENT_MCUWUSEL_WU0_EV_PAD4 --> WHY??
+  HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_PAD;  //Does not work with AON_EVENT_MCUWUSEL_WU0_EV_PAD4 --> WHY??
 
   IntEnable(INT_EDGE_DETECT);
 
@@ -245,7 +233,7 @@ int main(void) {
   powerDisableAuxRamRet();
 
   //Clear payload buffer
-   memset(payload, 0, ADVLEN);
+    memset(payload, 0, ADVLEN);
 
   while(1) {
 
@@ -256,7 +244,6 @@ int main(void) {
     //Wait until RF Core PD is ready before accessing radio
     waitUntilRFCReady();
     initRadioInts();
-
     runRadio();
 
     //Wait until AUX is ready before configuring oscillators
@@ -289,37 +276,38 @@ int main(void) {
     while( !OSCHF_AttemptToSwitchToXosc())
     {}
   
-/*  baek: moved before while(1): because of crashes
+
     powerEnablePeriph();
     powerEnableGPIOClockRunMode();
-     // Wait for domains to power on /  // CRASH HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+     /* Wait for domains to power on */
      while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
      sensorsInit();
      ledInit();
-/*
+
 /*****************************************************************************************/
 //Todo: Read sensor values
-/*     //Start Temp measurement
-    enable_tmp_007(1);
-    //start hum measurement
-    configure_hdc_1000();
-    start_hdc_1000();
-    //Wait for, read and calc temperature
-    int temperature;
-    do{
-    	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-    }while(temperature==0x80000000);
-    enable_tmp_007(0);
-    char char_temp[5];
-    sprintf(char_temp, "%3d",temperature/100);
-
-    //Wait for, read and calc humidity
-    while(!read_data_hdc_1000())
-    	;
-    int humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
-    char char_hum[5];
-    sprintf(char_hum, "%3d",humidity/10);
+     //Start Temp measurement
+//    enable_tmp_007(1);
+//    //start hum measurement
+//    configure_hdc_1000();
+//    start_hdc_1000();
+//    //Wait for, read and calc temperature
+//    int temperature;
+//    do{
+//    	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
+//    }while(temperature==0x80000000);
+//    enable_tmp_007(0);
+//    char char_temp[5];
+//    sprintf(char_temp, "%3d",temperature/100);
+//
+//    //Wait for, read and calc humidity
+//    while(!read_data_hdc_1000())
+//    	;
+//    int humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
+//    char char_hum[5];
+//    sprintf(char_hum, "%3d",humidity/10);
 
 /*****************************************************************************************/
 /*   mbedtls_aes_context aes;
@@ -362,79 +350,76 @@ int main(void) {
 
 /*****************************************************************************************/
 //Todo: Set payload and transmit
-
-//#define VENDOR		9
-//#define SENSOR_ID	200
+#define VENDOR		9
+#define SENSOR_ID	200
 	uint8_t p;
     p = 0;
-    /*URI-Payload length=29 ADV_LEN = 30*/
-/*payload[p++] = 29;         //len
- payload[p++] = 0x03;		  // Type URI
-  payload[p++] = 0xBA;		// UTF-8 code point for
-   payload[p++] = 0;
-    payload[p++] = 0;
-    payload[p++] = 0;
-    payload[p++] = 'k';
-    payload[p++] = 'i';
-    payload[p++] = '.';
-    payload[p++] = 'z';
-    payload[p++] = 'h';
-    payload[p++] = 'a';
-    payload[p++] = 'w';
-    payload[p++] = '.';
-    payload[p++] = 'c';
-    payload[p++] = 'h';
+    /*jedes 5.te mal senden*/
+    if((g_count % 5)==0){
+		/*URI-Payload length=29 ADV_LEN = 30*/
+		payload[p++] = ADVLEN-1;        /* len */
+		payload[p++] = 0xde;
+		payload[p++] = 0xba;
+		payload[p++] = g_diff;
+		payload[p++] = g_diff>>8;
+		payload[p++] =g_diff>>16;
+		payload[p++] =g_diff>>24;
+		payload[p++] = '.';
+		payload[p++] = 'c';
+		payload[p++] = 'h';
 
-    payload[p++] = '?';
- 	payload[p++] = 't';
-	payload[p++] = '=';
-	payload[p++] = 5; //char_temp[0];
-	payload[p++] = 6; //char_temp[1];
-	payload[p++] = 7; //char_temp[2];
-	payload[p++] = '&';
-   	payload[p++] = 'h';
-   	payload[p++] = '=';
-   	payload[p++] = 8; //char_hum[0];
-   	payload[p++] = 9; //char_hum[1];
-   	payload[p++] = 10; //char_hum[2];
-   	payload[p++] = '#';
-   	payload[p++] = 0; //SENSOR_ID;
-*/
-    /*URI-Payload length=2+21 ADV_LEN = 25*/
-//    payload[p++] = 2;          /* len */
-//	payload[p++] = 0x01;		  /* Type flags */
-//	payload[p++] = 0x05;
-//	payload[p++] = 21; 	      /* len */
-//	payload[p++] = 0x03;		  /* Type UUID list */
-//	payload[p++] = 0x01;
-//	payload[p++] = 0xDE;
-//	payload[p++] = VENDOR;
-//	payload[p++] = SENSOR_ID;
-//	payload[p++] = output[0];
-//	payload[p++] = output[1];
-//	payload[p++] = output[2];
-//	payload[p++] = output[3];
-//	payload[p++] = output[4];
-//	payload[p++] = output[5];
-//	payload[p++] = output[6];
-//	payload[p++] = output[7];
-//	payload[p++] = output[8];
-//	payload[p++] = output[9];
-//	payload[p++] = output[10];
-//	payload[p++] = output[11];
-//	payload[p++] = output[12];
-//	payload[p++] = output[13];
-//	payload[p++] = output[14];
-//	payload[p++] = output[15];
+		payload[p++] = '?';
+		payload[p++] = 't';
+		payload[p++] = '=';
+		payload[p++] = 0;//char_temp[0];
+		payload[p++] = 0;//char_temp[1];
+		payload[p++] = 0;//char_temp[2];
+		payload[p++] = '&';
+		payload[p++] = 'h';
+		payload[p++] = '=';
+		payload[p++] = 0;//char_hum[0];
+		payload[p++] = 0;//char_hum[1];
+		payload[p++] = 0;//char_hum[2];
+		payload[p++] = '#';
+		payload[p++] = SENSOR_ID;
+
+		/*URI-Payload length=2+21 ADV_LEN = 25*/
+	//    payload[p++] = 2;          /* len */
+	//	payload[p++] = 0x01;		  /* Type flags */
+	//	payload[p++] = 0x05;
+	//	payload[p++] = 21; 	      /* len */
+	//	payload[p++] = 0x03;		  /* Type UUID list */
+	//	payload[p++] = 0x01;
+	//	payload[p++] = 0xDE;
+	//	payload[p++] = VENDOR;
+	//	payload[p++] = SENSOR_ID;
+	//	payload[p++] = output[0];
+	//	payload[p++] = output[1];
+	//	payload[p++] = output[2];
+	//	payload[p++] = output[3];
+	//	payload[p++] = output[4];
+	//	payload[p++] = output[5];
+	//	payload[p++] = output[6];
+	//	payload[p++] = output[7];
+	//	payload[p++] = output[8];
+	//	payload[p++] = output[9];
+	//	payload[p++] = output[10];
+	//	payload[p++] = output[11];
+	//	payload[p++] = output[12];
+	//	payload[p++] = output[13];
+	//	payload[p++] = output[14];
+	//	payload[p++] = output[15];
 
 
-    payload[0] = ADVLEN - 1;		// Test
 
-    //Start radio setup and linked advertisment
-    radioUpdateAdvData(ADVLEN, payload);
+		//Start radio setup and linked advertisment
+		radioUpdateAdvData(ADVLEN, payload);
 
-    //Start radio setup and linked advertisment
-    radioSetupAndTransmit();
+		//Start radio setup and linked advertisment
+		radioSetupAndTransmit();
+	}
+
+    g_count++;
 
 //END: Transmit
 /*****************************************************************************************/
@@ -461,16 +446,21 @@ int main(void) {
     //
     // Standby procedure
     //
-    IntEnable(INT_EDGE_DETECT);
+
     powerDisableXtal();
+
     // Turn off radio
     powerDisableRFC();
+
     // Switch to RCOSC_HF
     OSCHfSourceSwitch();
+
     // Allow AUX to turn off again. No longer need oscillator interface
     powerDisableAuxForceOn();
+
     // Goto Standby. MCU will now request to be powered down on DeepSleep
     powerEnableMcuPdReq();
+
     // Disable cache and retention
     powerDisableCache();
     powerDisableCacheRetention();
@@ -489,9 +479,7 @@ int main(void) {
     PRCMDeepSleep();
 
     SysCtrlAonUpdate();
-
     SysCtrlAdjustRechargeAfterPowerDown();
-
     SysCtrlAonSync();
 
     //
@@ -499,7 +487,6 @@ int main(void) {
 	//
    
     powerEnableRFC();
-    // CPUdelay(100000);
     powerEnableAuxForceOn();
 
     //Re-enable cache and retention
