@@ -89,7 +89,7 @@ extern volatile bool rfAdvertisingDone;
 #define CONV_RDY_BIT                    0x4000
 
 uint32_t g_diff;
-uint8_t g_count=0;
+//uint8_t g_count=0;
 static uint16_t sequenceNumber = 0x0;
 
 // interrupts -----------------------------------------------------------
@@ -104,7 +104,7 @@ void GPIOIntHandler(void){
   while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
   time1 = time2;
- time2=AONRTCCurrentCompareValueGet();
+  time2=AONRTCCurrentCompareValueGet();
   g_diff=time2-time1;
 
 
@@ -236,7 +236,7 @@ void ledInit(void)
   powerDisableAuxRamRet();
 
   //Clear payload buffer
-    memset(payload, 0, ADVLEN);
+  memset(payload, 0, ADVLEN);
 
   while(1) {
 
@@ -246,8 +246,8 @@ void ledInit(void)
     rfSetupDone = 0;
     rfAdvertisingDone = 0;
 
-	select_bmp_280();     				// activates I2C for bmp-sensor
-	enable_bmp_280(1);					// works
+	//select_bmp_280();     				// activates I2C for bmp-sensor
+	//enable_bmp_280(1);					// works
 
     //Wait until RF Core PD is ready before accessing radio
     waitUntilRFCReady();
@@ -297,6 +297,7 @@ void ledInit(void)
 /*****************************************************************************************/
 // Read sensor values
 
+     /*
      uint32_t pressure = 0;  			// only 3 Bytes used
 	//uint32_t temp = 0;
 	//select_bmp_280();     				// activates I2C for bmp-sensor
@@ -375,9 +376,9 @@ void ledInit(void)
 
 		//pressure
 		payload[p++] = 0;
-		payload[p++] = (pressure >> 16);
-		payload[p++] = (pressure >> 8);
-		payload[p++] = pressure;
+		payload[p++] = 0; //(pressure >> 16);
+		payload[p++] = 0; //(pressure >> 8);
+		payload[p++] = 0; //pressure;
 
 		//temperature
 		payload[p++] = 0;
@@ -425,7 +426,7 @@ void ledInit(void)
     //Request radio to not force on system bus any more
     radioCmdBusRequest(false);
  // } // end if
-  g_count++;
+ // g_count++;
 
     //
     // Standby procedure
