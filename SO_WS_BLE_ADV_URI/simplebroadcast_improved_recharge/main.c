@@ -103,7 +103,7 @@ void GPIOIntHandler(void){
   while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
   time1 = time2;
- // time2=AONRTCCurrentCompareValueGet();
+ time2=AONRTCCurrentCompareValueGet();
   g_diff=time2-time1;
 
 
@@ -190,8 +190,8 @@ void ledInit(void)
   powerEnableRFC();
 
   powerEnableXtalInterface();
-  //powerConfigureRecharge(); --> Optimized version later in this code (brts)
   
+
   // Divide INF clk to save Idle mode power (increases interrupt latency)
   powerDivideInfClkDS(PRCM_INFRCLKDIVDS_RATIO_DIV32);
 
@@ -298,14 +298,15 @@ void ledInit(void)
 //    configure_hdc_1000();
 //    start_hdc_1000();
 //    //Wait for, read and calc temperature
-//    int temperature;
-//    do{
-//    	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-//    }while(temperature==0x80000000);
-//    enable_tmp_007(0);
-//    char char_temp[5];
+
+   int temperature;
+    do{
+    	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
+    }while(temperature==0x80000000);
+    enable_tmp_007(0);
+    char char_temp[5];
 //    sprintf(char_temp, "%3d",temperature/100);
-//
+
 //    //Wait for, read and calc humidity
 //    while(!read_data_hdc_1000())
 //    	;
@@ -350,10 +351,10 @@ void ledInit(void)
 		payload[p++] = 0x58;
 
 		//temperature
+		payload[p++] = 0;
 		payload[p++] = 0;//char_temp[0];
-		payload[p++] = 0;//char_temp[1];
-		payload[p++] = 0x59;//char_temp[2];
-		payload[p++] = 0xDA;
+		payload[p++] = 0x59;//char_temp[1];
+		payload[p++] = 0xDA;//char_temp[2];
 
 		// huminity
 		payload[p++] = 0;
