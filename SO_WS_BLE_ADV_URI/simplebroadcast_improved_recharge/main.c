@@ -90,6 +90,7 @@ extern volatile bool rfAdvertisingDone;
 
 uint32_t g_diff;
 uint8_t g_count=0;
+static uint16_t sequenceNumber = 0x0;
 
 // interrupts -----------------------------------------------------------
 void GPIOIntHandler(void){
@@ -245,6 +246,9 @@ void ledInit(void)
     rfSetupDone = 0;
     rfAdvertisingDone = 0;
 
+	select_bmp_280();     				// activates I2C for bmp-sensor
+	enable_bmp_280(1);					// works
+
     //Wait until RF Core PD is ready before accessing radio
     waitUntilRFCReady();
     initRadioInts();
@@ -293,18 +297,41 @@ void ledInit(void)
 /*****************************************************************************************/
 // Read sensor values
 
+     uint32_t pressure = 0;  			// only 3 Bytes used
+	//uint32_t temp = 0;
+	//select_bmp_280();     				// activates I2C for bmp-sensor
+	//enable_bmp_280(1);					// works
+
+	//do{
+		pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
+		//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
+	//}while(pressure == 0x80000000);
+		if(pressure == 0x80000000){
+			CPUdelay(100);
+
+			pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
+
+		}
+
+/*
     //Start Temp measurement
-    int temperature;
+    uint16_t temperature;
     enable_tmp_007(1);
 
    //Wait for, read and calc temperature
-    //do{
+    {
+    int count = 0;
+    do{
     	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-    //}while(temperature==0x80000000);
+    	g_count++;
+    }while( ((temperature == 0x80000000) || (temperature == 0)) && (count <=5) );
+    count++;
+	count--;
+    }
     enable_tmp_007(0);
-    char char_temp[5];
+    char char_temp[2];
 
-
+*/
 
    //start hum measurement
     //    configure_hdc_1000();
@@ -332,31 +359,31 @@ void ledInit(void)
     p = 0;
     /*jedes 5.te mal senden*/
 
-		/*URI-Payload length=29 ADV_LEN = 30*/
+
 		payload[p++] = ADVLEN-1;        /* len */
 		payload[p++] = 0x03;
 		payload[p++] = 0xde;
 		payload[p++] = 0xba;
-		payload[p++] = 0;			// laufnummer
-		payload[p++] = 0;
+		payload[p++] =(sequenceNumber >> 8);				// laufnummer
+		payload[p++] = sequenceNumber;
 
 		// Speed
-		payload[p++] = g_diff >> 24;
-		payload[p++] = g_diff >> 16;
-		payload[p++] = g_diff >> 8;
-		payload[p++] = g_diff;
+		payload[p++] = g_diff >> 24;						// higher seconds
+		payload[p++] = g_diff >> 16;						// lower  seconds
+		payload[p++] = g_diff >> 8;							// higher subseconds
+		payload[p++] = g_diff;								// lower  subseconds
 
 		//pressure
 		payload[p++] = 0;
-		payload[p++] = 0x01;
-		payload[p++] = 0x79;
-		payload[p++] = 0x58;
+		payload[p++] = (pressure >> 16);
+		payload[p++] = (pressure >> 8);
+		payload[p++] = pressure;
 
 		//temperature
 		payload[p++] = 0;
 		payload[p++] = 0; // char_temp[2];
-		payload[p++] = char_temp[1];
-		payload[p++] = char_temp[0];
+		payload[p++] = 0;//temperature >> 8; // char_temp[1];
+		payload[p++] = 0; //temperature; //char_temp[0];
 
 		// huminity
 		payload[p++] = 0;

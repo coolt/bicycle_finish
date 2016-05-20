@@ -285,7 +285,7 @@ int value_bmp_280(int type)
 
   if(enabled != SENSOR_STATUS_READY) {
     PRINTF("Sensor disabled or starting up (%d)\n", enabled);
-    return CC26XX_SENSOR_READING_ERROR;
+    return 0x03;
   }
 
   if((type != BMP_280_SENSOR_TYPE_TEMP) && type != BMP_280_SENSOR_TYPE_PRESS) {
