@@ -93,15 +93,16 @@ uint8_t g_count=0;
 
 // interrupts -----------------------------------------------------------
 void GPIOIntHandler(void){
+
   uint32_t event_flags;
-  static uint32_t time1=0,time2=0;
+  static uint32_t time1 = 0,time2 = 0;
+
   powerEnablePeriph();
   powerEnableGPIOClockRunMode();
-
   /* Wait for domains to power on */
   while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
-  time1=time2;
+  time1 = time2;
  // time2=AONRTCCurrentCompareValueGet();
   g_diff=time2-time1;
 
@@ -198,7 +199,6 @@ void ledInit(void)
 
   powerEnablePeriph();
   powerEnableGPIOClockRunMode();
-
   /* Wait for domains to power on */
   while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
@@ -207,6 +207,8 @@ void ledInit(void)
 
   //Config IOID4 for external interrupt on rising edge and wake up
   //IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
+
+  // Config reedSwitch as input
   IOCPortConfigureSet(BOARD_IOID_DP0, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
   //Set device to wake MCU from standby on PIN 4 (BUTTON1)
   HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_PAD;  //Does not work with AON_EVENT_MCUWUSEL_WU0_EV_PAD4 --> WHY??
@@ -309,37 +311,8 @@ void ledInit(void)
 //    	;
 //    int humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
 //    char char_hum[5];
-//    sprintf(char_hum, "%3d",humidity/10);
 
-/*****************************************************************************************/
-/*   mbedtls_aes_context aes;
-   mbedtls_aes_context aes2;
-   unsigned char key[32];
-   unsigned char key2[32];
-   unsigned char iv[16];
-   unsigned char iv2[16];
-   unsigned char input [128];
-   unsigned char output[128];
-   unsigned char output2[128];
-   //size_t input_len = 40;
-   //size_t output_len = 0;
 
-   memset(input, 0, 128);
-   memset(output, 0, 128);
-   memset(output2, 0, 128);
-   sprintf(input, "t=%.1f&h=%.1f",(float)temperature/1000,(float)humidity/100);
-   input[13]=0x03;
-   input[14]=0x03;
-   input[15]=0x03;
-   sprintf(iv, "AAAAAAAAAAAAAAA");
-   sprintf(key, "1234567890123456789012345678901");
-   mbedtls_aes_setkey_enc( &aes, key, 256 );
-   mbedtls_aes_crypt_cbc( &aes, MBEDTLS_AES_ENCRYPT, 16, iv, input, output );
-   sprintf(iv2, "AAAAAAAAAAAAAAA");
-   sprintf(key2, "1234567890123456789012345678901");
-   mbedtls_aes_setkey_dec( &aes2, key2, 256 );
-   mbedtls_aes_crypt_cbc( &aes2, MBEDTLS_AES_DECRYPT, 16, iv2, output, output2 );
-*/
 
 //END read sensor values
 /*****************************************************************************************/
@@ -351,9 +324,7 @@ void ledInit(void)
 	HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
 
 /*****************************************************************************************/
-//Todo: Set payload and transmit
-#define VENDOR		9
-#define SENSOR_ID	200
+// Set payload and transmit
 	uint8_t p;
     p = 0;
     /*jedes 5.te mal senden*/
@@ -401,8 +372,6 @@ void ledInit(void)
 		//Start radio setup and linked advertisment
 		radioSetupAndTransmit();
 	//}
-
-
 
 //END: Transmit
 /*****************************************************************************************/
@@ -468,7 +437,7 @@ void ledInit(void)
     SysCtrlAonSync();
 
     //
-	// Wakeup from RTC every 100ms, code starts execution from here
+	// Wakeup from RTC, code starts execution from here
 	//
    
     powerEnableRFC();
