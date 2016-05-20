@@ -355,7 +355,7 @@ void ledInit(void)
 	uint8_t p;
     p = 0;
     /*jedes 5.te mal senden*/
-    if((g_count % 5)==0){
+    //if((g_count % 5)==0){
 		/*URI-Payload length=29 ADV_LEN = 30*/
 		payload[p++] = ADVLEN-1;        /* len */
 		payload[p++] = 0xde;
@@ -417,7 +417,7 @@ void ledInit(void)
 
 		//Start radio setup and linked advertisment
 		radioSetupAndTransmit();
-	}
+	//}
 
     g_count++;
 
