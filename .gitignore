@@ -1,5 +1,21 @@
 composer.phar
 /vendor/
+advanced_communication/.metadata/**
+advanced_communication/advanced/.launches/**
+advanced_communication/advanced/.settings/**
+advanced_communication/advanced/cc26xxware_2_22_00_16101/**
+
+advanced_communication/advanced_v4_revert/.launches/**
+advanced_communication/advanced_v4_revert/.settings/**
+advanced_communication/advanced_v4_revert/cc26xxware_2_22_00_16101/**
+
+
+simple_harvester/.metadata/**
+simple_harvester/simple_harvester/.launches/**
+simple_harvester/simple_harvester/.settings/**
+simple_harvester/simple_harvester/cc26xxware_2_22_00_16101/**
+
+
 
 # renamed project
 # delete old project (simplebroadcast_improved_recharge/)
