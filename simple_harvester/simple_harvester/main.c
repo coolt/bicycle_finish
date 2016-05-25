@@ -380,75 +380,7 @@ void ledInit(void)
 // Set payload and transmit
 	uint8_t p;
     p = 0;
-<<<<<<< HEAD:SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/main.c
-    /*URI-Payload length=29 ADV_LEN = 30*/
-   payload[p++] = 29;         /* len */
-    payload[p++] = 0xDE;		  /* Type URI */
-    payload[p++] = 0xBA;		/* UTF-8 code point for */
-    payload[p++] = '/';
-    payload[p++] = '/';
-    payload[p++] = 's';
-    payload[p++] = 'k';
-    payload[p++] = 'i';
-    payload[p++] = '.';
-    payload[p++] = 'z';
-    payload[p++] = 'h';
-    payload[p++] = 'a';
-    payload[p++] = 'w';
-    payload[p++] = '.';
-    payload[p++] = 'c';
-    payload[p++] = 'h';
 
-    payload[p++] = '?';
- 	payload[p++] = 't';
-	payload[p++] = '=';
-	payload[p++] = 5; //char_temp[0];
-	payload[p++] = 6; //char_temp[1];
-	payload[p++] = 7; //char_temp[2];
-	payload[p++] = '&';
-   	payload[p++] = 'h';
-   	payload[p++] = '=';
-   	payload[p++] = 8; //char_hum[0];
-   	payload[p++] = 9; //char_hum[1];
-   	payload[p++] = 10; //char_hum[2];
-   	payload[p++] = '#';
-   	payload[p++] = SENSOR_ID;
-
-    /*URI-Payload length=2+21 ADV_LEN = 25*/
-//    payload[p++] = 2;          /* len */
-//	payload[p++] = 0x01;		  /* Type flags */
-//	payload[p++] = 0x05;
-//	payload[p++] = 21; 	      /* len */
-//	payload[p++] = 0x03;		  /* Type UUID list */
-//	payload[p++] = 0x01;
-//	payload[p++] = 0xDE;
-//	payload[p++] = VENDOR;
-//	payload[p++] = SENSOR_ID;
-//	payload[p++] = output[0];
-//	payload[p++] = output[1];
-//	payload[p++] = output[2];
-//	payload[p++] = output[3];
-//	payload[p++] = output[4];
-//	payload[p++] = output[5];
-//	payload[p++] = output[6];
-//	payload[p++] = output[7];
-//	payload[p++] = output[8];
-//	payload[p++] = output[9];
-//	payload[p++] = output[10];
-//	payload[p++] = output[11];
-//	payload[p++] = output[12];
-//	payload[p++] = output[13];
-//	payload[p++] = output[14];
-//	payload[p++] = output[15];
-
-
-
-    //Start radio setup and linked advertisment
-    radioUpdateAdvData(p, payload);
-
-    //Start radio setup and linked advertisment
-    radioSetupAndTransmit();
-=======
     /*jedes 5.te mal senden*/
 
 
@@ -494,7 +426,7 @@ void ledInit(void)
 		//Start radio setup and linked advertisment
 		radioSetupAndTransmit();
 	//}
->>>>>>> Dario:SO_WS_BLE_ADV_URI/simple_harvester/main.c
+
 
 //END: Transmit
 /*****************************************************************************************/
@@ -517,11 +449,9 @@ void ledInit(void)
 
     //Request radio to not force on system bus any more
     radioCmdBusRequest(false);
-<<<<<<< HEAD:SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/main.c
-=======
+
  // } // end if
  // g_count++;
->>>>>>> Dario:SO_WS_BLE_ADV_URI/simple_harvester/main.c
 
     //
     // Standby procedure
@@ -559,13 +489,9 @@ void ledInit(void)
     PRCMDeepSleep();
 
     SysCtrlAonUpdate();
-<<<<<<< HEAD:SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/main.c
 
     SysCtrlAdjustRechargeAfterPowerDown();
 
-=======
-    SysCtrlAdjustRechargeAfterPowerDown();
->>>>>>> Dario:SO_WS_BLE_ADV_URI/simple_harvester/main.c
     SysCtrlAonSync();
 
     //
@@ -573,10 +499,7 @@ void ledInit(void)
 	//
    
     powerEnableRFC();
-<<<<<<< HEAD:SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/main.c
 
-=======
->>>>>>> Dario:SO_WS_BLE_ADV_URI/simple_harvester/main.c
     powerEnableAuxForceOn();
 
     //Re-enable cache and retention
