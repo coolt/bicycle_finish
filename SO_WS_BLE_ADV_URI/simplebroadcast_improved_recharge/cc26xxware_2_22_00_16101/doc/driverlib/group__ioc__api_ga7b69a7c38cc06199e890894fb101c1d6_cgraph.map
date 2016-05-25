@@ -1,4 +1,0 @@
-<map id="IOCPinTypeGpioInput" name="IOCPinTypeGpioInput">
-<area shape="rect" id="node2" href="$group__ioc__api.html#gaa37e353181d0457f3b56ddd541c6eb0a" title="Set the configuration of an IO port. " alt="" coords="205,5,359,32"/>
-<area shape="rect" id="node3" href="$group__gpio__api.html#ga2023799c613b176b7dc07ef0c28b863a" title="Sets the direction of the specified pin(s). " alt="" coords="218,56,346,83"/>
-</map>
