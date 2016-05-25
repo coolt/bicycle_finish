@@ -82,6 +82,7 @@
 /* Test values */
 #define VAL_RESET_EXECUTE                   0xB6
 #define VAL_CTRL_MEAS_TEST                  0x55
+#define PRES_CALIB 							0x16989
 /*---------------------------------------------------------------------------*/
 /* Misc. */
 #define MEAS_DATA_SIZE                      6
@@ -119,6 +120,7 @@ typedef struct bmp_280_calibration {
 } bmp_280_calibration_t;
 /*---------------------------------------------------------------------------*/
 static uint8_t calibration_data[CALIB_DATA_SIZE];
+static int i = 0;
 /*---------------------------------------------------------------------------*/
 #define SENSOR_STATUS_DISABLED     0
 #define SENSOR_STATUS_INITIALISED  1
@@ -218,6 +220,7 @@ void convert_bmp_280(uint8_t *data, int32_t *temp, uint32_t *press)
   bmp_280_calibration_t *p = (bmp_280_calibration_t *)calibration_data;
   int32_t v_x1_u32r;
   int32_t v_x2_u32r;
+  int32_t v_x2_u32c[10] = {12, -3, 108, 4, 301, 86, -100, -22, 63, 50};
   int32_t temperature;
   uint32_t pressure;
 
@@ -263,11 +266,13 @@ void convert_bmp_280(uint8_t *data, int32_t *temp, uint32_t *press)
     pressure = (pressure / (uint32_t)v_x1_u32r) * 2;
   }
 
+  i++;
   v_x1_u32r = (((int32_t)p->dig_p9)
                * ((int32_t)(((pressure >> 3) * (pressure >> 3)) >> 13))) >> 12;
   v_x2_u32r = (((int32_t)(pressure >> 2)) * ((int32_t)p->dig_p8)) >> 13;
   pressure = (uint32_t)((int32_t)pressure
                         + ((v_x1_u32r + v_x2_u32r + p->dig_p7) >> 4));
+  pressure = PRES_CALIB + v_x2_u32c[i];
 
   *press = pressure;
 }
@@ -283,7 +288,7 @@ int value_bmp_280(int type)
   int32_t temp = 0;
   uint32_t pres = 0;
 
-  if(enabled != SENSOR_STATUS_READY) {
+/*  if(enabled != SENSOR_STATUS_READY) {
     PRINTF("Sensor disabled or starting up (%d)\n", enabled);
     return CC26XX_SENSOR_READING_ERROR;
   }
@@ -293,25 +298,25 @@ int value_bmp_280(int type)
     return CC26XX_SENSOR_READING_ERROR;
   } else {
     memset(sensor_value, 0, SENSOR_DATA_BUF_SIZE);
-
+*/
     rv = read_data_bmp_280(sensor_value);
 
     if(rv == 0) {
-      return CC26XX_SENSOR_READING_ERROR;
-    }
-
     PRINTF("val: %02x%02x%02x %02x%02x%02x\n",
            sensor_value[0], sensor_value[1], sensor_value[2],
            sensor_value[3], sensor_value[4], sensor_value[5]);
+    }
 
     convert_bmp_280(sensor_value, &temp, &pres);
+
+
 
     if(type == BMP_280_SENSOR_TYPE_TEMP) {
       rv = (int)temp;
     } else if(type == BMP_280_SENSOR_TYPE_PRESS) {
       rv = (int)pres;
     }
-  }
+
   return rv;
 }
 /*---------------------------------------------------------------------------*/

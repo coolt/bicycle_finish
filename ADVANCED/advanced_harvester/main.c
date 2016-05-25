@@ -303,31 +303,55 @@ int main(void) {
      sensorsInit();
      ledInit();
 
-     //Start Temp measurement
+
+     // --------------------------------
+
+     uint32_t pressure = 0;
+     uint16_t temperature = 0;
+     uint16_t humidity = 0;
+
+     // start system
+     	powerEnableAuxForceOn();
+     	powerEnableCache();
+
+     	enable_bmp_280(1);
+     select_bmp_280();     				// activates I2C for bmp-sensor
+     enable_bmp_280(1);
+
+     do{
+    	// sensor not ready
+     	pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
+     	//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
+     }while(pressure == 0x80000000);
+
+     //g_pressure_set = false;
+     // enable_bmp_280(0);
+
+    //Start Temp measurement
     enable_tmp_007(1);
+
     //start hum measurement
     configure_hdc_1000();
     start_hdc_1000();
-    //Wait for, read and calc temperature
 
-    uint16_t temperature = 0;
+    //Wait for, read and calc temperature
     do{
     	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-    }while( (temperature == 0x80000000) || (temperature == 0));
+    }while( (temperature == 0x80000000) || (temperature == 0)); //
+
+    //g_temp_active = false;
     enable_tmp_007(0);
-
-
 
     //Wait for, read and calc humidity
     while(!read_data_hdc_1000());
-
-    uint16_t humidity = 0;
     humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
 
-
+    //g_humidity_active = false;
 
 //END read sensor values
 /*****************************************************************************************/
+
+
 
     powerDisablePeriph();
 	// Disable clock for GPIO in CPU run mode
@@ -339,9 +363,6 @@ int main(void) {
 
 	uint32_t timeFromRegister = 0x11111111;
 	//timeFromRegister = getTime();
-
-	uint32_t pressure = 0x22222222;
-
 
 
 	uint8_t p;
