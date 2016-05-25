@@ -1,0 +1,149 @@
+# FIXED
+
+main.obj: ../main.c
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/ioc.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdbool.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/yvals.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdarg.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/linkage.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/_lock.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdint.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_types.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_chip_def.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_memmap.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ioc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ints.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/interrupt.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_nvic.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/debug.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/cpu.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/rom.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/gpio.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_gpio.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/sys_ctrl.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_sysctl.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_prcm.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_wuc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aux_wuc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_ioc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ddi_0_osc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_rfc_pwr.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi_3_refsys.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_sysctl.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_rtc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_fcfg1.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/pwr_ctrl.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi_2_refsys.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/osc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ddi.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/aon_wuc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/aux_wuc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/ddi.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aux_smph.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/prcm.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/aon_ioc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/adi.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_uart.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/vims.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_vims.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/sensor-common.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/interfaces/board-i2c.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/ext-flash.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdlib.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/bmp-280-sensor.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdlib.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/tmp-007-sensor.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdlib.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/hdc-1000-sensor.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdlib.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/opt-3001-sensor.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdlib.h
+main.obj: ../board.h
+main.obj: ../radio.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/config.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/rtc.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/radio.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/system.h
+main.obj: /home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_event.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdio.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdarg.h
+main.obj: ../mbedtls/aes.h
+main.obj: ../mbedtls/config.h
+main.obj: ../mbedtls/check_config.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/limits.h
+main.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stddef.h
+
+../main.c: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/ioc.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdbool.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/yvals.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdarg.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/linkage.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/_lock.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdint.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_types.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_chip_def.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_memmap.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ioc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ints.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/interrupt.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_nvic.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/debug.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/cpu.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/rom.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/gpio.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_gpio.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/sys_ctrl.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_sysctl.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_prcm.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_wuc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aux_wuc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_ioc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ddi_0_osc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_rfc_pwr.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi_3_refsys.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_sysctl.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_rtc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_fcfg1.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/pwr_ctrl.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi_2_refsys.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/osc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ddi.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/aon_wuc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/aux_wuc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/ddi.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aux_smph.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/prcm.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/aon_ioc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/adi.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_uart.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/vims.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_vims.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/sensor-common.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/interfaces/board-i2c.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/ext-flash.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdlib.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/bmp-280-sensor.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdlib.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/tmp-007-sensor.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdlib.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/hdc-1000-sensor.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdlib.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors/opt-3001-sensor.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdlib.h: 
+../board.h: 
+../radio.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/config.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/rtc.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/radio.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/system.h: 
+/home/dalyan/Schreibtisch/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_event.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdio.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdarg.h: 
+../mbedtls/aes.h: 
+../mbedtls/config.h: 
+../mbedtls/check_config.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/limits.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stddef.h: 

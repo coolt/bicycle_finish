@@ -1,0 +1,15 @@
+# FIXED
+
+cc26xxware_2_22_00_16101/driverLib/debug.obj: ../cc26xxware_2_22_00_16101/driverLib/debug.c
+cc26xxware_2_22_00_16101/driverLib/debug.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/debug.h
+cc26xxware_2_22_00_16101/driverLib/debug.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdint.h
+cc26xxware_2_22_00_16101/driverLib/debug.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h
+cc26xxware_2_22_00_16101/driverLib/debug.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_types.h
+cc26xxware_2_22_00_16101/driverLib/debug.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_chip_def.h
+
+../cc26xxware_2_22_00_16101/driverLib/debug.c: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/debug.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdint.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_types.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_chip_def.h: 

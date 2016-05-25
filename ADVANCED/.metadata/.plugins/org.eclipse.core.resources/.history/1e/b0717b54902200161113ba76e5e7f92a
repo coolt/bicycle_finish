@@ -1,0 +1,27 @@
+# FIXED
+
+aes.obj: ../aes.c
+aes.obj: ../mbedtls/config.h
+aes.obj: ../mbedtls/check_config.h
+aes.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/limits.h
+aes.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/yvals.h
+aes.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdarg.h
+aes.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/linkage.h
+aes.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/_lock.h
+aes.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/string.h
+aes.obj: ../mbedtls/aes.h
+aes.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stddef.h
+aes.obj: /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdint.h
+
+../aes.c: 
+../mbedtls/config.h: 
+../mbedtls/check_config.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/limits.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/yvals.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdarg.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/linkage.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/_lock.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/string.h: 
+../mbedtls/aes.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stddef.h: 
+/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include/stdint.h: 

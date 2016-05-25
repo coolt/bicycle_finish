@@ -1,0 +1,143 @@
+# FIXED
+
+main.obj: ../main.c
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/ioc.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdint.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_types.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_chip_def.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_memmap.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ioc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ints.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/interrupt.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_nvic.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/debug.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/cpu.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/rom.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/gpio.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_gpio.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/sys_ctrl.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_sysctl.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_prcm.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_wuc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aux_wuc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_ioc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ddi_0_osc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_rfc_pwr.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi_3_refsys.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_sysctl.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_rtc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_fcfg1.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/pwr_ctrl.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi_2_refsys.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/osc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ddi.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/aon_wuc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/aux_wuc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/ddi.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aux_smph.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/prcm.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/aon_ioc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/adi.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_uart.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/vims.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_vims.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/sensor-common.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/interfaces/board-i2c.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/ext-flash.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdlib.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/linkage.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/bmp-280-sensor.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdlib.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/tmp-007-sensor.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdlib.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/hdc-1000-sensor.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdlib.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/opt-3001-sensor.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdlib.h
+main.obj: ../board.h
+main.obj: ../radio.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/config.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/rtc.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/radio.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/system.h
+main.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_event.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdio.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdarg.h
+main.obj: ../mbedtls/aes.h
+main.obj: ../mbedtls/config.h
+main.obj: ../mbedtls/check_config.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/limits.h
+main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h
+
+../main.c: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/ioc.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdint.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_types.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_chip_def.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_memmap.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ioc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ints.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/interrupt.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_nvic.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/debug.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/cpu.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/rom.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/gpio.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_gpio.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/sys_ctrl.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_sysctl.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_prcm.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_wuc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aux_wuc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_ioc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ddi_0_osc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_rfc_pwr.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi_3_refsys.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_sysctl.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_rtc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_fcfg1.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/pwr_ctrl.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi_2_refsys.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/osc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_ddi.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/aon_wuc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/aux_wuc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/../driverLib/ddi.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aux_smph.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/prcm.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/aon_ioc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/../driverLib/adi.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_uart.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_adi.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/driverLib/../driverLib/vims.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_vims.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/sensor-common.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/interfaces/board-i2c.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/ext-flash.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdlib.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/linkage.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/bmp-280-sensor.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdlib.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/tmp-007-sensor.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdlib.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/hdc-1000-sensor.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdlib.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/sensors/opt-3001-sensor.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdlib.h: 
+../board.h: 
+../radio.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/config.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/rtc.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/radio.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/system.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc/hw_aon_event.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdio.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdarg.h: 
+../mbedtls/aes.h: 
+../mbedtls/config.h: 
+../mbedtls/check_config.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/limits.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stddef.h: 

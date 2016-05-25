@@ -1,0 +1,13 @@
+# FIXED
+
+sensors/sensor-common.obj: ../sensors/sensor-common.c
+sensors/sensor-common.obj: ../sensors/sensor-common.h
+sensors/sensor-common.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/interfaces/board-i2c.h
+sensors/sensor-common.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdint.h
+sensors/sensor-common.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h
+
+../sensors/sensor-common.c: 
+../sensors/sensor-common.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/simplebroadcast_improved_recharge/interfaces/board-i2c.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdint.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h: 

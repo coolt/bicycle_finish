@@ -1,3 +1,0 @@
-COMPILER_TOOL = "/cygdrive/c/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.2/bin/armcl"
-COMPILER_INCL = "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.2/include"
-ARCHIVER_TOOL = "/cygdrive/c/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.2/bin/armar"
