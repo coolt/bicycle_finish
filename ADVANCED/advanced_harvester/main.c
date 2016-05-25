@@ -208,7 +208,7 @@ int main(void) {
   powerEnableRFC();
 
   powerEnableXtalInterface();
-  //powerConfigureRecharge(); --> Optimized version later in this code (brts)
+
   
   // Divide INF clk to save Idle mode power (increases interrupt latency)
   powerDivideInfClkDS(PRCM_INFRCLKDIVDS_RATIO_DIV32);
@@ -251,7 +251,7 @@ int main(void) {
   powerDisableAuxRamRet();
 
   //Clear payload buffer
-    memset(payload, 0, ADVLEN);
+  memset(payload, 0, ADVLEN);
 
   while(1) {
 
@@ -310,20 +310,20 @@ int main(void) {
     start_hdc_1000();
     //Wait for, read and calc temperature
 
-    int temperature ;
+    uint16_t temperature = 0;
     do{
     	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-    }while(temperature==0x80000000);
+    }while( (temperature == 0x80000000) || (temperature == 0));
     enable_tmp_007(0);
-    //char char_temp[5] = temperature;
+
 
 
     //Wait for, read and calc humidity
-    while(!read_data_hdc_1000())
-    	;
-    int humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
-    char char_hum[5];
-    sprintf(char_hum, "%3d",humidity/10);
+    while(!read_data_hdc_1000());
+
+    uint16_t humidity = 0;
+    humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
+
 
 
 //END read sensor values
@@ -374,9 +374,9 @@ int main(void) {
 
 
    	payload[p++] = 0;
-   	payload[p++] = char_hum[0];
-   	payload[p++] = char_hum[1];
-   	payload[p++] = char_hum[2];
+   	payload[p++] = 0;
+   	payload[p++] = (char) (humidity >> 8);
+   	payload[p++] = (char) humidity;
 
    	payload[p++] = 0;  // checksum
    	payload[p++] = 0;
