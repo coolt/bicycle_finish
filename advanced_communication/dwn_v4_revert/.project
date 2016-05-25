@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>dwn_v4_revert</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.ti.ccstudio.core.ccsNature</nature>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+	</natures>
+	<variableList>
+		<variable>
+			<name>FIRMWARE</name>
+			<value>file:/C:/Users/katrin/workspace_v4/meli16/cc26xxware_2_22_00_16101</value>
+		</variable>
+		<variable>
+			<name>INTERFACE</name>
+			<value>file:/C:/Users/katrin/workspace_v4/meli16/interfaces</value>
+		</variable>
+		<variable>
+			<name>RADIO</name>
+			<value>file:/C:/Users/katrin/workspace_v4/meli16/radio_files</value>
+		</variable>
+		<variable>
+			<name>SENSOR</name>
+			<value>file:/C:/Users/katrin/workspace_v4/meli16/sensors</value>
+		</variable>
+	</variableList>
+</projectDescription>

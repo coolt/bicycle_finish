@@ -17,7 +17,7 @@
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROGRAM.Texas Instruments XDS110 USB Debug Probe_0/Cortex_M3_0" value="${build_artifact:meli16}"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROJECT.Texas Instruments XDS110 USB Debug Probe_0/Cortex_M3_0" value="meli16"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_TARGET_CONFIG" value="${target_config_active_default:meli16}"/>
-<stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.Texas Instruments XDS110 USB Debug Probe_0/Cortex_M3_0" value="C:/Users\katrin\Documents\GitHub\sensortag\bicycle_computer_v4\Debug\meli16.out"/>
+<stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.Texas Instruments XDS110 USB Debug Probe_0/Cortex_M3_0" value="C:/Users\katrin\Downloads\sensortag-advanced\sensortag-advanced\bicycle_computer_v4\Debug\meli16.out"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/meli16"/>
 </listAttribute>

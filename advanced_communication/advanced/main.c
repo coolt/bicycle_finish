@@ -438,15 +438,15 @@ int main(void) {
 		// system in wake up
 		// wait for interrupts
 
-		if(!g_measurement_done){
+		//if(!g_measurement_done){
 			getData();										// get current energy state
-		}
+		//}
 
-		if(g_measurement_done){
+		//if(g_measurement_done){
 			setData();
 			sendData();
 			sleep();
-		}
+		//}
 
 	}
 }
