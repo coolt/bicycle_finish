@@ -90,3 +90,4 @@ advanced_communication/advanced/Debug/sensors/subdir_rules.mk
 advanced_communication/advanced/Debug/cc26xxware_2_22_00_16101/driverLib/subdir_rules.mk
 advanced_communication/advanced/Debug/advanced.map
 *.launch
+*.launch
