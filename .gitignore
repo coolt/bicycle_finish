@@ -2,6 +2,16 @@
 composer.phar
 /vendor/
 
+# add new project
+advanced_communication/.metadata/**
+advanced_communication/simple_harvester/Debug
+advanced_communication/simple_harvester/.launches/**
+advanced_communication/simple_harvester/.settings/**
+advanced_communication/simple_harvester/cc26xxware_2_22_00_16101/**
+
+
+
+
 #renamed project directory
 # form SO_WS_BLE_ADV_URI to simple_harvester
 simple_harvester/simple_harvester/Debug
