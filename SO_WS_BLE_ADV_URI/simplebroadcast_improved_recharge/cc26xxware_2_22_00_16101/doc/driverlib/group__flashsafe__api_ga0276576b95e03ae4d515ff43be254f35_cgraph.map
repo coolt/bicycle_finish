@@ -1,7 +1,0 @@
-<map id="FlashsafeIntClear" name="FlashsafeIntClear">
-<area shape="rect" id="node2" href="$group__flashsafe__api.html#ga3b400f672752b8ba1798bb2ce313fe82" title="Aquire the flash semaphore. " alt="" coords="184,5,369,32"/>
-<area shape="rect" id="node4" href="$group__flash__api.html#ga6dd9c64a60e5645a50507d831279f85d" title="Clears flash controller interrupt source. " alt="" coords="225,56,329,83"/>
-<area shape="rect" id="node5" href="$group__flashsafe__api.html#ga7a07e537eb0207e4004bbf79f7874be5" title="Release the flash semaphore. " alt="" coords="192,107,361,133"/>
-<area shape="rect" id="node3" href="$group__mcusemaphore__api.html#gad93496e0580b9983fcff65f31778632f" title="Try to Acquire a semaphore. " alt="" coords="417,5,543,32"/>
-<area shape="rect" id="node6" href="$group__mcusemaphore__api.html#gaed11d8e4592fbbf77b090d970371f1d3" title="Release a semaphore. " alt="" coords="425,107,535,133"/>
-</map>

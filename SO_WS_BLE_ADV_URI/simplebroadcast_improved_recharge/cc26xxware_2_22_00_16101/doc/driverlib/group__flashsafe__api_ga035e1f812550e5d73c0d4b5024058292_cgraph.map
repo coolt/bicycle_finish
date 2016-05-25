@@ -1,8 +1,0 @@
-<map id="FlashsafeIntRegister" name="FlashsafeIntRegister">
-<area shape="rect" id="node2" href="$group__flashsafe__api.html#ga3b400f672752b8ba1798bb2ce313fe82" title="Aquire the flash semaphore. " alt="" coords="203,5,388,32"/>
-<area shape="rect" id="node4" href="$group__interrupt__api.html#ga0a32aafea7f4904d2a64ee18b45f96c9" title="Registers a function to be called when an interrupt occurs. " alt="" coords="251,56,340,83"/>
-<area shape="rect" id="node5" href="$group__interrupt__api.html#ga49fc9c3d1a0f8c42a20249f8c5d360ce" title="Enables an interrupt. " alt="" coords="255,107,336,133"/>
-<area shape="rect" id="node6" href="$group__flashsafe__api.html#ga7a07e537eb0207e4004bbf79f7874be5" title="Release the flash semaphore. " alt="" coords="211,157,380,184"/>
-<area shape="rect" id="node3" href="$group__mcusemaphore__api.html#gad93496e0580b9983fcff65f31778632f" title="Try to Acquire a semaphore. " alt="" coords="436,5,561,32"/>
-<area shape="rect" id="node7" href="$group__mcusemaphore__api.html#gaed11d8e4592fbbf77b090d970371f1d3" title="Release a semaphore. " alt="" coords="444,157,553,184"/>
-</map>

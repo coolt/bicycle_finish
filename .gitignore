@@ -1,6 +1,14 @@
 composer.phar
 /vendor/
 
+# renamed project
+# delete old project (simplebroadcast_improved_recharge/)
+# renamed in simple_harvester
+SO_WS_BLE_ADV_URI/simple_harvester/Debug
+SO_WS_BLE_ADV_URI/simple_harvester/.launches/**
+SO_WS_BLE_ADV_URI/simple_harvester/.settings/**
+SO_WS_BLE_ADV_URI/simple_harvester/cc26xxware_2_22_00_16101/**
+
 # Commit your application's lock file http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
