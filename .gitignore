@@ -99,3 +99,5 @@ advanced_communication/advanced/Debug/advanced.map
 ADVANCED/.metadata/.plugins/org.eclipse.cdt.core/advanced_harvester.1464191380925.pdom
 *.pdom
 *.pdom
+*.markers
+ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources
