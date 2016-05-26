@@ -227,7 +227,7 @@ int main(void) {
   //Config IOID4 for external interrupt on rising edge and wake up
   IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
   //Config IOID4 for external interrupt on rising edge and wake up
-  IOCPortConfigureSet(BOARD_IOID_DP0 , IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
+  //IOCPortConfigureSet(BOARD_IOID_DP0 , IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
   //Set device to wake MCU from standby on PIN 4 (BUTTON1)
   HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_PAD;  //Does not work with AON_EVENT_MCUWUSEL_WU0_EV_PAD4 --> WHY??
 
@@ -241,6 +241,7 @@ int main(void) {
 
   initInterrupts();
   initRadio();
+
 
   // Turn off FLASH in idle mode
   powerDisableFlashInIdle();
@@ -302,8 +303,7 @@ int main(void) {
      /* Wait for domains to power on */
      while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
-     sensorsInit();
-     ledInit();
+
 
 
      // --------------------------------
@@ -313,18 +313,19 @@ int main(void) {
      uint16_t humidity = 0;
 
      // start system
-     	powerEnableAuxForceOn();
-     	powerEnableCache();
+    //powerEnableAuxForceOn();
+    //powerEnableCache();
 
-     	enable_bmp_280(1);
-     select_bmp_280();     				// activates I2C for bmp-sensor
+//     enable_bmp_280(1);
+//     select_bmp_280();     				// activates I2C for bmp-sensor
+     //init_bmp_280();
      enable_bmp_280(1);
 
      do{
-    	// sensor not ready
+    	// sensor not always ready
      	pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
      	//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
-     }while(pressure == 0x80000000);
+     }while((pressure == 0x80000000) || (pressure == 0));
 
      //g_pressure_set = false;
      // enable_bmp_280(0);
@@ -370,6 +371,7 @@ int main(void) {
 	uint8_t p;
     p = 0;
 
+    // header
     payload[p++] = ADVLEN-1;
     payload[p++] = 0x03;
     payload[p++] = 0xDE;
@@ -377,33 +379,33 @@ int main(void) {
     payload[p++] = (char) (sequenceNumber >> 8);
     payload[p++] = (char) sequenceNumber;
 
-    payload[p++] = (timeFromRegister >> 24) & 0x000000FF;
-    payload[p++] = (timeFromRegister >> 16) & 0x000000FF;
-    payload[p++] = (timeFromRegister >> 8) & 0x000000FF;
-    payload[p++] = timeFromRegister  & 0x000000FF;
+    // speed
+    payload[p++] = (char) (timeFromRegister >> 24) & 0x000000FF;
+    payload[p++] = (char) (timeFromRegister >> 16) & 0x000000FF;
+    payload[p++] = (char) (timeFromRegister >> 8) & 0x000000FF;
+    payload[p++] = (char) timeFromRegister  & 0x000000FF;
 
+    // pressure
     payload[p++] = 0;
-    payload[p++] = (pressure >> 16) & 0x000000FF;
-    payload[p++] = (pressure >> 8) & 0x000000FF;
-    payload[p++] = pressure  & 0x000000FF;
+    payload[p++] = (char) ((pressure >> 16) & 0x000000FF);
+    payload[p++] = (char) ((pressure >> 8) & 0x000000FF);
+    payload[p++] = (char) (pressure  & 0x000000FF);
 
+    // temperature
     payload[p++] = 0;
     payload[p++] = 0;
     payload[p++] = (char) (temperature >> 8);
  	payload[p++] = (char) temperature & 0x00FF;
- 	//payload[p++] = char_temp[0]; // = 0;
- 	//payload[p++] = char_temp[1];
- 	//payload[p++] = char_temp[2];
 
-
+ 	// humidity
    	payload[p++] = 0;
    	payload[p++] = 0;
    	payload[p++] = (char) (humidity >> 8);
    	payload[p++] = (char) humidity;
 
+   	// checksum
    	payload[p++] = 0;  // checksum
    	payload[p++] = 0;
-
 
    	sequenceNumber++;
 

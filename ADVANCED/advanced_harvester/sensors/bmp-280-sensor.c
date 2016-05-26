@@ -220,7 +220,7 @@ void convert_bmp_280(uint8_t *data, int32_t *temp, uint32_t *press)
   bmp_280_calibration_t *p = (bmp_280_calibration_t *)calibration_data;
   int32_t v_x1_u32r;
   int32_t v_x2_u32r;
-  int32_t v_x2_u32c[10] = {12, -3, 108, 4, 301, 86, -100, -22, 63, 50};
+  int32_t v_x2_u32c[10] = {12, -3, 108, 4, 301, 86, -100, -22, 63, 50};//dummy
   int32_t temperature;
   uint32_t pressure;
 
@@ -272,7 +272,7 @@ void convert_bmp_280(uint8_t *data, int32_t *temp, uint32_t *press)
   v_x2_u32r = (((int32_t)(pressure >> 2)) * ((int32_t)p->dig_p8)) >> 13;
   pressure = (uint32_t)((int32_t)pressure
                         + ((v_x1_u32r + v_x2_u32r + p->dig_p7) >> 4));
-  pressure = PRES_CALIB + v_x2_u32c[i];
+  //pressure = PRES_CALIB + v_x2_u32c[i];
 
   *press = pressure;
 }
@@ -288,17 +288,17 @@ int value_bmp_280(int type)
   int32_t temp = 0;
   uint32_t pres = 0;
 
-/*  if(enabled != SENSOR_STATUS_READY) {
+  /*if(enabled != SENSOR_STATUS_READY) {
     PRINTF("Sensor disabled or starting up (%d)\n", enabled);
     return CC26XX_SENSOR_READING_ERROR;
-  }
+  }*/
 
   if((type != BMP_280_SENSOR_TYPE_TEMP) && type != BMP_280_SENSOR_TYPE_PRESS) {
     PRINTF("Invalid type\n");
     return CC26XX_SENSOR_READING_ERROR;
   } else {
     memset(sensor_value, 0, SENSOR_DATA_BUF_SIZE);
-*/
+
     rv = read_data_bmp_280(sensor_value);
 
     if(rv == 0) {
@@ -316,7 +316,7 @@ int value_bmp_280(int type)
     } else if(type == BMP_280_SENSOR_TYPE_PRESS) {
       rv = (int)pres;
     }
-
+  }
   return rv;
 }
 /*---------------------------------------------------------------------------*/
