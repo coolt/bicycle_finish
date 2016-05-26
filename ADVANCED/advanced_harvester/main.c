@@ -117,6 +117,8 @@ uint8_t spiBuffer[SPI_BUFFER_LENGTH];
 
 static uint16_t sequenceNumber = 0x0;
 uint32_t timediff=0;
+uint8_t count=0;//times gpio int appears
+bool readed_sensors=false;
 
 // interrupts -----------------------------------------------------------
 void GPIOIntHandler(void){
@@ -134,6 +136,7 @@ void GPIOIntHandler(void){
   time2=time1;
   time1= AONRTCCurrentCompareValueGet();
   timediff=time1-time2;
+  count++;
 
   /* Read interrupt flags */
   event_flags = (HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK);
@@ -315,9 +318,9 @@ int main(void) {
 
      // --------------------------------
 
-     uint32_t pressure = 0;
-     uint16_t temperature = 0;
-     uint16_t humidity = 0;
+     static uint32_t pressure = 0;
+     static uint16_t temperature = 0;
+     static uint16_t humidity = 0;
 
      // start system
     //powerEnableAuxForceOn();
@@ -326,36 +329,38 @@ int main(void) {
 //     enable_bmp_280(1);
 //     select_bmp_280();     				// activates I2C for bmp-sensor
      //init_bmp_280();
-     enable_bmp_280(1);
+     if(count>=50 && !readed_sensors){
+    	 readed_sensors=true;
+		 enable_bmp_280(1);
 
-     do{
-    	// sensor not always ready
-     	pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
-     	//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
-     }while((pressure == 0x80000000) );
+		 do{
+			// sensor not always ready
+			pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
+			//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
+		 }while((pressure == 0x80000000) );
+     }else if(false){
+		 //g_pressure_set = false;
+		 // enable_bmp_280(0);
 
-     //g_pressure_set = false;
-     // enable_bmp_280(0);
+		//Start Temp measurement
+		enable_tmp_007(1);
 
-    //Start Temp measurement
-    enable_tmp_007(1);
+		//start hum measurement
+		configure_hdc_1000();
+		start_hdc_1000();
 
-    //start hum measurement
-    configure_hdc_1000();
-    start_hdc_1000();
+		//Wait for, read and calc temperature
+		do{
+			temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
+		}while( (temperature == 0x80000000)); //
 
-    //Wait for, read and calc temperature
-    do{
-    	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-    }while( (temperature == 0x80000000)); //
+		//g_temp_active = false;
+		enable_tmp_007(0);
 
-    //g_temp_active = false;
-    enable_tmp_007(0);
-
-    //Wait for, read and calc humidity
-    while(!read_data_hdc_1000());
-    humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
-
+		//Wait for, read and calc humidity
+		while(!read_data_hdc_1000());
+		humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
+     }
     //g_humidity_active = false;
 
 //END read sensor values
@@ -417,32 +422,42 @@ int main(void) {
    	sequenceNumber++;
 
     //Start radio setup and linked advertisment
-    radioUpdateAdvData(ADVLEN, payload);
+
 
     //Start radio setup and linked advertisment
-    radioSetupAndTransmit();
+    if(count>=100){
+    	count=0;
+    	readed_sensors=false;
+    	radioUpdateAdvData(ADVLEN, payload);
+    	radioSetupAndTransmit();
+
+	//Wait in IDLE for CMD_DONE interrupt after radio setup. ISR will disable radio interrupts
+		while( ! rfSetupDone) {
+		  powerDisableCPU();
+		  PRCMDeepSleep();
+		}
+		 //Disable flash in IDLE after CMD_RADIO_SETUP is done (radio setup reads FCFG trim values)
+		    powerDisableFlashInIdle();
+
+		    //Wait in IDLE for LAST_CMD_DONE after 3 adv packets
+		    while( ! rfAdvertisingDone) {
+		      powerDisableCPU();
+		      PRCMDeepSleep();
+		    }
+
+		    //Request radio to not force on system bus any more
+		    radioCmdBusRequest(false);
+
+
+    }
 
 //END: Transmit
 /*****************************************************************************************/
 
 
-    //Wait in IDLE for CMD_DONE interrupt after radio setup. ISR will disable radio interrupts
-    while( ! rfSetupDone) {
-      powerDisableCPU();
-      PRCMDeepSleep();
-    }
 
-    //Disable flash in IDLE after CMD_RADIO_SETUP is done (radio setup reads FCFG trim values)
-    powerDisableFlashInIdle();
 
-    //Wait in IDLE for LAST_CMD_DONE after 3 adv packets
-    while( ! rfAdvertisingDone) {
-      powerDisableCPU();
-      PRCMDeepSleep();
-    }
 
-    //Request radio to not force on system bus any more
-    radioCmdBusRequest(false);
     
     //
     // Standby procedure
