@@ -116,10 +116,12 @@ uint16_t g_pressure;
 uint8_t spiBuffer[SPI_BUFFER_LENGTH];
 
 static uint16_t sequenceNumber = 0x0;
+uint32_t timediff=0;
 
 // interrupts -----------------------------------------------------------
 void GPIOIntHandler(void){
   uint32_t event_flags;
+  static uint32_t time1=0,time2=0;
   powerEnablePeriph();
   powerEnableGPIOClockRunMode();
 
@@ -128,6 +130,11 @@ void GPIOIntHandler(void){
 
   /*Disable interrupts while clearing flags*/
   IntDisable(INT_EDGE_DETECT);
+
+  time2=time1;
+  time1= AONRTCCurrentCompareValueGet();
+  timediff=time1-time2;
+
   /* Read interrupt flags */
   event_flags = (HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK);
   if(event_flags){//Is an event flag set? (should always be set)
@@ -213,7 +220,7 @@ int main(void) {
   // Divide INF clk to save Idle mode power (increases interrupt latency)
   powerDivideInfClkDS(PRCM_INFRCLKDIVDS_RATIO_DIV32);
 
-  //initRTC();
+  initRTC();
 
   powerEnablePeriph();
   powerEnableGPIOClockRunMode();
@@ -227,7 +234,7 @@ int main(void) {
   //Config IOID4 for external interrupt on rising edge and wake up
   IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
   //Config IOID4 for external interrupt on rising edge and wake up
-  //IOCPortConfigureSet(BOARD_IOID_DP0 , IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
+  IOCPortConfigureSet(BOARD_IOID_DP0 , IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
   //Set device to wake MCU from standby on PIN 4 (BUTTON1)
   HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_PAD;  //Does not work with AON_EVENT_MCUWUSEL_WU0_EV_PAD4 --> WHY??
 
@@ -325,7 +332,7 @@ int main(void) {
     	// sensor not always ready
      	pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
      	//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
-     }while((pressure == 0x80000000) || (pressure == 0));
+     }while((pressure == 0x80000000) );
 
      //g_pressure_set = false;
      // enable_bmp_280(0);
@@ -340,7 +347,7 @@ int main(void) {
     //Wait for, read and calc temperature
     do{
     	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-    }while( (temperature == 0x80000000) || (temperature == 0)); //
+    }while( (temperature == 0x80000000)); //
 
     //g_temp_active = false;
     enable_tmp_007(0);
@@ -380,10 +387,10 @@ int main(void) {
     payload[p++] = (char) sequenceNumber;
 
     // speed
-    payload[p++] = (char) (timeFromRegister >> 24) & 0x000000FF;
-    payload[p++] = (char) (timeFromRegister >> 16) & 0x000000FF;
-    payload[p++] = (char) (timeFromRegister >> 8) & 0x000000FF;
-    payload[p++] = (char) timeFromRegister  & 0x000000FF;
+    payload[p++] = (char) (timediff >> 24) & 0x000000FF;
+    payload[p++] = (char) (timediff >> 16) & 0x000000FF;
+    payload[p++] = (char) (timediff >> 8) & 0x000000FF;
+    payload[p++] = (char) timediff  & 0x000000FF;
 
     // pressure
     payload[p++] = 0;
