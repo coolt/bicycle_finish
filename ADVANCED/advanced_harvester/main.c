@@ -50,7 +50,7 @@
  * (12.01.2016, brts)
  */
 
-
+// general
 #include <driverLib/ioc.h>
 #include <driverLib/sys_ctrl.h>
 #include <config.h>
@@ -64,11 +64,7 @@
 #include "tmp-007-sensor.h"
 #include "hdc-1000-sensor.h"
 #include "opt-3001-sensor.h"
-
 #include "interfaces/board-i2c.h"
-
-
-
 #include "mbedtls/aes.h"
 
 // GPIO
@@ -85,15 +81,17 @@
 #include <inc/hw_aon_event.h>
 
 
-
 // SPI
-//#include "spi.h"
+#include "spi.h"
 
-
+// radio transmittion
 extern volatile bool rfBootDone;
 extern volatile bool rfSetupDone;
 extern volatile bool rfAdvertisingDone;
 
+// get and store data
+char payload[ADVLEN];					// shared data buffer
+static uint16_t sequenceNumber = 0x0;
 #define TMP007_REG_ADDR_STATUS          0x04
 #define TMP_007_SENSOR_TYPE_AMBIENT   2
 #define REGISTER_LENGTH                 2
@@ -101,27 +99,26 @@ extern volatile bool rfAdvertisingDone;
 #define LO_UINT16(a) ((a) & 0xFF)
 #define SWAP(v) ((LO_UINT16(v) << 8) | HI_UINT16(v))
 #define CONV_RDY_BIT                    0x4000
-
-
 uint32_t g_timestamp1, g_timestamp2;
-char payload[ADVLEN];					// shared data buffer
-//volatile bool rfBootDone;				// flags RF-Commands
-//volatile bool rfSetupDone;
-//volatile bool rfAdvertisingDone;
+uint32_t g_timediff = 0;
+
+// controll sequnce data
+uint8_t count = 0;						//times gpio int appears
+bool readed_sensors = false;
 bool g_button_pressed;
 bool g_pressure_set;					// pressure sensor state
 bool g_temp_active;
 bool g_humidity_active;
-uint16_t g_pressure;
+
+// spi
 uint8_t spiBuffer[SPI_BUFFER_LENGTH];
 
-static uint16_t sequenceNumber = 0x0;
-uint32_t timediff=0;
-uint8_t count=0;//times gpio int appears
-bool readed_sensors=false;
+
+
 
 // interrupts -----------------------------------------------------------
 void GPIOIntHandler(void){
+
   uint32_t event_flags;
   static uint32_t time1=0,time2=0;
   powerEnablePeriph();
@@ -133,14 +130,16 @@ void GPIOIntHandler(void){
   /*Disable interrupts while clearing flags*/
   IntDisable(INT_EDGE_DETECT);
 
-  time2=time1;
-  time1= AONRTCCurrentCompareValueGet();
-  timediff=time1-time2;
-  count++;
+  // calculate speed from GPIO-Interrupt (Pin25)
+  time2 = time1;
+  time1 = AONRTCCurrentCompareValueGet();				// read out RTC timestamp
+  g_timediff = time1-time2;
+  count++;												// count interrupts (= reed switch)
 
   /* Read interrupt flags */
+  // event flag must be handeld, otherwise crach in while line 146
   event_flags = (HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK);
-  if(event_flags){//Is an event flag set? (should always be set)
+  if(event_flags){										//Is an event flag set? (should always be set)
     /* Clear the interrupt flags*/
     HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) = event_flags;
     /*Wait until the flag is cleared, no new flag possible because interrupt disabled*/
@@ -166,8 +165,6 @@ void GPIOIntHandler(void){
 
 void sensorsInit(void)
 {
-	uint16_t success = 0;
-    uint16_t val;
 
 	//Turn off TMP007
     configure_tmp_007(0);
@@ -196,14 +193,6 @@ void sensorsInit(void)
 	board_i2c_shutdown();
 }
 
-void ledInit(void)
-{
-	IOCPinTypeGpioOutput(BOARD_IOID_LED_1); //LED1
-	IOCPinTypeGpioOutput(BOARD_IOID_LED_2); //LED2
-
-	GPIOPinClear(BOARD_LED_1);
-	GPIOPinClear(BOARD_LED_2);
-}
 
 
 int main(void) {
@@ -216,14 +205,12 @@ int main(void) {
   //Force AUX on
   powerEnableAuxForceOn();
   powerEnableRFC();
-
   powerEnableXtalInterface();
-
   
   // Divide INF clk to save Idle mode power (increases interrupt latency)
   powerDivideInfClkDS(PRCM_INFRCLKDIVDS_RATIO_DIV32);
 
-  initRTC();
+  initRTC();										// for speed measurement
 
   powerEnablePeriph();
   powerEnableGPIOClockRunMode();
@@ -232,13 +219,14 @@ int main(void) {
   while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
   sensorsInit();
-  ledInit();
 
   //Config IOID4 for external interrupt on rising edge and wake up
   IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
+
   //Config IOID4 for external interrupt on rising edge and wake up
   IOCPortConfigureSet(BOARD_IOID_DP0 , IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
   //Set device to wake MCU from standby on PIN 4 (BUTTON1)
+
   HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_PAD;  //Does not work with AON_EVENT_MCUWUSEL_WU0_EV_PAD4 --> WHY??
 
   IntEnable(INT_EDGE_DETECT);
@@ -251,7 +239,6 @@ int main(void) {
 
   initInterrupts();
   initRadio();
-
 
   // Turn off FLASH in idle mode
   powerDisableFlashInIdle();
@@ -306,15 +293,11 @@ int main(void) {
     while( !OSCHF_AttemptToSwitchToXosc())
     {}
   
-
     powerEnablePeriph();
     powerEnableGPIOClockRunMode();
 
      /* Wait for domains to power on */
      while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
-
-
-
 
      // --------------------------------
 
@@ -322,25 +305,18 @@ int main(void) {
      static uint16_t temperature = 0;
      static uint16_t humidity = 0;
 
-     // start system
-    //powerEnableAuxForceOn();
-    //powerEnableCache();
-
-//     enable_bmp_280(1);
-//     select_bmp_280();     				// activates I2C for bmp-sensor
-     //init_bmp_280();
-     if(count>=50 && !readed_sensors){
+     // for energy sparing: read sensors out only all 50 times
+     if( count >= 50 && !readed_sensors){
     	 readed_sensors=true;
 		 enable_bmp_280(1);
 
 		 do{
-			// sensor not always ready
 			pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
 			//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
 		 }while((pressure == 0x80000000) );
-     }else if(false){
 		 //g_pressure_set = false;
-		 // enable_bmp_280(0);
+
+     }else if(false){
 
 		//Start Temp measurement
 		enable_tmp_007(1);
@@ -360,13 +336,11 @@ int main(void) {
 		//Wait for, read and calc humidity
 		while(!read_data_hdc_1000());
 		humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
+		//g_humidity_active = false;
      }
-    //g_humidity_active = false;
 
 //END read sensor values
 /*****************************************************************************************/
-
-
 
     powerDisablePeriph();
 	// Disable clock for GPIO in CPU run mode
@@ -375,9 +349,6 @@ int main(void) {
 	HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
 
 /*****************************************************************************************/
-
-	uint32_t timeFromRegister = 0x11111111;
-	//timeFromRegister = getTime();
 
 
 	uint8_t p;
@@ -392,10 +363,10 @@ int main(void) {
     payload[p++] = (char) sequenceNumber;
 
     // speed
-    payload[p++] = (char) (timediff >> 24) & 0x000000FF;
-    payload[p++] = (char) (timediff >> 16) & 0x000000FF;
-    payload[p++] = (char) (timediff >> 8) & 0x000000FF;
-    payload[p++] = (char) timediff  & 0x000000FF;
+    payload[p++] = (char) (g_timediff >> 24) & 0x000000FF;
+    payload[p++] = (char) (g_timediff >> 16) & 0x000000FF;
+    payload[p++] = (char) (g_timediff >> 8) & 0x000000FF;
+    payload[p++] = (char) g_timediff  & 0x000000FF;
 
     // pressure
     payload[p++] = 0;
@@ -421,42 +392,36 @@ int main(void) {
 
    	sequenceNumber++;
 
-    //Start radio setup and linked advertisment
-
 
     //Start radio setup and linked advertisment
-    if(count>=100){
-    	count=0;
+   	// for energy sparing: only each 100 time send data
+    if(count >= 100){
+    	count = 0;
     	readed_sensors=false;
     	radioUpdateAdvData(ADVLEN, payload);
     	radioSetupAndTransmit();
 
-	//Wait in IDLE for CMD_DONE interrupt after radio setup. ISR will disable radio interrupts
+		//Wait in IDLE for CMD_DONE interrupt after radio setup. ISR will disable radio interrupts
 		while( ! rfSetupDone) {
 		  powerDisableCPU();
 		  PRCMDeepSleep();
 		}
-		 //Disable flash in IDLE after CMD_RADIO_SETUP is done (radio setup reads FCFG trim values)
-		    powerDisableFlashInIdle();
+		//Disable flash in IDLE after CMD_RADIO_SETUP is done (radio setup reads FCFG trim values)
+		powerDisableFlashInIdle();
 
-		    //Wait in IDLE for LAST_CMD_DONE after 3 adv packets
-		    while( ! rfAdvertisingDone) {
-		      powerDisableCPU();
-		      PRCMDeepSleep();
-		    }
+		//Wait in IDLE for LAST_CMD_DONE after 3 adv packets
+		while( ! rfAdvertisingDone) {
+		  powerDisableCPU();
+		  PRCMDeepSleep();
+		}
 
-		    //Request radio to not force on system bus any more
-		    radioCmdBusRequest(false);
-
+		//Request radio to not force on system bus any more
+		radioCmdBusRequest(false);
 
     }
 
 //END: Transmit
 /*****************************************************************************************/
-
-
-
-
 
     
     //
