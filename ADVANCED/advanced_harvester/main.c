@@ -51,6 +51,7 @@
  */
 
 // general
+#include "system.h"
 #include <driverLib/ioc.h>
 #include <driverLib/sys_ctrl.h>
 #include <config.h>

@@ -58,54 +58,96 @@
 void        ResetISR( void );
 static void NmiSR( void );
 static void FaultISR( void );
+
 static void IntDefaultHandler( void );
+extern void IntDefaultHandler( void );
+
 extern int  main(void);
 
-
-
+// static for not used handler
+// implemented handler only extern
+static void MPUFaultIntHandler( void );
 extern void MPUFaultIntHandler( void );
+static void BusFaultIntHandler( void );
 extern void BusFaultIntHandler( void );
+static void UsageFaultIntHandler( void );
 extern void UsageFaultIntHandler( void );
+static void SVCallIntHandler( void );
 extern void SVCallIntHandler( void );
+static void DebugMonIntHandler( void );
 extern void DebugMonIntHandler( void );
+static void PendSVIntHandler( void );
 extern void PendSVIntHandler( void );
+static void SysTickIntHandler( void );
 extern void SysTickIntHandler( void );
+//static void GPIOIntHandler( void );
 extern void GPIOIntHandler( void );
+static void I2CIntHandler( void );
 extern void I2CIntHandler( void );
+//static void RFCCPE1IntHandler( void );
 extern void RFCCPE1IntHandler( void );
+static void AONIntHandler( void );
 extern void AONIntHandler( void );
+//static void AONRTCIntHandler( void );
 extern void AONRTCIntHandler( void );
+static void UART0IntHandler( void );
 extern void UART0IntHandler( void );
+static void AUXSWEvent0IntHandler( void );
 extern void AUXSWEvent0IntHandler( void );
+static void SSI0IntHandler( void );
 extern void SSI0IntHandler( void );
+static void SSI1IntHandler( void );
 extern void SSI1IntHandler( void );
+//static void RFCCPE0IntHandler( void );
 extern void RFCCPE0IntHandler( void );
+static void RFCHardwareIntHandler( void );
 extern void RFCHardwareIntHandler( void );
+static void RFCCmdAckIntHandler( void );
 extern void RFCCmdAckIntHandler( void );
+static void I2SIntHandler( void );
 extern void I2SIntHandler( void );
+static void AUXSWEvent1IntHandler( void );
 extern void AUXSWEvent1IntHandler( void );
+static void WatchdogIntHandler( void );
 extern void WatchdogIntHandler( void );
+static void Timer0AIntHandler( void );
 extern void Timer0AIntHandler( void );
+static void Timer0BIntHandler( void );
 extern void Timer0BIntHandler( void );
+static void Timer1AIntHandler( void );
 extern void Timer1AIntHandler( void );
+static void Timer1BIntHandler( void );
 extern void Timer1BIntHandler( void );
+static void Timer2AIntHandler( void );
 extern void Timer2AIntHandler( void );
+static void Timer2BIntHandler( void );
 extern void Timer2BIntHandler( void );
+static void Timer3AIntHandler( void );
 extern void Timer3AIntHandler( void );
+static void Timer3BIntHandler( void );
 extern void Timer3BIntHandler( void );
+static void CryptoIntHandler( void );
 extern void CryptoIntHandler( void );
+static void uDMAIntHandler( void );
 extern void uDMAIntHandler( void );
+static void uDMAErrIntHandler( void );
 extern void uDMAErrIntHandler( void );
+static void FlashIntHandler( void );
 extern void FlashIntHandler( void );
+static void SWEvent0IntHandler( void );
 extern void SWEvent0IntHandler( void );
+static void AUXCombEventIntHandler( void );
 extern void AUXCombEventIntHandler( void );
+static void AONProgIntHandler( void );
 extern void AONProgIntHandler( void );
+static void DynProgIntHandler( void );
 extern void DynProgIntHandler( void );
+static void AUXCompAIntHandler( void );
 extern void AUXCompAIntHandler( void );
+static void AUXADCIntHandler( void );
 extern void AUXADCIntHandler( void );
+static void TRNGIntHandler( void );
 extern void TRNGIntHandler( void );
-
-
 
 //*****************************************************************************
 //
@@ -280,7 +322,7 @@ static void SVCallIntHandler( void ){ while(1) {}}
 static void DebugMonIntHandler( void ){ while(1) {}}
 static void PendSVIntHandler( void ){ while(1) {}}
 static void SysTickIntHandler( void ){ while(1) {}}
-//static void GPIOIntHandler( void ){ while(1) {}}
+//static void GPIOIntHandler( void ){ while(1) {}}  // see main
 static void I2CIntHandler( void ){ while(1) {}}
 static void AONIntHandler( void ){ while(1) {}}
 
