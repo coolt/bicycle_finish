@@ -79,11 +79,11 @@ extern bool g_measurement_done;
 //extern char payload[ADVLEN]; 						// data buffer
 //extern volatile bool rfBootDone;					// communication flag
 //extern volatile bool rfSetupDone;					// communication flag
-//extern volatile bool rfAdvertisingDone;				// communication flag
+//extern volatile bool rfAdvertisingDone;			// communication flag
 
 
 // sensor
 // -------
-extern bool g_pressure_set, g_humidity_active, g_temp_active;
+extern bool g_pressure_set, g_humidity_acitve, g_temp_active;
 extern uint16_t g_pressure;
 extern uint16_t g_temp_calibration;

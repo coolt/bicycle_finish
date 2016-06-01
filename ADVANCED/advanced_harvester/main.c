@@ -51,39 +51,44 @@
  */
 
 // general
-#include "system.h"
-#include <driverLib/ioc.h>
-#include <driverLib/sys_ctrl.h>
-#include <config.h>
 #include "string.h"
 #include <stdio.h>
+#include "system.h"										// Funktionen (Power), Init, Waits
+#include <driverLib/ioc.h>								// Grundeinstallung aktive domains
+#include <driverLib/sys_ctrl.h>							// Bus, CPU, Refresh
+#include <config.h>										// Konstanten Applkation
+
 
 // sensors
 #include "sensor-common.h"
 #include "ext-flash.h"
-#include "bmp-280-sensor.h"
-#include "tmp-007-sensor.h"
-#include "hdc-1000-sensor.h"
+#include "bmp-280-sensor.h"								// barometric pressure
+#include "tmp-007-sensor.h"								// temperature
+#include "hdc-1000-sensor.h"							// humitiy
 #include "opt-3001-sensor.h"
 #include "interfaces/board-i2c.h"
 #include "mbedtls/aes.h"
 
+#define SENSOR_HUMIDITY_I2C_ADDRESS     0x43			// -> hdc-1000-sensor.c
+#define SENSOR_TEMPERATURE_I2C_ADDRESS  0x44			// temp-007-sensor.c
+#define SENSOR_PRESSURE_I2C_ADDRESS     0x77			// bmp-280-sensor.c
+
+#define TMP007_REG_ADDR_STATUS          0x04
+#define TMP_007_SENSOR_TYPE_AMBIENT   2
+#define REGISTER_LENGTH                 2
+#define HI_UINT16(a) (((a) >> 8) & 0xFF)
+#define LO_UINT16(a) ((a) & 0xFF)
+#define SWAP(v) ((LO_UINT16(v) << 8) | HI_UINT16(v))
+#define CONV_RDY_BIT                    0x4000
+
+
 // GPIO
-#include "board.h"						// Konstanten IO
-#include <driverLib/gpio.h>				// Konstanten GPIO Pins
+#include "board.h"										// Konstanten IO
+#include <driverLib/gpio.h>								// Konstanten GPIO Pins
 
 // RF-Chip (M0)
 #include "radio.h"
-#include <driverLib/rfc.h>				// Set up RFC interrupts
-
-// RTC
-#include <rtc.h>
-#include <driverLib/aon_rtc.h>
-#include <inc/hw_aon_event.h>
-
-
-// SPI
-#include "spi.h"
+#include <driverLib/rfc.h>								// Set up RFC interrupts
 
 // radio transmittion
 extern volatile bool rfBootDone;
@@ -93,13 +98,6 @@ extern volatile bool rfAdvertisingDone;
 // get and store data
 char payload[ADVLEN];					// shared data buffer
 static uint16_t sequenceNumber = 0x0;
-#define TMP007_REG_ADDR_STATUS          0x04
-#define TMP_007_SENSOR_TYPE_AMBIENT   2
-#define REGISTER_LENGTH                 2
-#define HI_UINT16(a) (((a) >> 8) & 0xFF)
-#define LO_UINT16(a) ((a) & 0xFF)
-#define SWAP(v) ((LO_UINT16(v) << 8) | HI_UINT16(v))
-#define CONV_RDY_BIT                    0x4000
 uint32_t g_timestamp1, g_timestamp2;
 uint32_t g_timediff = 0;
 
@@ -110,6 +108,16 @@ bool g_button_pressed;
 bool g_pressure_set;					// pressure sensor state
 bool g_temp_active;
 bool g_humidity_active;
+// long g_current_energy_state;
+
+// RTC
+#include <rtc.h>
+#include <driverLib/aon_rtc.h>
+#include <inc/hw_aon_event.h>
+
+
+// SPI
+#include "spi.h"
 
 // spi
 uint8_t spiBuffer[SPI_BUFFER_LENGTH];
@@ -164,8 +172,7 @@ void GPIOIntHandler(void){
   __asm(" nop");
 }
 
-void sensorsInit(void)
-{
+void sensorsInit(void){
 
 	//Turn off TMP007
     configure_tmp_007(0);
@@ -192,207 +199,281 @@ void sensorsInit(void)
 
 	//Shut down I2C
 	board_i2c_shutdown();
+
+	g_temp_active = false;
+	g_pressure_set = false;
+	g_humidity_acitve = false;
+}
+
+void initSensortag(void){
+
+	uint8_t payload[ADVLEN];
+
+	  //Disable JTAG to allow for Standby
+	  AONWUCJtagPowerOff();
+
+	  //Force AUX on
+	  powerEnableAuxForceOn();
+	  powerEnableRFC();
+	  powerEnableXtalInterface();
+
+	  // Divide INF clk to save Idle mode power (increases interrupt latency)
+	  powerDivideInfClkDS(PRCM_INFRCLKDIVDS_RATIO_DIV32);
+
+	  initRTC();										// for speed measurement
+
+	  powerEnablePeriph();
+	  powerEnableGPIOClockRunMode();
+
+	  /* Wait for domains to power on */
+	  while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
+
+	  sensorsInit();
+
+	  //Config IOID4 for external interrupt on rising edge and wake up
+	  IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
+
+	  //Config IOID4 for external interrupt on rising edge and wake up
+	  IOCPortConfigureSet(BOARD_IOID_DP0 , IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
+	  //Set device to wake MCU from standby on PIN 4 (BUTTON1)
+
+	  HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_PAD;  //Does not work with AON_EVENT_MCUWUSEL_WU0_EV_PAD4 --> WHY??
+
+	  IntEnable(INT_EDGE_DETECT);
+
+	  powerDisablePeriph();
+	  //Disable clock for GPIO in CPU run mode
+	  HWREGBITW(PRCM_BASE + PRCM_O_GPIOCLKGR, PRCM_GPIOCLKGR_CLK_EN_BITN) = 0;
+	  // Load clock settings
+	  HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
+
+	  initInterrupts();
+	  initRadio();
+
+	  // Turn off FLASH in idle mode
+	  powerDisableFlashInIdle();
+
+	  // Cache retention must be enabled in Idle if flash domain is turned off (to avoid cache corruption)
+	  powerEnableCacheRetention();
+
+	  //AUX - request to power down (takes no effect since force on is set)
+	  powerEnableAUXPdReq();
+	  powerDisableAuxRamRet();
+
+	  //Clear payload buffer
+	  memset(payload, 0, ADVLEN);
+
+}
+
+void getData(void){
+
+	// Wakeup from RTC according to energy-state
+	// ---------------------------------------------
+
+	// start system
+	powerEnableAuxForceOn();
+	powerEnableCache();
+
+
+	// read Energy state from EM8500
+	// ----------------------------------
+	//g_current_energy_state = getEnergyStateFromGPIO();
+	g_current_energy_state = getEnergyStateFromSPI();
+	updateRTCWakeUpTime(g_current_energy_state);
+
+	// clear ble-data-buffer
+	memset(payload, 0, ADVLEN); 											// Clear payload buffer (ADVLEN = 24)
+
+	//
+
+	// set header ble-data-buffer
+	payload[0] = ADVLEN - 1; 												// length = ADV-Length - 1 (1 Byte) = 23 Bytes
+	payload[1] = 0x03; 														// Type (1 Byte)  =>   0x03 = UUID -> immer 2 Bytes
+	payload[2] = 0xDE; 														// UUID (2 Bytes) =>   0xDE00 (UUID im Ines)
+	payload[3] = 0xBA;
+	payload[4] = (char) (sequenceNumber >> 8);															// Laufnummer für 2 Tage Laufzeit (2 Bytes)
+	payload[5] = (char) sequenceNumber;
+
+
+	// read sensors acording to the energy state
+	// LOW:  no sensorts
+	// MIDDLE: only one sensor, but each time a new one (ringbuffer-system)
+	// HIGH: read all sensors
+	if(g_current_energy_state == MIDDLE_ENERGY ){
+
+		static int g_ringbuffer = 0;
+
+		if(g_ringbuffer == 0){
+			enable_bmp_280(1);
+			g_pressure_set = true;
+			g_ringbuffer ++;
+		}
+		else if (g_ringbuffer == 1){
+			enable_tmp_007(1);
+			g_temp_active = true;
+			g_ringbuffer ++;
+		}
+		else if(g_ringbuffer == 2){
+			// start_hdc_1000();
+			g_humidity_active = true;
+			g_ringbuffer = 0;
+		}
+	} // end MIDDLE ENERGY
+
+	else if (g_current_energy_state == HIGH_ENERGY ){
+		enable_tmp_007(1);
+		g_pressure_set = true;
+		enable_bmp_280(1);
+		g_temp_active = true;
+		g_humidity_active = true;
+	}
+
+	// update sequence_number
+	sequenceNumber++;
+}
+
+void setData(void){
+
+	rfBootDone  = 0;
+	    rfSetupDone = 0;
+	    rfAdvertisingDone = 0;
+
+	    //Wait until RF Core PD is ready before accessing radio
+	    waitUntilRFCReady();
+	    initRadioInts();
+	    runRadio();
+
+	    //Wait until AUX is ready before configuring oscillators
+	    waitUntilAUXReady();
+
+	    //Enable 24MHz XTAL
+	    OSCHF_TurnOnXosc();
+
+	    //IDLE until BOOT_DONE interrupt from RFCore is triggered
+	    while( ! rfBootDone) {
+	      powerDisableCPU();
+	      PRCMDeepSleep();
+	    }
+
+	    //This code runs after BOOT_DONE interrupt has woken up the CPU again
+	    //Request radio to keep on system bus
+	    radioCmdBusRequest(true);
+
+	    //Patch CM0 - no RFE patch needed for TX only
+	    radioPatch();
+
+	    //Start radio timer
+	    radioCmdStartRAT();
+
+	    //Enable Flash access while doing radio setup
+	    powerEnableFlashInIdle();
+
+	    //Switch to XTAL
+	    while( !OSCHF_AttemptToSwitchToXosc())
+	    {}
+
+	    powerEnablePeriph();
+	    powerEnableGPIOClockRunMode();
+
+	     /* Wait for domains to power on */
+	     while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
+
+	     // --------------------------------
+
+	     static uint32_t pressure = 0;
+	     static uint16_t temperature = 0;
+	     static uint16_t humidity = 0;
+
+	     // for energy sparing: read sensors out only all 50 times
+	     if( count >= 50 && !readed_sensors){
+	    	 readed_sensors=true;
+			 enable_bmp_280(1);
+
+			 do{
+				pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
+				//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
+			 }while((pressure == 0x80000000) );
+			 //g_pressure_set = false;
+
+	     }else if(false){
+
+			//Start Temp measurement
+			enable_tmp_007(1);
+
+			//start hum measurement
+			configure_hdc_1000();
+			start_hdc_1000();
+
+			//Wait for, read and calc temperature
+			do{
+				temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
+			}while( (temperature == 0x80000000)); //
+
+			//g_temp_active = false;
+			enable_tmp_007(0);
+
+			//Wait for, read and calc humidity
+			while(!read_data_hdc_1000());
+			humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
+			//g_humidity_active = false;
+	     }
+
+	//END read sensor values
+	/*****************************************************************************************/
+
+	    powerDisablePeriph();
+		// Disable clock for GPIO in CPU run mode
+		HWREGBITW(PRCM_BASE + PRCM_O_GPIOCLKGR, PRCM_GPIOCLKGR_CLK_EN_BITN) = 0;
+		// Load clock settings
+		HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
+
+	/*****************************************************************************************/
+
+
+		uint8_t p;
+	    p = 0;
+
+	    // header
+	    payload[p++] = ADVLEN-1;
+	    payload[p++] = 0x03;
+	    payload[p++] = 0xDE;
+	    payload[p++] = 0xBA;
+	    payload[p++] = (char) (sequenceNumber >> 8);
+	    payload[p++] = (char) sequenceNumber;
+
+	    // speed
+	    payload[p++] = (char) (g_timediff >> 24) & 0x000000FF;
+	    payload[p++] = (char) (g_timediff >> 16) & 0x000000FF;
+	    payload[p++] = (char) (g_timediff >> 8) & 0x000000FF;
+	    payload[p++] = (char) g_timediff  & 0x000000FF;
+
+	    // pressure
+	    payload[p++] = 0;
+	    payload[p++] = (char) ((pressure >> 16) & 0x000000FF);
+	    payload[p++] = (char) ((pressure >> 8) & 0x000000FF);
+	    payload[p++] = (char) (pressure  & 0x000000FF);
+
+	    // temperature
+	    payload[p++] = 0;
+	    payload[p++] = 0;
+	    payload[p++] = (char) (temperature >> 8);
+	 	payload[p++] = (char) temperature & 0x00FF;
+
+	 	// humidity
+	   	payload[p++] = 0;
+	   	payload[p++] = 0;
+	   	payload[p++] = (char) (humidity >> 8);
+	   	payload[p++] = (char) humidity;
+
+	   	// checksum
+	   	payload[p++] = 0;  // checksum
+	   	payload[p++] = 0;
+
+	   	sequenceNumber++;
 }
 
 
-
-int main(void) {
-
-  uint8_t payload[ADVLEN];
-
-  //Disable JTAG to allow for Standby
-  AONWUCJtagPowerOff();
-
-  //Force AUX on
-  powerEnableAuxForceOn();
-  powerEnableRFC();
-  powerEnableXtalInterface();
-  
-  // Divide INF clk to save Idle mode power (increases interrupt latency)
-  powerDivideInfClkDS(PRCM_INFRCLKDIVDS_RATIO_DIV32);
-
-  initRTC();										// for speed measurement
-
-  powerEnablePeriph();
-  powerEnableGPIOClockRunMode();
-
-  /* Wait for domains to power on */
-  while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
-
-  sensorsInit();
-
-  //Config IOID4 for external interrupt on rising edge and wake up
-  IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
-
-  //Config IOID4 for external interrupt on rising edge and wake up
-  IOCPortConfigureSet(BOARD_IOID_DP0 , IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
-  //Set device to wake MCU from standby on PIN 4 (BUTTON1)
-
-  HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_PAD;  //Does not work with AON_EVENT_MCUWUSEL_WU0_EV_PAD4 --> WHY??
-
-  IntEnable(INT_EDGE_DETECT);
-
-  powerDisablePeriph();
-  //Disable clock for GPIO in CPU run mode
-  HWREGBITW(PRCM_BASE + PRCM_O_GPIOCLKGR, PRCM_GPIOCLKGR_CLK_EN_BITN) = 0;
-  // Load clock settings
-  HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
-
-  initInterrupts();
-  initRadio();
-
-  // Turn off FLASH in idle mode
-  powerDisableFlashInIdle();
-
-  // Cache retention must be enabled in Idle if flash domain is turned off (to avoid cache corruption)
-  powerEnableCacheRetention();
-
-  //AUX - request to power down (takes no effect since force on is set)
-  powerEnableAUXPdReq();
-  powerDisableAuxRamRet();
-
-  //Clear payload buffer
-  memset(payload, 0, ADVLEN);
-
-  while(1) {
-
-    rfBootDone  = 0;
-    rfSetupDone = 0;
-    rfAdvertisingDone = 0;
-
-    //Wait until RF Core PD is ready before accessing radio
-    waitUntilRFCReady();
-    initRadioInts();
-    runRadio();
-
-    //Wait until AUX is ready before configuring oscillators
-    waitUntilAUXReady();
-
-    //Enable 24MHz XTAL
-    OSCHF_TurnOnXosc();
-
-    //IDLE until BOOT_DONE interrupt from RFCore is triggered
-    while( ! rfBootDone) {
-      powerDisableCPU();
-      PRCMDeepSleep();
-    }
-
-    //This code runs after BOOT_DONE interrupt has woken up the CPU again
-    //Request radio to keep on system bus
-    radioCmdBusRequest(true);
-
-    //Patch CM0 - no RFE patch needed for TX only
-    radioPatch();
-
-    //Start radio timer
-    radioCmdStartRAT();
-
-    //Enable Flash access while doing radio setup
-    powerEnableFlashInIdle();
-
-    //Switch to XTAL
-    while( !OSCHF_AttemptToSwitchToXosc())
-    {}
-  
-    powerEnablePeriph();
-    powerEnableGPIOClockRunMode();
-
-     /* Wait for domains to power on */
-     while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
-
-     // --------------------------------
-
-     static uint32_t pressure = 0;
-     static uint16_t temperature = 0;
-     static uint16_t humidity = 0;
-
-     // for energy sparing: read sensors out only all 50 times
-     if( count >= 50 && !readed_sensors){
-    	 readed_sensors=true;
-		 enable_bmp_280(1);
-
-		 do{
-			pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
-			//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
-		 }while((pressure == 0x80000000) );
-		 //g_pressure_set = false;
-
-     }else if(false){
-
-		//Start Temp measurement
-		enable_tmp_007(1);
-
-		//start hum measurement
-		configure_hdc_1000();
-		start_hdc_1000();
-
-		//Wait for, read and calc temperature
-		do{
-			temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-		}while( (temperature == 0x80000000)); //
-
-		//g_temp_active = false;
-		enable_tmp_007(0);
-
-		//Wait for, read and calc humidity
-		while(!read_data_hdc_1000());
-		humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
-		//g_humidity_active = false;
-     }
-
-//END read sensor values
-/*****************************************************************************************/
-
-    powerDisablePeriph();
-	// Disable clock for GPIO in CPU run mode
-	HWREGBITW(PRCM_BASE + PRCM_O_GPIOCLKGR, PRCM_GPIOCLKGR_CLK_EN_BITN) = 0;
-	// Load clock settings
-	HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
-
-/*****************************************************************************************/
-
-
-	uint8_t p;
-    p = 0;
-
-    // header
-    payload[p++] = ADVLEN-1;
-    payload[p++] = 0x03;
-    payload[p++] = 0xDE;
-    payload[p++] = 0xBA;
-    payload[p++] = (char) (sequenceNumber >> 8);
-    payload[p++] = (char) sequenceNumber;
-
-    // speed
-    payload[p++] = (char) (g_timediff >> 24) & 0x000000FF;
-    payload[p++] = (char) (g_timediff >> 16) & 0x000000FF;
-    payload[p++] = (char) (g_timediff >> 8) & 0x000000FF;
-    payload[p++] = (char) g_timediff  & 0x000000FF;
-
-    // pressure
-    payload[p++] = 0;
-    payload[p++] = (char) ((pressure >> 16) & 0x000000FF);
-    payload[p++] = (char) ((pressure >> 8) & 0x000000FF);
-    payload[p++] = (char) (pressure  & 0x000000FF);
-
-    // temperature
-    payload[p++] = 0;
-    payload[p++] = 0;
-    payload[p++] = (char) (temperature >> 8);
- 	payload[p++] = (char) temperature & 0x00FF;
-
- 	// humidity
-   	payload[p++] = 0;
-   	payload[p++] = 0;
-   	payload[p++] = (char) (humidity >> 8);
-   	payload[p++] = (char) humidity;
-
-   	// checksum
-   	payload[p++] = 0;  // checksum
-   	payload[p++] = 0;
-
-   	sequenceNumber++;
-
+void sendData(void){
 
     //Start radio setup and linked advertisment
    	// for energy sparing: only each 100 time send data
@@ -421,61 +502,79 @@ int main(void) {
 
     }
 
-//END: Transmit
-/*****************************************************************************************/
+    //END: Transmit
 
-    
-    //
-    // Standby procedure
-    //
-    
-    powerDisableXtal();
+}
 
-    // Turn off radio
-    powerDisableRFC();
-    
-    // Switch to RCOSC_HF
-    OSCHfSourceSwitch();
 
-    // Allow AUX to turn off again. No longer need oscillator interface
-    powerDisableAuxForceOn();
+void sleep(void){
 
-    // Goto Standby. MCU will now request to be powered down on DeepSleep
-    powerEnableMcuPdReq();
+	    // Standby procedure
+	    //
 
-    // Disable cache and retention
-    powerDisableCache();
-    powerDisableCacheRetention();
+	    powerDisableXtal();
 
-    //Calculate next recharge
-    SysCtrlSetRechargeBeforePowerDown(XOSC_IN_HIGH_POWER_MODE);
+	    // Turn off radio
+	    powerDisableRFC();
 
-    // Synchronize transactions to AON domain to ensure AUX has turned off
-    SysCtrlAonSync();
+	    // Switch to RCOSC_HF
+	    OSCHfSourceSwitch();
 
-    //
-    // Enter Standby
-    //
+	    // Allow AUX to turn off again. No longer need oscillator interface
+	    powerDisableAuxForceOn();
 
-    powerDisableCPU();
-    PRCMDeepSleep();
+	    // Goto Standby. MCU will now request to be powered down on DeepSleep
+	    powerEnableMcuPdReq();
 
-    SysCtrlAonUpdate();
-    SysCtrlAdjustRechargeAfterPowerDown();
-    SysCtrlAonSync();
+	    // Disable cache and retention
+	    powerDisableCache();
+	    powerDisableCacheRetention();
 
-    //
-	// Wakeup from RTC every 100ms, code starts execution from here
-	//
-   
-    powerEnableRFC();
-    powerEnableAuxForceOn();
+	    //Calculate next recharge
+	    SysCtrlSetRechargeBeforePowerDown(XOSC_IN_HIGH_POWER_MODE);
 
-    //Re-enable cache and retention
-    powerEnableCache();
-    powerEnableCacheRetention();
+	    // Synchronize transactions to AON domain to ensure AUX has turned off
+	    SysCtrlAonSync();
 
-    //MCU will not request to be powered down on DeepSleep -> System goes only to IDLE
-    powerDisableMcuPdReq();
-  }
+	    //
+	    // Enter Standby
+	    //
+
+	    powerDisableCPU();
+	    PRCMDeepSleep();
+
+	    SysCtrlAonUpdate();
+	    SysCtrlAdjustRechargeAfterPowerDown();
+	    SysCtrlAonSync();
+
+	    //
+		// Wakeup from RTC every 100ms, code starts execution from here
+		//
+
+	    powerEnableRFC();
+	    powerEnableAuxForceOn();
+
+	    //Re-enable cache and retention
+	    powerEnableCache();
+	    powerEnableCacheRetention();
+
+	    //MCU will not request to be powered down on DeepSleep -> System goes only to IDLE
+	    powerDisableMcuPdReq();
+}
+
+
+
+
+
+int main(void) {
+
+	initSensortag();
+
+	while(1) {
+
+	// getData(); // new
+	setData();
+	sendData();
+	sleep();
+	}
 }

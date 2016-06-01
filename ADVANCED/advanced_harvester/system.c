@@ -1,3 +1,4 @@
+#include "system.h"
 #include <driverLib/aux_wuc.h>
 #include <driverLib/cpu.h>
 #include <inc/hw_aon_wuc.h>
@@ -8,6 +9,43 @@
 #include <inc/hw_types.h>
 #include <driverLib/osc.h>
 #include <driverLib/vims.h>
+
+
+// Real Time Clock
+#include "config.h"
+#include "cc26xxware_2_22_00_16101/driverLib/aon_rtc.h"
+#include "cc26xxware_2_22_00_16101/driverLib/sys_ctrl.h"
+
+
+// GPIO
+#include "cc26xxware_2_22_00_16101/driverLib/gpio.h" 						// Konstanten GPIO Pins
+#include "board.h" 															// Konstanten IO
+#include "cc26xxware_2_22_00_16101/driverLib/ioc.h"  						// Grundeinstellungen aktivieren domains
+#include "cc26xxware_2_22_00_16101/inc/hw_aon_event.h"
+
+// RFC
+#include "radio.h"
+#include "string.h" 					// memset()
+
+// Sensors
+#include "sensor-common.h"
+#include "ext-flash.h"
+#include "bmp-280-sensor.h"				// barometric pressure
+#include "tmp-007-sensor.h"				// temperature
+#include "hdc-1000-sensor.h"			//  Humitiy
+#include "opt-3001-sensor.h"
+#include "interfaces/board-i2c.h"
+
+// spi
+#include "cc26xxware_2_22_00_16101/driverLib/prcm.h"
+#include "spi.h"
+
+// globale variable
+uint32_t g_timestamp1, g_timestamp2;
+bool g_pressure_set;					// pressure sensor state
+bool g_temp_active;
+bool g_humidity_acitve;
+
 
 // Enable interrupt on CPU
 void initInterrupts(void) {
@@ -22,6 +60,92 @@ void initInterrupts(void) {
   // Global interrupt enable
   CPUcpsie();
 }
+
+void initSPI(void){
+
+	// power on
+	powerEnableAuxForceOn(); 								// WUC domain
+	powerEnableXtalInterface(); 							// clk WUC
+	powerEnablePeriph();
+	powerEnableGPIOClockRunMode();
+	while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON)); /* Wait for domains to power on */
+
+}
+
+long getEnergyStateFromSPI(void){
+
+	g_current_energy_state = LOW_ENERGY;		// inital state
+	uint8_t energy_status_byte = 0;
+
+	uint8_t lts_bat_min_hi = 0;  		// bit 7
+	uint8_t lts_bat_min_lo = 0;			// bit 6
+	uint8_t sts_bat_max_hi = 0;			// bit 5
+	uint8_t sts_bat_max_lo = 0;			// bit 4
+	uint8_t sts_apl_min_hi = 0;			// bit 3
+	uint8_t sts_apl_min_lo = 0;			// bit 2
+	uint8_t sts_bat_min_hi = 0;			// bit 1
+	uint8_t sts_bat_min_lo = 0;			// bit 0
+
+
+	energy_status_byte = readStatusRegisterEM8500();
+
+	// extract bit for energy state
+	lts_bat_min_hi = (energy_status_byte & 0x80) >> 7; // V_LTS > bat_min hi dis
+	lts_bat_min_lo = (energy_status_byte & 0x40) >> 6; // V_LTS > bat_min hi con
+	sts_bat_max_hi = (energy_status_byte & 0x20) >> 5;
+	sts_bat_max_lo = (energy_status_byte & 0x10) >> 4;
+	sts_apl_min_hi = (energy_status_byte & 0x08) >> 3;
+	sts_apl_min_lo = (energy_status_byte & 0x04) >> 2;
+	sts_bat_min_hi = (energy_status_byte & 0x02) >> 1;
+	sts_bat_min_lo = (energy_status_byte & 0x01);
+
+	if (sts_apl_min_hi == 1 | sts_apl_min_lo ){
+		g_current_energy_state = MIDDLE_ENERGY;
+	}
+	else if (lts_bat_min_hi == 1 | lts_bat_min_lo == 1   ){
+
+		g_current_energy_state = HIGH_ENERGY;
+	}
+	return g_current_energy_state;
+}
+
+
+long getEnergyStateFromGPIO(void){
+
+	g_current_energy_state = MIDDLE_ENERGY;
+
+	return g_current_energy_state;
+
+}
+
+
+
+// **********************************************************************************************
+
+
+
+void powerEnableSPIdomain(void){
+
+	// power on GPIO (CS und andere Pins sind GPIO PIns)
+	powerEnablePeriph();
+	powerEnableGPIOClockRunMode();
+		while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
+
+	PRCMPowerDomainOn(PRCM_DOMAIN_SERIAL); 		// power on in MCU power domain  -> prcm.cS
+	uint32_t debug = HWREG(PRCM_BASE + PRCM_O_SSICLKGR) & PRCM_SSICLKGR_CLK_EN_SSI0; // enable clock for SSI
+	HWREG(PRCM_BASE + PRCM_O_SSICLKGR) = 1;
+}
+
+
+
+void powerDisableSPIdomain(void){
+	PRCMDomainDisable(PRCM_DOMAIN_SERIAL);
+
+}
+
+
+
+
 
 void powerEnableAuxForceOn(void) {
   HWREGBITW(AON_WUC_BASE + AON_WUC_O_AUXCTL,AON_WUC_AUXCTL_AUX_FORCE_ON_BITN)=1;

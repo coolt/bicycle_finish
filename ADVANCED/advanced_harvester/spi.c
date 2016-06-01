@@ -21,10 +21,10 @@
 
 uint8_t EM8500read(uint8_t address){
 
-	uint8_t value = 0;						// usually a const buffer
+	uint8_t value = 0;								// usually a const buffer
 
 	// set read comands to buffer
-	const uint8_t buffer = 0x80 | address;							// command for read (read command | start-adress to read)
+	const uint8_t buffer = 0x80 | address;			// command for read (read command | start-adress to read)
 
 
 	ti_lib_gpio_pin_write(BOARD_DEVPACK_CS, 1);	 	// enable Chip select
@@ -62,7 +62,7 @@ void configureEM8500(){
 	powerEnableSPIdomain();							// power MCU domain and enable clk
 
 	// send configuration per spi					-> board-spi.c
-	if ( accessible() ){							// power spi-domain i.O.
+	//if ( accessible() ){							// power spi-domain i.O.
 
 		board_spi_open(bit_rate, clk_pin);			// f = 5 kHz, Pin = DP8 SCLK
 		ti_lib_ioc_pin_type_gpio_output(BOARD_IOID_DEVPACK_CS);//config Pin CSN as output
@@ -107,7 +107,7 @@ void configureEM8500(){
 
 			}
 		}
-	}
+	//}
 	board_spi_close();    						// new here. before was after while (1) and never reached
 	// powerDisableSPIdomain();					// check, if to uncomment
 }
@@ -123,7 +123,7 @@ uint8_t readStatusRegisterEM8500(void){
 	powerEnableSPIdomain();									// power MCU domain and enable clk
 
 	// send configuration per spi
-	if ( accessible() ){
+	//if ( accessible() ){
 		board_spi_open(bit_rate, clk_pin);
 		ti_lib_ioc_pin_type_gpio_output(BOARD_IOID_DEVPACK_CS);//config Pin CSN as output
 
@@ -144,7 +144,7 @@ uint8_t readStatusRegisterEM8500(void){
 		ti_lib_gpio_pin_write(BOARD_DEVPACK_CS, 0);		// deselect CS
 		CPUdelay(10 * DELAY_M_SEC);
 
-	}
+	//}
 	board_spi_close();					// new here: before direct after while(1) and never reached
 	// powerDisableSPIdomain();			// check: if to comment out
 

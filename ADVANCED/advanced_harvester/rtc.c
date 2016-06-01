@@ -9,6 +9,29 @@
 #include <driverLib/aon_rtc.h>
 #include <driverLib/sys_ctrl.h>
 
+long g_current_wake_up_time;
+long g_current_energy_state;
+
+
+// set Wake up time according to energy state
+void updateRTCWakeUpTime(long energy_state){
+
+	switch(energy_state){
+		case LOW_ENERGY:
+			g_current_wake_up_time = WAKE_INTERVAL_LOW_ENERGY;
+			break;
+		case MIDDLE_ENERGY:
+			g_current_wake_up_time = WAKE_INTERVAL_MIDDLE_ENERGY;
+			break;
+		case HIGH_ENERGY:
+			g_current_wake_up_time = WAKE_INTERVAL_HIGH_ENERGY;
+			break;
+		default:
+			g_current_wake_up_time = WAKE_INTERVAL_MIDDLE_ENERGY;
+			break;
+	}
+}
+
 void initRTC(void) {
   //Add RTC Ch2 event as input to AON RTC interrupt
 //  AONRTCCombinedEventConfig(AON_RTC_CH2);
@@ -38,4 +61,6 @@ void AONRTCIntHandler(void) {
   while( AONRTCEventGet(AON_RTC_CH2));
 
 }
+
+
 

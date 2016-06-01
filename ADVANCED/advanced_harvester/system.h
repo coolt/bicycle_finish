@@ -3,6 +3,7 @@
 
 void initInterrupts(void);
 
+long getEnergyStateFromSPI(void);
 
 
 void powerEnableAuxForceOn(void);
