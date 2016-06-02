@@ -101,3 +101,5 @@ ADVANCED/.metadata/.plugins/org.eclipse.cdt.core/advanced_harvester.146419138092
 *.pdom
 *.markers
 ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources
+*.properties
+ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources
