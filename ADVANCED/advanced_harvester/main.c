@@ -104,11 +104,11 @@ uint32_t g_timediff = 0;
 // controll sequnce data
 uint8_t count = 0;						//times gpio int appears
 bool readed_sensors = false;
-bool g_button_pressed;
+bool g_button_pressed;					// for debugging
 bool g_pressure_set;					// pressure sensor state
 bool g_temp_active;
 bool g_humidity_active;
-// long g_current_energy_state;
+long g_current_energy_state;
 
 // RTC
 #include <rtc.h>
@@ -265,6 +265,7 @@ void initSensortag(void){
 
 }
 
+
 void getData(void){
 
 	// Wakeup from RTC according to energy-state
@@ -275,24 +276,10 @@ void getData(void){
 	powerEnableCache();
 
 
-	// read Energy state from EM8500
+	// read Energy from velocity
 	// ----------------------------------
-	//g_current_energy_state = getEnergyStateFromGPIO();
-	g_current_energy_state = getEnergyStateFromSPI();
-	updateRTCWakeUpTime(g_current_energy_state);
-
-	// clear ble-data-buffer
-	memset(payload, 0, ADVLEN); 											// Clear payload buffer (ADVLEN = 24)
-
-	//
-
-	// set header ble-data-buffer
-	payload[0] = ADVLEN - 1; 												// length = ADV-Length - 1 (1 Byte) = 23 Bytes
-	payload[1] = 0x03; 														// Type (1 Byte)  =>   0x03 = UUID -> immer 2 Bytes
-	payload[2] = 0xDE; 														// UUID (2 Bytes) =>   0xDE00 (UUID im Ines)
-	payload[3] = 0xBA;
-	payload[4] = (char) (sequenceNumber >> 8);															// Laufnummer für 2 Tage Laufzeit (2 Bytes)
-	payload[5] = (char) sequenceNumber;
+	// g_timediff
+	g_current_energy_state = MIDDLE_ENERGY;
 
 
 	// read sensors acording to the energy state
@@ -304,33 +291,30 @@ void getData(void){
 		static int g_ringbuffer = 0;
 
 		if(g_ringbuffer == 0){
-			enable_bmp_280(1);
+
 			g_pressure_set = true;
 			g_ringbuffer ++;
 		}
 		else if (g_ringbuffer == 1){
-			enable_tmp_007(1);
 			g_temp_active = true;
 			g_ringbuffer ++;
 		}
 		else if(g_ringbuffer == 2){
-			// start_hdc_1000();
 			g_humidity_active = true;
 			g_ringbuffer = 0;
 		}
 	} // end MIDDLE ENERGY
 
 	else if (g_current_energy_state == HIGH_ENERGY ){
-		enable_tmp_007(1);
+
 		g_pressure_set = true;
-		enable_bmp_280(1);
 		g_temp_active = true;
 		g_humidity_active = true;
 	}
 
-	// update sequence_number
-	sequenceNumber++;
+
 }
+
 
 void setData(void){
 

@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['gettrimforadcshmodeen',['GetTrimForAdcShModeEn',['../setup_8c.html#a0059cbdb89681868d07ec5079dd5189e',1,'setup.c']]],
+  ['gettrimforadcshvbufen',['GetTrimForAdcShVbufEn',['../setup_8c.html#ade9ebed0edf796987421f0f5491799fc',1,'setup.c']]],
+  ['gettrimforampcompctrl',['GetTrimForAmpcompCtrl',['../setup_8c.html#aef15642fba0aeba55a332ee4042dd54e',1,'setup.c']]],
+  ['gettrimforampcompth1',['GetTrimForAmpcompTh1',['../setup_8c.html#ad452879637513618daa537b94d73c756',1,'setup.c']]],
+  ['gettrimforampcompth2',['GetTrimForAmpcompTh2',['../setup_8c.html#acc8909c3e4eec81de336c2821e38d74f',1,'setup.c']]],
+  ['gettrimforanabypassvalue1',['GetTrimForAnabypassValue1',['../setup_8c.html#a73f71ea85d22a4b1af970b390d228ae3',1,'setup.c']]],
+  ['gettrimfordblrloopfilterresetvoltage',['GetTrimForDblrLoopFilterResetVoltage',['../setup_8c.html#a3d90d25b0815007de57d59f5ea33e533',1,'setup.c']]],
+  ['gettrimforradcextcfg',['GetTrimForRadcExtCfg',['../setup_8c.html#aa43c217e20feece0e2a3e275b071234b',1,'setup.c']]],
+  ['gettrimforrcosclfibiastrim',['GetTrimForRcOscLfIBiasTrim',['../setup_8c.html#a5514d7129e945f394b5845531e80dd05',1,'setup.c']]],
+  ['gettrimforrcosclfrtunectunetrim',['GetTrimForRcOscLfRtuneCtuneTrim',['../setup_8c.html#a0cb482a6e2489a46447c1f4a8ecc3d0f',1,'setup.c']]],
+  ['gettrimforxoschfctl',['GetTrimForXoscHfCtl',['../setup_8c.html#ad075a3cde13275b39e059a9e45aa2c0c',1,'setup.c']]],
+  ['gettrimforxoschffaststart',['GetTrimForXoscHfFastStart',['../setup_8c.html#a4b998d69d9116c30abe3dfa3f6f9c961',1,'setup.c']]],
+  ['gettrimforxoschfibiastherm',['GetTrimForXoscHfIbiastherm',['../setup_8c.html#a86907986aaf9e322ea0daafd13bac9f9',1,'setup.c']]],
+  ['gettrimforxosclfregulatorandcmirrwrratio',['GetTrimForXoscLfRegulatorAndCmirrwrRatio',['../setup_8c.html#ade3b34bc179f2c8a311c713de7f5225f',1,'setup.c']]],
+  ['gpiodirmodeget',['GPIODirModeGet',['../group__gpio__api.html#gad1965991e466f173fef176b16b630768',1,'gpio.h']]],
+  ['gpiodirmodeset',['GPIODirModeSet',['../group__gpio__api.html#ga2023799c613b176b7dc07ef0c28b863a',1,'gpio.h']]],
+  ['gpioeventclear',['GPIOEventClear',['../group__gpio__api.html#gab3c219b452b6f22c4fdefb934fdc623c',1,'gpio.h']]],
+  ['gpioeventget',['GPIOEventGet',['../group__gpio__api.html#ga238fadd03c7e633a25c78257978cd7ba',1,'gpio.h']]],
+  ['gpiopinclear',['GPIOPinClear',['../group__gpio__api.html#ga1e066f2082cf963b3de7899b1961d5f9',1,'gpio.h']]],
+  ['gpiopinread',['GPIOPinRead',['../group__gpio__api.html#gabbdeaf2bd92668d079a5dfa085d12a51',1,'gpio.h']]],
+  ['gpiopintoggle',['GPIOPinToggle',['../group__gpio__api.html#gaa7bf7dee72a009e45770d690643fcb88',1,'gpio.h']]],
+  ['gpiopinwrite',['GPIOPinWrite',['../group__gpio__api.html#ga4db5a492c52651a77ab02c3f5917dec2',1,'gpio.h']]]
+];
