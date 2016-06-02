@@ -96,19 +96,20 @@ extern volatile bool rfSetupDone;
 extern volatile bool rfAdvertisingDone;
 
 // get and store data
-char payload[ADVLEN];					// shared data buffer
+char payload[ADVLEN];									// shared data buffer
 static uint16_t sequenceNumber = 0x0;
 uint32_t g_timestamp1, g_timestamp2;
 uint32_t g_timediff = 0;
 
 // controll sequnce data
-uint8_t count = 0;						//times gpio int appears
+uint8_t count_interrupts = 0;							//times gpio intterupt (reed) appears
+uint8_t count_max_interrupts = 6;						// force sleep time
 bool readed_sensors = false;
 bool g_button_pressed;
-bool g_pressure_set;					// pressure sensor state
+bool g_pressure_set;									// pressure sensor state
 bool g_temp_active;
 bool g_humidity_active;
-// long g_current_energy_state;
+
 
 // RTC
 #include <rtc.h>
@@ -122,8 +123,14 @@ bool g_humidity_active;
 // spi
 uint8_t spiBuffer[SPI_BUFFER_LENGTH];
 
-
-
+// energy states
+uint32_t maskEnergyState = 0x00001100;
+#define KMH_10 			0x5E
+#define KMH_15 			0x3E
+#define KMH_20 			0x2F
+#define KMH_30 			0x1F
+#define KMH_30 			0x17
+long g_current_energy_state;
 
 // interrupts -----------------------------------------------------------
 void GPIOIntHandler(void){
@@ -143,7 +150,7 @@ void GPIOIntHandler(void){
   time2 = time1;
   time1 = AONRTCCurrentCompareValueGet();				// read out RTC timestamp
   g_timediff = time1-time2;
-  count++;												// count interrupts (= reed switch)
+  count_interrupts++;									// count interrupts (= reed switch)
 
   /* Read interrupt flags */
   // event flag must be handeld, otherwise crach in while line 146
@@ -384,8 +391,10 @@ void setData(void){
 	     static uint16_t temperature = 0;
 	     static uint16_t humidity = 0;
 
-	     // for energy sparing: read sensors out only all 50 times
-	     if( count >= 50 && !readed_sensors){
+	     // for energy sparing:
+	     // read sensors out only after halfe of count_max_interrupts
+	     // otherwise: go directly to sleep
+	     if( count_interrupts >= (count_max_interrupts/2) && !readed_sensors){
 	    	 readed_sensors=true;
 			 enable_bmp_280(1);
 
@@ -477,8 +486,8 @@ void sendData(void){
 
     //Start radio setup and linked advertisment
    	// for energy sparing: only each 100 time send data
-    if(count >= 100){
-    	count = 0;
+    if(count_interrupts >= 100){
+    	count_interrupts = 0;
     	readed_sensors=false;
     	radioUpdateAdvData(ADVLEN, payload);
     	radioSetupAndTransmit();

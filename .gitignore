@@ -104,3 +104,4 @@ ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.co
 *.properties
 ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources
 *.ini
+*.resources
