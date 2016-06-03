@@ -103,7 +103,6 @@ uint32_t g_timediff = 0;
 
 // controll sequnce data
 uint8_t count_interrupts = 0;							//times gpio intterupt (reed) appears
-uint8_t count_max_interrupts = 4;						// force sleep time
 bool readed_sensors = false;
 bool g_button_pressed;
 bool g_pressure_set;									// pressure sensor state
