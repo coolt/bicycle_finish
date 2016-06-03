@@ -385,7 +385,7 @@ void setData(void){
 					//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
 				 }while((pressure == 0x80000000) );
 				// ----------------------------
-				 g_pressure_set = false;
+				g_pressure_set = false;
 				g_ringbuffer ++;
 		 		}
 		 		else if (g_ringbuffer == 1){
