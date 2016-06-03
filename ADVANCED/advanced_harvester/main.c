@@ -103,7 +103,7 @@ uint32_t g_timediff = 0;
 
 // controll sequnce data
 uint8_t count_interrupts = 0;							//times gpio intterupt (reed) appears
-uint8_t count_max_interrupts = 6;						// force sleep time
+uint8_t count_max_interrupts = 4;						// force sleep time
 bool readed_sensors = false;
 bool g_button_pressed;
 bool g_pressure_set;									// pressure sensor state
@@ -129,7 +129,7 @@ uint32_t maskEnergyState = 0x00001100;
 #define KMH_15 			0x3E
 #define KMH_20 			0x2F
 #define KMH_30 			0x1F
-#define KMH_30 			0x17
+#define KMH_40 			0x17
 long g_current_energy_state;
 
 // interrupts -----------------------------------------------------------
@@ -277,155 +277,148 @@ void getData(void){
 	// Wakeup from RTC according to energy-state
 	// ---------------------------------------------
 
-	// start system
-	powerEnableAuxForceOn();
-	powerEnableCache();
 
-
-	// read Energy state from EM8500
+	// read Energy state from speed
 	// ----------------------------------
-	//g_current_energy_state = getEnergyStateFromGPIO();
-	g_current_energy_state = getEnergyStateFromSPI();
-	updateRTCWakeUpTime(g_current_energy_state);
 
-	// clear ble-data-buffer
-	memset(payload, 0, ADVLEN); 											// Clear payload buffer (ADVLEN = 24)
+	//g_current_energy_state = g_timediff;
 
-	//
-
-	// set header ble-data-buffer
-	payload[0] = ADVLEN - 1; 												// length = ADV-Length - 1 (1 Byte) = 23 Bytes
-	payload[1] = 0x03; 														// Type (1 Byte)  =>   0x03 = UUID -> immer 2 Bytes
-	payload[2] = 0xDE; 														// UUID (2 Bytes) =>   0xDE00 (UUID im Ines)
-	payload[3] = 0xBA;
-	payload[4] = (char) (sequenceNumber >> 8);															// Laufnummer für 2 Tage Laufzeit (2 Bytes)
-	payload[5] = (char) sequenceNumber;
 
 
 	// read sensors acording to the energy state
 	// LOW:  no sensorts
 	// MIDDLE: only one sensor, but each time a new one (ringbuffer-system)
 	// HIGH: read all sensors
-	if(g_current_energy_state == MIDDLE_ENERGY ){
+	//if(g_current_energy_state == MIDDLE_ENERGY ){
 
 		static int g_ringbuffer = 0;
 
 		if(g_ringbuffer == 0){
-			enable_bmp_280(1);
 			g_pressure_set = true;
 			g_ringbuffer ++;
 		}
 		else if (g_ringbuffer == 1){
-			enable_tmp_007(1);
 			g_temp_active = true;
 			g_ringbuffer ++;
 		}
 		else if(g_ringbuffer == 2){
-			// start_hdc_1000();
 			g_humidity_active = true;
 			g_ringbuffer = 0;
 		}
-	} // end MIDDLE ENERGY
+	//} // end MIDDLE ENERGY
 
-	else if (g_current_energy_state == HIGH_ENERGY ){
-		enable_tmp_007(1);
+/*	else if (g_current_energy_state == HIGH_ENERGY ){
 		g_pressure_set = true;
-		enable_bmp_280(1);
 		g_temp_active = true;
 		g_humidity_active = true;
 	}
-
-	// update sequence_number
-	sequenceNumber++;
+*/
 }
 
 void setData(void){
 
 	rfBootDone  = 0;
-	    rfSetupDone = 0;
-	    rfAdvertisingDone = 0;
+	rfSetupDone = 0;
+	rfAdvertisingDone = 0;
 
-	    //Wait until RF Core PD is ready before accessing radio
-	    waitUntilRFCReady();
-	    initRadioInts();
-	    runRadio();
+	static int g_ringbuffer = 0; // von oben
 
-	    //Wait until AUX is ready before configuring oscillators
-	    waitUntilAUXReady();
+	//Wait until RF Core PD is ready before accessing radio
+	waitUntilRFCReady();
+	initRadioInts();
+	runRadio();
 
-	    //Enable 24MHz XTAL
-	    OSCHF_TurnOnXosc();
+	//Wait until AUX is ready before configuring oscillators
+	waitUntilAUXReady();
 
-	    //IDLE until BOOT_DONE interrupt from RFCore is triggered
-	    while( ! rfBootDone) {
-	      powerDisableCPU();
-	      PRCMDeepSleep();
-	    }
+	//Enable 24MHz XTAL
+	OSCHF_TurnOnXosc();
 
-	    //This code runs after BOOT_DONE interrupt has woken up the CPU again
-	    //Request radio to keep on system bus
-	    radioCmdBusRequest(true);
+	//IDLE until BOOT_DONE interrupt from RFCore is triggered
+	while( ! rfBootDone) {
+	  powerDisableCPU();
+	  PRCMDeepSleep();
+	}
 
-	    //Patch CM0 - no RFE patch needed for TX only
-	    radioPatch();
+	//This code runs after BOOT_DONE interrupt has woken up the CPU again
+	//Request radio to keep on system bus
+	radioCmdBusRequest(true);
 
-	    //Start radio timer
-	    radioCmdStartRAT();
+	//Patch CM0 - no RFE patch needed for TX only
+	radioPatch();
 
-	    //Enable Flash access while doing radio setup
-	    powerEnableFlashInIdle();
+	//Start radio timer
+	radioCmdStartRAT();
 
-	    //Switch to XTAL
-	    while( !OSCHF_AttemptToSwitchToXosc())
-	    {}
+	//Enable Flash access while doing radio setup
+	powerEnableFlashInIdle();
 
-	    powerEnablePeriph();
-	    powerEnableGPIOClockRunMode();
+	//Switch to XTAL
+	while( !OSCHF_AttemptToSwitchToXosc())
+	{}
 
-	     /* Wait for domains to power on */
-	     while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
+	powerEnablePeriph();
+	powerEnableGPIOClockRunMode();
 
-	     // --------------------------------
+	 /* Wait for domains to power on */
+	 while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
 
-	     static uint32_t pressure = 0;
-	     static uint16_t temperature = 0;
-	     static uint16_t humidity = 0;
+	 // --------------------------------
 
-	     // for energy sparing:
-	     // read sensors out only after halfe of count_max_interrupts
-	     // otherwise: go directly to sleep
-	     if( count_interrupts >= (count_max_interrupts/2) && !readed_sensors){
-	    	 readed_sensors=true;
-			 enable_bmp_280(1);
+	 static uint32_t pressure = 0;
+	 static uint16_t temperature = 0;
+	 static uint16_t humidity = 0;
 
-			 do{
-				pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
-				//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
-			 }while((pressure == 0x80000000) );
-			 //g_pressure_set = false;
+	 // for energy sparing:
+	 // read sensors out only after halfe of count_max_interrupts
+	 // otherwise: go directly to sleep
+	 if( count_interrupts >= (count_max_interrupts/2) && !readed_sensors){
+		 readed_sensors=true;
 
-	     }else if(false){
+	// Kontrollstruktur: ein sensor nach dem anderen (Ringbuffer)
+		 if(g_ringbuffer == 0){
+			 	 g_pressure_set = true;
+				// -----------------------------
+				 enable_bmp_280(1);
+				 do{
+					pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
+					//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
+				 }while((pressure == 0x80000000) );
+				// ----------------------------
+				 g_pressure_set = false;
+				g_ringbuffer ++;
+		 		}
+		 		else if (g_ringbuffer == 1){
+		 			g_temp_active = true;
+					// -----------------------------
+		 			//Start Temp measurement
+		 			enable_tmp_007(1);
+		 			//Wait for, read and calc temperature
+					do{
+						temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
+					}while( (temperature == 0x80000000));
+					enable_tmp_007(0);
+					// -----------------------------
+					g_temp_active = false;
+		 			g_ringbuffer ++;
+		 		}
+		 		else if(g_ringbuffer == 2){
+		 			g_humidity_active = true;
+					// -----------------------------
+		 			//start hum measurement
+					configure_hdc_1000();
+					start_hdc_1000();
+					//Wait for, read and calc humidity
+					while(!read_data_hdc_1000());
+					humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
+					// -----------------------------
+					g_humidity_active = false;
+		 			g_ringbuffer = 0;
+		 		}
 
-			//Start Temp measurement
-			enable_tmp_007(1);
+	 //}else if(false){
 
-			//start hum measurement
-			configure_hdc_1000();
-			start_hdc_1000();
-
-			//Wait for, read and calc temperature
-			do{
-				temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-			}while( (temperature == 0x80000000)); //
-
-			//g_temp_active = false;
-			enable_tmp_007(0);
-
-			//Wait for, read and calc humidity
-			while(!read_data_hdc_1000());
-			humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
-			//g_humidity_active = false;
-	     }
+	 }
 
 	//END read sensor values
 	/*****************************************************************************************/
@@ -486,7 +479,7 @@ void sendData(void){
 
     //Start radio setup and linked advertisment
    	// for energy sparing: only each 100 time send data
-    if(count_interrupts >= 100){
+    if(count_interrupts >= count_max_interrupts){
     	count_interrupts = 0;
     	readed_sensors=false;
     	radioUpdateAdvData(ADVLEN, payload);
