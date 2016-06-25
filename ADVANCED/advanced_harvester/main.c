@@ -103,7 +103,7 @@ uint32_t g_timediff = 0;
 
 // controll sequnce data
 uint8_t count = 0;						//times gpio int appears
-uint8_t count_max = 60;
+uint8_t count_max = 1;
 bool readed_sensors = false;
 bool g_button_pressed;					// for debugging
 bool g_pressure_set;					// pressure sensor state
