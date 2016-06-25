@@ -103,6 +103,7 @@ uint32_t g_timediff = 0;
 
 // controll sequnce data
 uint8_t count = 0;						//times gpio int appears
+uint8_t count_max = 60;
 bool readed_sensors = false;
 bool g_button_pressed;					// for debugging
 bool g_pressure_set;					// pressure sensor state
@@ -202,7 +203,7 @@ void sensorsInit(void){
 
 	g_temp_active = false;
 	g_pressure_set = false;
-	g_humidity_acitve = false;
+	//g_humidity_acitve = false;
 }
 
 void initSensortag(void){
@@ -297,8 +298,9 @@ void getData(void){
 		}
 		else if (g_ringbuffer == 1){
 			g_temp_active = true;
-			g_ringbuffer ++;
+			g_ringbuffer = 0;
 		}
+		// not used, because of to high voltage treshold
 		else if(g_ringbuffer == 2){
 			g_humidity_active = true;
 			g_ringbuffer = 0;
@@ -309,7 +311,7 @@ void getData(void){
 
 		g_pressure_set = true;
 		g_temp_active = true;
-		g_humidity_active = true;
+		//g_humidity_active = true;
 	}
 
 
@@ -318,7 +320,7 @@ void getData(void){
 
 void setData(void){
 
-	rfBootDone  = 0;
+		rfBootDone  = 0;
 	    rfSetupDone = 0;
 	    rfAdvertisingDone = 0;
 
@@ -366,10 +368,10 @@ void setData(void){
 
 	     static uint32_t pressure = 0;
 	     static uint16_t temperature = 0;
-	     static uint16_t humidity = 0;
+	     // static uint16_t humidity = 0;
 
 	     // for energy sparing: read sensors out only all 50 times
-	     if( count >= 50 && !readed_sensors){
+	     if( count >= (count_max/2) && !readed_sensors){
 	    	 readed_sensors=true;
 			 enable_bmp_280(1);
 
@@ -385,8 +387,8 @@ void setData(void){
 			enable_tmp_007(1);
 
 			//start hum measurement
-			configure_hdc_1000();
-			start_hdc_1000();
+			//configure_hdc_1000();
+			//start_hdc_1000();
 
 			//Wait for, read and calc temperature
 			do{
@@ -397,8 +399,8 @@ void setData(void){
 			enable_tmp_007(0);
 
 			//Wait for, read and calc humidity
-			while(!read_data_hdc_1000());
-			humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
+			//while(!read_data_hdc_1000());
+			//humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
 			//g_humidity_active = false;
 	     }
 
@@ -446,8 +448,8 @@ void setData(void){
 	 	// humidity
 	   	payload[p++] = 0;
 	   	payload[p++] = 0;
-	   	payload[p++] = (char) (humidity >> 8);
-	   	payload[p++] = (char) humidity;
+	   	payload[p++] = 0; //(char) (humidity >> 8);
+	   	payload[p++] = 0; //(char) humidity;
 
 	   	// checksum
 	   	payload[p++] = 0;  // checksum
@@ -461,7 +463,7 @@ void sendData(void){
 
     //Start radio setup and linked advertisment
    	// for energy sparing: only each 100 time send data
-    if(count >= 100){
+    if(count >= count_max){
     	count = 0;
     	readed_sensors=false;
     	radioUpdateAdvData(ADVLEN, payload);
