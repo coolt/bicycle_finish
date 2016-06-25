@@ -84,7 +84,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="cc26xxware_2_21_03_15980/utils|cc26xxware_2_21_03_15980/linker_files|sensors/button-sensor.c|cc26xxware_2_22_00_16101/utils|cc26xxware_2_22_00_16101/doc|sensors/board-i2c.c|sensors/board.c|sensors/sensortag-sensors.c|cc26xxware_2_21_03_15980/startup_files/ccfg.c|Board.c|cc26xxware_2_22_00_16101/startup_files/ccfg.c|sensors/board-spi.c|radio_files/pa_table/pa_table_cc26xx.c|Interfaces|sensors/reed-relay.c|sensors/mpu-9250-sensor.c|cc26xxware_2_22_00_16101/linker_files" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="cc26xxware_2_21_03_15980/utils|cc26xxware_2_21_03_15980/linker_files|sensors/button-sensor.c|cc26xxware_2_22_00_16101/doc|sensors/board-i2c.c|sensors/board.c|sensors/sensortag-sensors.c|cc26xxware_2_21_03_15980/startup_files/ccfg.c|Board.c|sensors/board-spi.c|radio_files/pa_table/pa_table_cc26xx.c|Interfaces|sensors/reed-relay.c|sensors/mpu-9250-sensor.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

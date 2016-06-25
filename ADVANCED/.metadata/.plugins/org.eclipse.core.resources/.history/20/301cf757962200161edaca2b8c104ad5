@@ -1,0 +1,13 @@
+# FIXED
+
+cc26xxware_2_22_00_16101/startup_files/startup_ccs.obj: ../cc26xxware_2_22_00_16101/startup_files/startup_ccs.c
+cc26xxware_2_22_00_16101/startup_files/startup_ccs.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/advanced_harvester/cc26xxware_2_22_00_16101/inc/hw_types.h
+cc26xxware_2_22_00_16101/startup_files/startup_ccs.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdint.h
+cc26xxware_2_22_00_16101/startup_files/startup_ccs.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h
+cc26xxware_2_22_00_16101/startup_files/startup_ccs.obj: C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/advanced_harvester/cc26xxware_2_22_00_16101/inc/hw_chip_def.h
+
+../cc26xxware_2_22_00_16101/startup_files/startup_ccs.c: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/advanced_harvester/cc26xxware_2_22_00_16101/inc/hw_types.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdint.h: 
+C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/include/stdbool.h: 
+C:/Users/katrin/Documents/GitHub/bicycle_finish/ADVANCED/advanced_harvester/cc26xxware_2_22_00_16101/inc/hw_chip_def.h: 

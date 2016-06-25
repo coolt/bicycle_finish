@@ -1,0 +1,228 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+CG_TOOL_ROOT := /opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6
+
+GEN_OPTS__FLAG := 
+GEN_CMDS__FLAG := 
+
+ORDERED_OBJS += \
+"./aes.obj" \
+"./ccfg.obj" \
+"./main.obj" \
+"./radio.obj" \
+"./rtc.obj" \
+"./system.obj" \
+"./sensors/bmp-280-sensor.obj" \
+"./sensors/buzzer.obj" \
+"./sensors/ext-flash.obj" \
+"./sensors/hdc-1000-sensor.obj" \
+"./sensors/opt-3001-sensor.obj" \
+"./sensors/sensor-common.obj" \
+"./sensors/tmp-007-sensor.obj" \
+"./interfaces/board-i2c.obj" \
+"./interfaces/board-spi.obj" \
+"./cc26xxware_2_22_00_16101/startup_files/startup_ccs.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/adi.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/aon_batmon.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/aon_event.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/aon_ioc.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/aon_rtc.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/aon_wuc.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/aux_adc.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/aux_smph.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/aux_tdc.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/aux_timer.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/aux_wuc.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/ccfgread.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/chipinfo.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/cpu.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/crypto.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/ddi.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/debug.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/driverlib_release.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/event.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/flash.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/flashsafe.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/gpio.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/i2c.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/i2s.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/interrupt.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/ioc.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/osc.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/prcm.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/pwr_ctrl.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/rfc.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/rom_crypto.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/setup.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/smph.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/ssi.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/sys_ctrl.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/systick.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/timer.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/trng.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/uart.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/udma.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/vims.obj" \
+"./cc26xxware_2_22_00_16101/driverLib/watchdog.obj" \
+"../cc26x0f128.cmd" \
+$(GEN_CMDS__FLAG) \
+-l"libc.a" \
+
+-include ../makefile.init
+
+RM := rm -rf
+RMDIR := rm -rf
+
+# All of the sources participating in the build are defined here
+-include sources.mk
+-include subdir_vars.mk
+-include sensors/subdir_vars.mk
+-include interfaces/subdir_vars.mk
+-include cc26xxware_2_22_00_16101/startup_files/subdir_vars.mk
+-include cc26xxware_2_22_00_16101/driverLib/subdir_vars.mk
+-include subdir_rules.mk
+-include sensors/subdir_rules.mk
+-include interfaces/subdir_rules.mk
+-include cc26xxware_2_22_00_16101/startup_files/subdir_rules.mk
+-include cc26xxware_2_22_00_16101/driverLib/subdir_rules.mk
+-include objects.mk
+
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(strip $(S_DEPS)),)
+-include $(S_DEPS)
+endif
+ifneq ($(strip $(S_UPPER_DEPS)),)
+-include $(S_UPPER_DEPS)
+endif
+ifneq ($(strip $(S62_DEPS)),)
+-include $(S62_DEPS)
+endif
+ifneq ($(strip $(C64_DEPS)),)
+-include $(C64_DEPS)
+endif
+ifneq ($(strip $(ASM_DEPS)),)
+-include $(ASM_DEPS)
+endif
+ifneq ($(strip $(CC_DEPS)),)
+-include $(CC_DEPS)
+endif
+ifneq ($(strip $(S55_DEPS)),)
+-include $(S55_DEPS)
+endif
+ifneq ($(strip $(C67_DEPS)),)
+-include $(C67_DEPS)
+endif
+ifneq ($(strip $(CLA_DEPS)),)
+-include $(CLA_DEPS)
+endif
+ifneq ($(strip $(C??_DEPS)),)
+-include $(C??_DEPS)
+endif
+ifneq ($(strip $(CPP_DEPS)),)
+-include $(CPP_DEPS)
+endif
+ifneq ($(strip $(S??_DEPS)),)
+-include $(S??_DEPS)
+endif
+ifneq ($(strip $(C_DEPS)),)
+-include $(C_DEPS)
+endif
+ifneq ($(strip $(C62_DEPS)),)
+-include $(C62_DEPS)
+endif
+ifneq ($(strip $(CXX_DEPS)),)
+-include $(CXX_DEPS)
+endif
+ifneq ($(strip $(C++_DEPS)),)
+-include $(C++_DEPS)
+endif
+ifneq ($(strip $(ASM_UPPER_DEPS)),)
+-include $(ASM_UPPER_DEPS)
+endif
+ifneq ($(strip $(K_DEPS)),)
+-include $(K_DEPS)
+endif
+ifneq ($(strip $(C43_DEPS)),)
+-include $(C43_DEPS)
+endif
+ifneq ($(strip $(INO_DEPS)),)
+-include $(INO_DEPS)
+endif
+ifneq ($(strip $(S67_DEPS)),)
+-include $(S67_DEPS)
+endif
+ifneq ($(strip $(SA_DEPS)),)
+-include $(SA_DEPS)
+endif
+ifneq ($(strip $(S43_DEPS)),)
+-include $(S43_DEPS)
+endif
+ifneq ($(strip $(OPT_DEPS)),)
+-include $(OPT_DEPS)
+endif
+ifneq ($(strip $(PDE_DEPS)),)
+-include $(PDE_DEPS)
+endif
+ifneq ($(strip $(S64_DEPS)),)
+-include $(S64_DEPS)
+endif
+ifneq ($(strip $(C_UPPER_DEPS)),)
+-include $(C_UPPER_DEPS)
+endif
+ifneq ($(strip $(C55_DEPS)),)
+-include $(C55_DEPS)
+endif
+endif
+
+-include ../makefile.defs
+
+# Add inputs and outputs from these tool invocations to the build variables 
+EXE_OUTPUTS += \
+simplebroadcast_improved_recharge.out \
+
+EXE_OUTPUTS__QUOTED += \
+"simplebroadcast_improved_recharge.out" \
+
+BIN_OUTPUTS += \
+simplebroadcast_improved_recharge.hex \
+
+BIN_OUTPUTS__QUOTED += \
+"simplebroadcast_improved_recharge.hex" \
+
+
+# All Target
+all: simplebroadcast_improved_recharge.out
+
+# Tool invocations
+simplebroadcast_improved_recharge.out: $(OBJS) $(CMD_SRCS) $(LDS_SRCS) $(GEN_CMDS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: ARM Linker'
+	"/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/bin/armcl" -mv7M3 --code_state=16 --abi=eabi -me -g --define=DEBUG --display_error_number --diag_warning=225 --diag_wrap=off -z -m"simplebroadcast_improved_recharge.map" --heap_size=0 --stack_size=256 -i"/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/lib" -i"/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="simplebroadcast_improved_recharge_linkInfo.xml" --rom_model -o "simplebroadcast_improved_recharge.out" $(ORDERED_OBJS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+simplebroadcast_improved_recharge.hex: $(EXE_OUTPUTS)
+	@echo 'Invoking: ARM Hex Utility'
+	"/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/bin/armhex"  -o "simplebroadcast_improved_recharge.hex" $(EXE_OUTPUTS__QUOTED)
+	@echo 'Finished building: $@'
+	@echo ' '
+
+# Other Targets
+clean:
+	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
+	-$(RM) "aes.pp" "ccfg.pp" "main.pp" "radio.pp" "rtc.pp" "system.pp" "sensors/bmp-280-sensor.pp" "sensors/buzzer.pp" "sensors/ext-flash.pp" "sensors/hdc-1000-sensor.pp" "sensors/opt-3001-sensor.pp" "sensors/sensor-common.pp" "sensors/tmp-007-sensor.pp" "interfaces/board-i2c.pp" "interfaces/board-spi.pp" "cc26xxware_2_22_00_16101/startup_files/startup_ccs.pp" "cc26xxware_2_22_00_16101/driverLib/adi.pp" "cc26xxware_2_22_00_16101/driverLib/aon_batmon.pp" "cc26xxware_2_22_00_16101/driverLib/aon_event.pp" "cc26xxware_2_22_00_16101/driverLib/aon_ioc.pp" "cc26xxware_2_22_00_16101/driverLib/aon_rtc.pp" "cc26xxware_2_22_00_16101/driverLib/aon_wuc.pp" "cc26xxware_2_22_00_16101/driverLib/aux_adc.pp" "cc26xxware_2_22_00_16101/driverLib/aux_smph.pp" "cc26xxware_2_22_00_16101/driverLib/aux_tdc.pp" "cc26xxware_2_22_00_16101/driverLib/aux_timer.pp" "cc26xxware_2_22_00_16101/driverLib/aux_wuc.pp" "cc26xxware_2_22_00_16101/driverLib/ccfgread.pp" "cc26xxware_2_22_00_16101/driverLib/chipinfo.pp" "cc26xxware_2_22_00_16101/driverLib/cpu.pp" 
+	-$(RM) "cc26xxware_2_22_00_16101/driverLib/crypto.pp" "cc26xxware_2_22_00_16101/driverLib/ddi.pp" "cc26xxware_2_22_00_16101/driverLib/debug.pp" "cc26xxware_2_22_00_16101/driverLib/driverlib_release.pp" "cc26xxware_2_22_00_16101/driverLib/event.pp" "cc26xxware_2_22_00_16101/driverLib/flash.pp" "cc26xxware_2_22_00_16101/driverLib/flashsafe.pp" "cc26xxware_2_22_00_16101/driverLib/gpio.pp" "cc26xxware_2_22_00_16101/driverLib/i2c.pp" "cc26xxware_2_22_00_16101/driverLib/i2s.pp" "cc26xxware_2_22_00_16101/driverLib/interrupt.pp" "cc26xxware_2_22_00_16101/driverLib/ioc.pp" "cc26xxware_2_22_00_16101/driverLib/osc.pp" "cc26xxware_2_22_00_16101/driverLib/prcm.pp" "cc26xxware_2_22_00_16101/driverLib/pwr_ctrl.pp" "cc26xxware_2_22_00_16101/driverLib/rfc.pp" "cc26xxware_2_22_00_16101/driverLib/rom_crypto.pp" "cc26xxware_2_22_00_16101/driverLib/setup.pp" "cc26xxware_2_22_00_16101/driverLib/smph.pp" "cc26xxware_2_22_00_16101/driverLib/ssi.pp" "cc26xxware_2_22_00_16101/driverLib/sys_ctrl.pp" "cc26xxware_2_22_00_16101/driverLib/systick.pp" 
+	-$(RM) "cc26xxware_2_22_00_16101/driverLib/timer.pp" "cc26xxware_2_22_00_16101/driverLib/trng.pp" "cc26xxware_2_22_00_16101/driverLib/uart.pp" "cc26xxware_2_22_00_16101/driverLib/udma.pp" "cc26xxware_2_22_00_16101/driverLib/vims.pp" "cc26xxware_2_22_00_16101/driverLib/watchdog.pp" 
+	-$(RM) "aes.obj" "ccfg.obj" "main.obj" "radio.obj" "rtc.obj" "system.obj" "sensors/bmp-280-sensor.obj" "sensors/buzzer.obj" "sensors/ext-flash.obj" "sensors/hdc-1000-sensor.obj" "sensors/opt-3001-sensor.obj" "sensors/sensor-common.obj" "sensors/tmp-007-sensor.obj" "interfaces/board-i2c.obj" "interfaces/board-spi.obj" "cc26xxware_2_22_00_16101/startup_files/startup_ccs.obj" "cc26xxware_2_22_00_16101/driverLib/adi.obj" "cc26xxware_2_22_00_16101/driverLib/aon_batmon.obj" "cc26xxware_2_22_00_16101/driverLib/aon_event.obj" "cc26xxware_2_22_00_16101/driverLib/aon_ioc.obj" "cc26xxware_2_22_00_16101/driverLib/aon_rtc.obj" "cc26xxware_2_22_00_16101/driverLib/aon_wuc.obj" "cc26xxware_2_22_00_16101/driverLib/aux_adc.obj" "cc26xxware_2_22_00_16101/driverLib/aux_smph.obj" "cc26xxware_2_22_00_16101/driverLib/aux_tdc.obj" "cc26xxware_2_22_00_16101/driverLib/aux_timer.obj" "cc26xxware_2_22_00_16101/driverLib/aux_wuc.obj" "cc26xxware_2_22_00_16101/driverLib/ccfgread.obj" "cc26xxware_2_22_00_16101/driverLib/chipinfo.obj" 
+	-$(RM) "cc26xxware_2_22_00_16101/driverLib/cpu.obj" "cc26xxware_2_22_00_16101/driverLib/crypto.obj" "cc26xxware_2_22_00_16101/driverLib/ddi.obj" "cc26xxware_2_22_00_16101/driverLib/debug.obj" "cc26xxware_2_22_00_16101/driverLib/driverlib_release.obj" "cc26xxware_2_22_00_16101/driverLib/event.obj" "cc26xxware_2_22_00_16101/driverLib/flash.obj" "cc26xxware_2_22_00_16101/driverLib/flashsafe.obj" "cc26xxware_2_22_00_16101/driverLib/gpio.obj" "cc26xxware_2_22_00_16101/driverLib/i2c.obj" "cc26xxware_2_22_00_16101/driverLib/i2s.obj" "cc26xxware_2_22_00_16101/driverLib/interrupt.obj" "cc26xxware_2_22_00_16101/driverLib/ioc.obj" "cc26xxware_2_22_00_16101/driverLib/osc.obj" "cc26xxware_2_22_00_16101/driverLib/prcm.obj" "cc26xxware_2_22_00_16101/driverLib/pwr_ctrl.obj" "cc26xxware_2_22_00_16101/driverLib/rfc.obj" "cc26xxware_2_22_00_16101/driverLib/rom_crypto.obj" "cc26xxware_2_22_00_16101/driverLib/setup.obj" "cc26xxware_2_22_00_16101/driverLib/smph.obj" "cc26xxware_2_22_00_16101/driverLib/ssi.obj" "cc26xxware_2_22_00_16101/driverLib/sys_ctrl.obj" 
+	-$(RM) "cc26xxware_2_22_00_16101/driverLib/systick.obj" "cc26xxware_2_22_00_16101/driverLib/timer.obj" "cc26xxware_2_22_00_16101/driverLib/trng.obj" "cc26xxware_2_22_00_16101/driverLib/uart.obj" "cc26xxware_2_22_00_16101/driverLib/udma.obj" "cc26xxware_2_22_00_16101/driverLib/vims.obj" "cc26xxware_2_22_00_16101/driverLib/watchdog.obj" 
+	-@echo 'Finished clean'
+	-@echo ' '
+
+.PHONY: all clean dependents
+.SECONDARY:
+
+-include ../makefile.targets
+

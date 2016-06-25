@@ -1,0 +1,13 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Each subdirectory must supply rules for building sources it contributes
+cc26xxware_2_22_00_16101/startup_files/startup_ccs.obj: ../cc26xxware_2_22_00_16101/startup_files/startup_ccs.c $(GEN_OPTS) $(GEN_HDRS)
+	@echo 'Building file: $<'
+	@echo 'Invoking: ARM Compiler'
+	"/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/bin/armcl" -mv7M3 --code_state=16 --abi=eabi -me --include_path="/opt/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/interfaces" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/sensors" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/radio_files" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/radio_files/overrides" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/radio_files/pa_table" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/radio_files/patches" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/radio_files/rfc_api" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/inc" --include_path="/home/dalyan/git/IoT2_Labs/Labs/11 - URI ADV/SO_WS_BLE_ADV_URI/simplebroadcast_improved_recharge/cc26xxware_2_22_00_16101/linker_files" -g --define=DEBUG --display_error_number --diag_warning=225 --diag_wrap=off --preproc_with_compile --preproc_dependency="cc26xxware_2_22_00_16101/startup_files/startup_ccs.pp" --obj_directory="cc26xxware_2_22_00_16101/startup_files" $(GEN_OPTS__FLAG) "$(shell echo $<)"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

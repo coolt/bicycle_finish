@@ -107,12 +107,6 @@ void GPIOIntHandler(void){
   time2=AONRTCCurrentCompareValueGet();
   g_diff=time2-time1;
 
-  
-  
-  
-
-
-
   /*Disable interrupts while clearing flags*/
   IntDisable(INT_EDGE_DETECT);
   /* Read interrupt flags */
@@ -121,7 +115,7 @@ void GPIOIntHandler(void){
     /* Clear the interrupt flags*/
     HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) = event_flags;
     /*Wait until the flag is cleared, no new flag possible because interrupt disabled*/
-    while((HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK));
+    //while((HWREG(GPIO_BASE + GPIO_O_EVFLAGS31_0) & GPIO_PIN_MASK));  // CRASH
   }
   /*Enable after flags cleared*/
   IntEnable(INT_EDGE_DETECT);
@@ -268,8 +262,8 @@ void ledInit(void)
     rfSetupDone = 0;
     rfAdvertisingDone = 0;
 
-	//select_bmp_280();     				// activates I2C for bmp-sensor
-	//enable_bmp_280(1);					// works
+	select_bmp_280();     				// activates I2C for bmp-sensor
+	enable_bmp_280(1);					// works
 
     //Wait until RF Core PD is ready before accessing radio
     waitUntilRFCReady();
@@ -319,16 +313,16 @@ void ledInit(void)
 /*****************************************************************************************/
 // Read sensor values
 
-     /*
+
      uint32_t pressure = 0;  			// only 3 Bytes used
 	//uint32_t temp = 0;
-	//select_bmp_280();     				// activates I2C for bmp-sensor
-	//enable_bmp_280(1);					// works
+	select_bmp_280();     				// activates I2C for bmp-sensor
+	enable_bmp_280(1);					// works
 
-	//do{
+	do{
 		pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
 		//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
-	//}while(pressure == 0x80000000);
+	}while(pressure == 0x80000000);
 		if(pressure == 0x80000000){
 			CPUdelay(100);
 
@@ -336,7 +330,7 @@ void ledInit(void)
 
 		}
 
-/*
+
     //Start Temp measurement
     uint16_t temperature;
     enable_tmp_007(1);
@@ -346,7 +340,7 @@ void ledInit(void)
     int count = 0;
     do{
     	temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-    	g_count++;
+    	//g_count++;
     }while( ((temperature == 0x80000000) || (temperature == 0)) && (count <=5) );
     count++;
 	count--;
@@ -354,15 +348,14 @@ void ledInit(void)
     enable_tmp_007(0);
     char char_temp[2];
 
-*/
+
 
    //start hum measurement
-    //    configure_hdc_1000();
-    //    start_hdc_1000();
+        configure_hdc_1000();
+        start_hdc_1000();
 //    //Wait for, read and calc humidity
-//    while(!read_data_hdc_1000())
-//    	;
-//    int humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
+    while(!read_data_hdc_1000());
+   int humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
 //    char char_hum[5];
 
 

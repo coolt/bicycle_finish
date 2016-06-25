@@ -1,0 +1,317 @@
+diff --git a/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/RemoteSystemsTempFiles/org.eclipse.egit.core/GitProjectData.properties b/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/RemoteSystemsTempFiles/org.eclipse.egit.core/GitProjectData.properties
+index b503fe8..bc42074 100644
+--- a/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/RemoteSystemsTempFiles/org.eclipse.egit.core/GitProjectData.properties
++++ b/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/RemoteSystemsTempFiles/org.eclipse.egit.core/GitProjectData.properties
+@@ -1,3 +1,3 @@
+ #GitProjectData
+-#Wed May 25 17:07:23 CEST 2016
++#Wed Jun 01 17:46:53 CEST 2016
+ .gitdir=../../.git
+diff --git a/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/.location b/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/.location
+deleted file mode 100644
+index c40cfab..0000000
+Binary files a/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/.location and /dev/null differ
+diff --git a/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/.markers b/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/.markers
+index 36b485b..6c3bbc8 100644
+Binary files a/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/.markers and b/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/.markers differ
+diff --git a/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/org.eclipse.egit.core/GitProjectData.properties b/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/org.eclipse.egit.core/GitProjectData.properties
+index 4e8e8cf..2e2e965 100644
+--- a/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/org.eclipse.egit.core/GitProjectData.properties
++++ b/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.projects/advanced_harvester/org.eclipse.egit.core/GitProjectData.properties
+@@ -1,3 +1,3 @@
+ #GitProjectData
+-#Wed May 25 17:49:42 CEST 2016
++#Wed Jun 01 19:48:45 CEST 2016
+ .gitdir=../../.git
+diff --git a/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources b/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources
+index a6162eb..142563a 100644
+Binary files a/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources and b/ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources differ
+diff --git a/ADVANCED/.metadata/version.ini b/ADVANCED/.metadata/version.ini
+index e1d86ad..68c7907 100644
+--- a/ADVANCED/.metadata/version.ini
++++ b/ADVANCED/.metadata/version.ini
+@@ -1,3 +1,3 @@
+-#Thu May 26 12:20:53 CEST 2016
++#Wed Jun 01 19:54:36 CEST 2016
+ org.eclipse.core.runtime=2
+ org.eclipse.platform=4.5.1.v20150904-0015
+diff --git a/ADVANCED/advanced_harvester/main.c b/ADVANCED/advanced_harvester/main.c
+index 0073a57..f839570 100644
+--- a/ADVANCED/advanced_harvester/main.c
++++ b/ADVANCED/advanced_harvester/main.c
+@@ -100,15 +100,19 @@ char payload[ADVLEN];					// shared data buffer
+ static uint16_t sequenceNumber = 0x0;
+ uint32_t g_timestamp1, g_timestamp2;
+ uint32_t g_timediff = 0;
++static uint32_t pressure = 0;
++static uint16_t temperature = 0;
++static uint16_t humidity = 0;
+ 
+ // controll sequnce data
+ uint8_t count = 0;						//times gpio int appears
++uint8_t g_count_max = 120;
+ bool readed_sensors = false;
+ bool g_button_pressed;
+ bool g_pressure_set;					// pressure sensor state
+ bool g_temp_active;
+ bool g_humidity_active;
+-// long g_current_energy_state;
++long g_current_energy_state;
+ 
+ // RTC
+ #include <rtc.h>
+@@ -265,76 +269,48 @@ void initSensortag(void){
+ 
+ }
+ 
++
+ void getData(void){
+ 
+ 	// Wakeup from RTC according to energy-state
+ 	// ---------------------------------------------
+ 
+-	// start system
+-	powerEnableAuxForceOn();
+-	powerEnableCache();
+-
+-
+-	// read Energy state from EM8500
+-	// ----------------------------------
+-	//g_current_energy_state = getEnergyStateFromGPIO();
+-	g_current_energy_state = getEnergyStateFromSPI();
+-	updateRTCWakeUpTime(g_current_energy_state);
+-
+-	// clear ble-data-buffer
+-	memset(payload, 0, ADVLEN); 											// Clear payload buffer (ADVLEN = 24)
+-
+-	//
+-
+-	// set header ble-data-buffer
+-	payload[0] = ADVLEN - 1; 												// length = ADV-Length - 1 (1 Byte) = 23 Bytes
+-	payload[1] = 0x03; 														// Type (1 Byte)  =>   0x03 = UUID -> immer 2 Bytes
+-	payload[2] = 0xDE; 														// UUID (2 Bytes) =>   0xDE00 (UUID im Ines)
+-	payload[3] = 0xBA;
+-	payload[4] = (char) (sequenceNumber >> 8);															// Laufnummer für 2 Tage Laufzeit (2 Bytes)
+-	payload[5] = (char) sequenceNumber;
+-
+-
+ 	// read sensors acording to the energy state
+-	// LOW:  no sensorts
+-	// MIDDLE: only one sensor, but each time a new one (ringbuffer-system)
+-	// HIGH: read all sensors
+-	if(g_current_energy_state == MIDDLE_ENERGY ){
+ 
++	// HIGH ENERGY: v > 40 km/h
++	if (g_timediff >= 10000){
++			g_pressure_set = true;
++			g_temp_active = true;
++			g_humidity_active = true;
++		}
++	// MIDDLE ENERGY: v > 25 km/h
++	else if(g_timediff >= 300 ){
+ 		static int g_ringbuffer = 0;
+ 
+ 		if(g_ringbuffer == 0){
+-			enable_bmp_280(1);
+ 			g_pressure_set = true;
+ 			g_ringbuffer ++;
+ 		}
+ 		else if (g_ringbuffer == 1){
+-			enable_tmp_007(1);
+ 			g_temp_active = true;
+ 			g_ringbuffer ++;
+ 		}
+ 		else if(g_ringbuffer == 2){
+-			// start_hdc_1000();
+ 			g_humidity_active = true;
+ 			g_ringbuffer = 0;
+ 		}
+-	} // end MIDDLE ENERGY
+-
+-	else if (g_current_energy_state == HIGH_ENERGY ){
+-		enable_tmp_007(1);
+-		g_pressure_set = true;
+-		enable_bmp_280(1);
+-		g_temp_active = true;
+-		g_humidity_active = true;
+ 	}
+ 
+-	// update sequence_number
++	// LOW ENERGY: no sensors read out
++
+ 	sequenceNumber++;
+ }
+ 
++
++
+ void setData(void){
+ 
+-	rfBootDone  = 0;
++		rfBootDone  = 0;
+ 	    rfSetupDone = 0;
+ 	    rfAdvertisingDone = 0;
+ 
+@@ -380,12 +356,10 @@ void setData(void){
+ 
+ 	     // --------------------------------
+ 
+-	     static uint32_t pressure = 0;
+-	     static uint16_t temperature = 0;
+-	     static uint16_t humidity = 0;
++
+ 
+ 	     // for energy sparing: read sensors out only all 50 times
+-	     if( count >= 50 && !readed_sensors){
++	     if( count >= (g_count_max/2) && !readed_sensors){
+ 	    	 readed_sensors=true;
+ 			 enable_bmp_280(1);
+ 
+@@ -418,18 +392,17 @@ void setData(void){
+ 			//g_humidity_active = false;
+ 	     }
+ 
+-	//END read sensor values
+-	/*****************************************************************************************/
+ 
++
++	    // power off sensors
+ 	    powerDisablePeriph();
+ 		// Disable clock for GPIO in CPU run mode
+ 		HWREGBITW(PRCM_BASE + PRCM_O_GPIOCLKGR, PRCM_GPIOCLKGR_CLK_EN_BITN) = 0;
+ 		// Load clock settings
+ 		HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
+ 
+-	/*****************************************************************************************/
+-
+ 
++		// set data to radio buffer
+ 		uint8_t p;
+ 	    p = 0;
+ 
+@@ -469,7 +442,6 @@ void setData(void){
+ 	   	payload[p++] = 0;  // checksum
+ 	   	payload[p++] = 0;
+ 
+-	   	sequenceNumber++;
+ }
+ 
+ 
+@@ -477,7 +449,7 @@ void sendData(void){
+ 
+     //Start radio setup and linked advertisment
+    	// for energy sparing: only each 100 time send data
+-    if(count >= 100){
++    if(true /*count >= g_count_max*/){
+     	count = 0;
+     	readed_sensors=false;
+     	radioUpdateAdvData(ADVLEN, payload);
+@@ -499,19 +471,20 @@ void sendData(void){
+ 
+ 		//Request radio to not force on system bus any more
+ 		radioCmdBusRequest(false);
+-
+     }
+ 
+-    //END: Transmit
+-
+ }
+ 
+ 
+ void sleep(void){
+ 
+-	    // Standby procedure
+-	    //
++		// Wake up from RTC
++
++
++		// Disable Reed Switch Interrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
++		IntDisable(INT_EDGE_DETECT);
+ 
++	    // Standby procedure
+ 	    powerDisableXtal();
+ 
+ 	    // Turn off radio
+@@ -523,6 +496,10 @@ void sleep(void){
+ 	    // Allow AUX to turn off again. No longer need oscillator interface
+ 	    powerDisableAuxForceOn();
+ 
++
++
++
++
+ 	    // Goto Standby. MCU will now request to be powered down on DeepSleep
+ 	    powerEnableMcuPdReq();
+ 
+@@ -536,10 +513,8 @@ void sleep(void){
+ 	    // Synchronize transactions to AON domain to ensure AUX has turned off
+ 	    SysCtrlAonSync();
+ 
+-	    //
+-	    // Enter Standby
+-	    //
+ 
++	    // Enter Standby
+ 	    powerDisableCPU();
+ 	    PRCMDeepSleep();
+ 
+@@ -547,10 +522,8 @@ void sleep(void){
+ 	    SysCtrlAdjustRechargeAfterPowerDown();
+ 	    SysCtrlAonSync();
+ 
+-	    //
+-		// Wakeup from RTC every 100ms, code starts execution from here
+-		//
+ 
++		// Wakeup from RTC, code starts execution from here
+ 	    powerEnableRFC();
+ 	    powerEnableAuxForceOn();
+ 
+diff --git a/ADVANCED/advanced_harvester/rtc.c b/ADVANCED/advanced_harvester/rtc.c
+index 160ffff..2cfacc5 100644
+--- a/ADVANCED/advanced_harvester/rtc.c
++++ b/ADVANCED/advanced_harvester/rtc.c
+@@ -33,18 +33,19 @@ void updateRTCWakeUpTime(long energy_state){
+ }
+ 
+ void initRTC(void) {
++
+   //Add RTC Ch2 event as input to AON RTC interrupt
+-//  AONRTCCombinedEventConfig(AON_RTC_CH2);
++ AONRTCCombinedEventConfig(AON_RTC_CH2);
+ //  //Set RTC ch 2 auto increment
+-//  AONRTCIncValueCh2Set(WAKE_INTERVAL_TICKS);
++ AONRTCIncValueCh2Set(WAKE_INTERVAL_TICKS);
+ //  //Set RTC ch2 initial compare value
+-//  AONRTCCompareValueSet(AON_RTC_CH2, WAKE_INTERVAL_TICKS);
++  AONRTCCompareValueSet(AON_RTC_CH2, WAKE_INTERVAL_TICKS);
+ //  //Set RTC CH 2 to auto increment mode
+-//  AONRTCModeCh2Set(AON_RTC_MODE_CH2_CONTINUOUS);
++  AONRTCModeCh2Set(AON_RTC_MODE_CH2_CONTINUOUS);
+ //  //Enable channel 2
+-//  AONRTCChannelEnable(AON_RTC_CH2);
++ AONRTCChannelEnable(AON_RTC_CH2);
+ //  //Set device to wake MCU from standby on RTC channel 2
+-//  HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_RTC_CH2;
++  HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_RTC_CH2;
+ 
+   //Enable RTC
+   AONRTCEnable();
+@@ -54,12 +55,17 @@ void initRTC(void) {
+ //RTC interrupt handler
+ void AONRTCIntHandler(void) {
+ 
+-  // Clear RTC event flag
++	// Wake up Interrupt from Sleep
++
++	// Clear RTC event flag
+   do{
+     AONRTCEventClear(AON_RTC_CH2);
+   }
+   while( AONRTCEventGet(AON_RTC_CH2));
+ 
++  // After sleep: Activates Reed Input
++  IntDisable(INT_EDGE_DETECT);
++
+ }
+ 
+ 

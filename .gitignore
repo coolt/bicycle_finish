@@ -1,6 +1,9 @@
 
 composer.phar
 /vendor/
+ADVANCED/.metadata/.plugins/org.eclipse.core.resources/**
+
+
 
 # add new project
 advanced_communication/.metadata/**
@@ -8,7 +11,7 @@ advanced_communication/simple_harvester/Debug
 advanced_communication/simple_harvester/.launches/**
 advanced_communication/simple_harvester/.settings/**
 advanced_communication/simple_harvester/cc26xxware_2_22_00_16101/**
-
+**.mk
 
 
 
@@ -77,3 +80,24 @@ Dario_wake_up/.metadata/.plugins/org.eclipse.rse.core/profiles/PRF.katrin_think_
 Dario_wake_up/.metadata/.plugins/org.eclipse.rse.core/profiles/PRF.katrin_think_0/node.properties
 Dario_wake_up/.metadata/.plugins/org.eclipse.cdt.make.core/specs.cpp
 
+advanced_communication/advanced/Debug/advanced.map
+advanced_communication/advanced/Debug/cc26xxware_2_22_00_16101/driverLib/subdir_rules.mk
+advanced_communication/advanced/Debug/cc26xxware_2_22_00_16101/startup_files/subdir_rules.mk
+*.mk
+advanced_communication/advanced/Debug/cc26xxware_2_22_00_16101/driverLib/subdir_rules.mk
+*.mk
+advanced_communication/advanced/Debug/advanced.map
+*.map
+advanced_communication/advanced/Debug/advanced.map
+advanced_communication/advanced/Debug/sensors/subdir_rules.mk
+advanced_communication/advanced/Debug/cc26xxware_2_22_00_16101/driverLib/subdir_rules.mk
+advanced_communication/advanced/Debug/advanced.map
+*.launch
+*.launch
+*.ini
+*.ini
+ADVANCED/.metadata/.plugins/org.eclipse.cdt.core/advanced_harvester.1464191380925.pdom
+*.pdom
+*.pdom
+*.markers
+ADVANCED/.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources
