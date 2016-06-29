@@ -103,7 +103,7 @@ uint32_t g_timediff = 0;
 
 // controll sequnce data
 uint8_t count = 0;						//times gpio int appears
-uint8_t count_max = 1;
+uint8_t count_max = 2;
 bool readed_sensors = false;
 bool g_button_pressed;					// for debugging
 bool g_pressure_set;					// pressure sensor state
@@ -142,10 +142,13 @@ void GPIOIntHandler(void){
 
   // calculate speed from GPIO-Interrupt (Pin25)
   time2 = time1;
-  //if(count == (count_max/2) - 1){
-	  time1 = AONRTCCurrentCompareValueGet();				// read out RTC timestamp
-  //}
+  time1 = AONRTCCurrentCompareValueGet();				// read out RTC timestamp
   g_timediff = time1-time2;
+
+  // throw away wrong values
+  if(g_timediff < 0x0000000F00){
+	  g_timediff = 0;
+  }
   count++;												// count interrupts (= reed switch)
 
   /* Read interrupt flags */
@@ -205,7 +208,6 @@ void sensorsInit(void){
 
 	g_temp_active = false;
 	g_pressure_set = false;
-	//g_humidity_acitve = false;
 }
 
 void initSensortag(void){
@@ -274,30 +276,31 @@ void getData(void){
 	// Wakeup from RTC according to energy-state
 	// ---------------------------------------------
 
-/*	// start system
-	powerEnableAuxForceOn();
-	powerEnableCache();
-
-	//Re-enable cache and retention
-		    powerEnableCache();
-		    powerEnableCacheRetention();
-
-		    //MCU will not request to be powered down on DeepSleep -> System goes only to IDLE
-		    powerDisableMcuPdReq();
-*/
-// Code from sleep
-
 
 	// set energy state from velocity
 	// ----------------------------------
+	count_max = 2;									// default (wenig Energie)
 	g_current_energy_state = LOW_ENERGY;			// low energy until 15 km/h
 													// 15 km/h -> g_timediff > 0x00003E00
 
+	//Problem Middle energy
+	//----------------------
+	// die Energie geht bei 20 km verloren!!! (ev. weil Sensoren mitausgelesen werden),
+	// auch wenn count auf 100 ist
+	// Lösung: bis 30 km/h nur Sensoren mit auslesen, count = 2 lassen, VSUP stellt ab
+	// Ab 30 km/h: count = 100
+
 	if(g_timediff < 0x00003E00 ){
 		g_current_energy_state = MIDDLE_ENERGY;		// middle energy:
-	}												// from 15 km/h - 40 km/h
+		count_max = 2;								// from 15 km/h - 30 km/h
+	}
+	if(g_timediff < 0x00002000 ){
+				g_current_energy_state = HIGH_ENERGY;		// higher 30 km/h
+				count_max = 100;
+	}
 	if(g_timediff < 0x00001780 ){
 			g_current_energy_state = HIGH_ENERGY;		// higher 40 km/h
+			count_max = 2;
 		}
 
 
@@ -386,7 +389,7 @@ void setData(void){
 
 
 	     // for energy sparing: read sensors out only all 50 times
-	     if( count >= (count_max/2) && !readed_sensors && g_pressure_set){
+	     if( count >= (count_max/2) && !readed_sensors){
 	    	 readed_sensors=true;
 			 enable_bmp_280(1);
 
@@ -574,7 +577,7 @@ int main(void) {
 
 	while(1) {
 
-	getData(); // new
+	getData();
 	setData();
 	sendData();
 	sleep();
