@@ -274,15 +274,31 @@ void getData(void){
 	// Wakeup from RTC according to energy-state
 	// ---------------------------------------------
 
-	// start system
+/*	// start system
 	powerEnableAuxForceOn();
 	powerEnableCache();
 
+	//Re-enable cache and retention
+		    powerEnableCache();
+		    powerEnableCacheRetention();
 
-	// read Energy from velocity
+		    //MCU will not request to be powered down on DeepSleep -> System goes only to IDLE
+		    powerDisableMcuPdReq();
+*/
+// Code from sleep
+
+
+	// set energy state from velocity
 	// ----------------------------------
-	// g_timediff
-	g_current_energy_state = LOW_ENERGY;
+	g_current_energy_state = LOW_ENERGY;			// low energy until 15 km/h
+													// 15 km/h -> g_timediff > 0x00003E00
+
+	if(g_timediff < 0x00003E00 ){
+		g_current_energy_state = MIDDLE_ENERGY;		// middle energy:
+	}												// from 15 km/h - 40 km/h
+	if(g_timediff < 0x00001780 ){
+			g_current_energy_state = HIGH_ENERGY;		// higher 40 km/h
+		}
 
 
 	// read sensors acording to the energy state
@@ -313,7 +329,6 @@ void getData(void){
 
 		g_pressure_set = true;
 		g_temp_active = true;
-		//g_humidity_active = true;
 	}
 }
 
@@ -546,6 +561,7 @@ void sleep(void){
 
 	    //MCU will not request to be powered down on DeepSleep -> System goes only to IDLE
 	    powerDisableMcuPdReq();
+
 }
 
 
@@ -558,7 +574,7 @@ int main(void) {
 
 	while(1) {
 
-	// getData(); // new
+	getData(); // new
 	setData();
 	sendData();
 	sleep();
