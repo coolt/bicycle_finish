@@ -384,19 +384,19 @@ void setData(void){
 	     static uint16_t temperature = 0;
 	     // static uint16_t humidity = 0;
 
-	     /*
+
 	     // for energy sparing: read sensors out only all 50 times
-	     if( count >= (count_max/2) && !readed_sensors){
+	     if( count >= (count_max/2) && !readed_sensors && g_pressure_set){
 	    	 readed_sensors=true;
 			 enable_bmp_280(1);
 
 			 do{
 				pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
-				//temp = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
+				temperature = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
 			 }while((pressure == 0x80000000) );
 			 //g_pressure_set = false;
 
-	     }else if(false){
+/*	     }else if(false){
 
 			//Start Temp measurement
 			enable_tmp_007(1);
@@ -412,13 +412,13 @@ void setData(void){
 
 			//g_temp_active = false;
 			enable_tmp_007(0);
-
+*/
 			//Wait for, read and calc humidity
 			//while(!read_data_hdc_1000());
 			//humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
 			//g_humidity_active = false;
 	     }
- */
+
 	//END read sensor values
 	/*****************************************************************************************/
 
