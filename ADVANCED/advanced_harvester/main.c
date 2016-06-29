@@ -142,9 +142,9 @@ void GPIOIntHandler(void){
 
   // calculate speed from GPIO-Interrupt (Pin25)
   time2 = time1;
-  if(count == (count_max/2) - 1){
+  //if(count == (count_max/2) - 1){
 	  time1 = AONRTCCurrentCompareValueGet();				// read out RTC timestamp
-  }
+  //}
   g_timediff = time1-time2;
   count++;												// count interrupts (= reed switch)
 
@@ -268,7 +268,7 @@ void initSensortag(void){
 
 }
 
-/*
+
 void getData(void){
 
 	// Wakeup from RTC according to energy-state
@@ -286,7 +286,7 @@ void getData(void){
 
 
 	// read sensors acording to the energy state
-	// LOW:  no sensorts
+	// LOW:  no sensors
 	// MIDDLE: only one sensor, but each time a new one (ringbuffer-system)
 	// HIGH: read all sensors
 	if(g_current_energy_state == MIDDLE_ENERGY ){
@@ -316,7 +316,6 @@ void getData(void){
 		//g_humidity_active = true;
 	}
 }
-*/
 
 void setData(void){
 
