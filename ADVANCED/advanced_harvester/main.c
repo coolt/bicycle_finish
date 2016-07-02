@@ -286,8 +286,8 @@ void getData(void){
 	// ----------------------------------
 	count_max = 2;									// default (wenig Energie => bis 15 km/h)
 	g_sensor_set = false;
-	//pressure = 0;
-	//temperature = 0;
+	pressure = 0;
+	temperature = 0;
 
 	// Middle energy
 	if(g_timediff < 0x00003E00 ){					// from 15 km/h - 25 km/h
@@ -300,6 +300,7 @@ void getData(void){
 	}												// Sensoren werden nicht mehr ausgelesen
 													// sowohl bei count = 50 wie bei count = 10
 	if(g_timediff < 0x00002080 ){
+
 		g_sensor_set = true;
 		count_max = 100;
 	}
@@ -357,7 +358,7 @@ void setData(void){
 
 	     /* Wait for domains to power on */
 	     while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
--
+
 
 	     // for energy sparing: read sensors out only all count/2-times
 	     if( count >= (count_max/2) && !readed_sensors && g_sensor_set){
@@ -448,6 +449,7 @@ void sendData(void){
 		//Request radio to not force on system bus any more
 		radioCmdBusRequest(false);
     }
+
 }
 
 
