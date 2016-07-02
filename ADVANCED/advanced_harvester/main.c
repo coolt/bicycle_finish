@@ -109,6 +109,12 @@ bool g_button_pressed;					// for debugging
 bool g_pressure_set;					// pressure sensor state
 bool g_temp_active;
 bool g_humidity_active;
+
+
+bool g_sensor_set;
+static uint32_t pressure = 0;
+static uint16_t temperature = 0;
+
 long g_current_energy_state;
 
 // RTC
@@ -146,7 +152,7 @@ void GPIOIntHandler(void){
   g_timediff = time1-time2;
 
   // throw away wrong values
-  if(g_timediff < 0x0000000F00){
+  if(g_timediff < 0x0000000400){
 	  g_timediff = 0;
   }
   count++;												// count interrupts (= reed switch)
@@ -280,8 +286,9 @@ void getData(void){
 	// set energy state from velocity
 	// ----------------------------------
 	count_max = 2;									// default (wenig Energie)
-	g_current_energy_state = LOW_ENERGY;			// low energy until 15 km/h
-													// 15 km/h -> g_timediff > 0x00003E00
+	g_sensor_set = false;
+	pressure = 0;
+	temperature = 0;
 
 	//Problem Middle energy
 	//----------------------
@@ -291,24 +298,31 @@ void getData(void){
 	// Ab 30 km/h: count = 100
 
 	if(g_timediff < 0x00003E00 ){
-		g_current_energy_state = MIDDLE_ENERGY;		// middle energy:
-		count_max = 2;								// from 15 km/h - 30 km/h
+		//g_current_energy_state = MIDDLE_ENERGY;		// middle energy:
+		g_sensor_set = true;							// from 15 km/h - 30 km/h
 	}
-	if(g_timediff < 0x00002000 ){
-				g_current_energy_state = HIGH_ENERGY;		// higher 30 km/h
-				count_max = 100;
+	if(g_timediff < 0x00002400 ){
+		//g_current_energy_state = HIGH_ENERGY;		// higher 30 km/h
+		g_sensor_set = true;
+		count_max = 50;
 	}
-	if(g_timediff < 0x00001780 ){
-			g_current_energy_state = HIGH_ENERGY;		// higher 40 km/h
-			count_max = 2;
+	if(g_timediff < 0x00002080 ){
+		//g_current_energy_state = HIGH_ENERGY;		// higher 40 km/h
+		g_sensor_set = true;
+		count_max = 100;
 		}
 
+	if(g_timediff < 0x00001E80 ){
+			//g_current_energy_state = HIGH_ENERGY;		// higher 40 km/h
+			g_sensor_set = true;
+			count_max = 250;
+			}
 
 	// read sensors acording to the energy state
 	// LOW:  no sensors
 	// MIDDLE: only one sensor, but each time a new one (ringbuffer-system)
 	// HIGH: read all sensors
-	if(g_current_energy_state == MIDDLE_ENERGY ){
+/*	if(g_current_energy_state == MIDDLE_ENERGY ){
 
 		static int g_ringbuffer = 0;
 
@@ -333,6 +347,8 @@ void getData(void){
 		g_pressure_set = true;
 		g_temp_active = true;
 	}
+	*/
+
 }
 
 void setData(void){
@@ -383,13 +399,12 @@ void setData(void){
 
 	     // --------------------------------
 
-	     static uint32_t pressure = 0;
-	     static uint16_t temperature = 0;
+//////////////////////////////////////7here DELETED static pressure, temp ////////////////////////
 	     // static uint16_t humidity = 0;
 
 
 	     // for energy sparing: read sensors out only all 50 times
-	     if( count >= (count_max/2) && !readed_sensors){
+	     if( count >= (count_max/2) && !readed_sensors && g_sensor_set){
 	    	 readed_sensors=true;
 			 enable_bmp_280(1);
 
