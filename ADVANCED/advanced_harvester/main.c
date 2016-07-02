@@ -242,11 +242,10 @@ void initSensortag(void){
 	  sensorsInit();
 
 	  //Config IOID4 for external interrupt on rising edge and wake up
-	  IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
+	  //IOCPortConfigureSet(BOARD_IOID_KEY_RIGHT, IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_FALLING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_UP | IOC_INPUT_ENABLE | IOC_WAKE_ON_LOW);
 
-	  //Config IOID4 for external interrupt on rising edge and wake up
+	  //Config IOID0 for external interrupt (Reed Switch) on rising edge and wake up
 	  IOCPortConfigureSet(BOARD_IOID_DP0 , IOC_PORT_GPIO, IOC_IOMODE_NORMAL | IOC_RISING_EDGE | IOC_INT_ENABLE | IOC_IOPULL_DOWN | IOC_INPUT_ENABLE | IOC_WAKE_ON_HIGH);
-	  //Set device to wake MCU from standby on PIN 4 (BUTTON1)
 
 	  HWREG(AON_EVENT_BASE + AON_EVENT_O_MCUWUSEL) = AON_EVENT_MCUWUSEL_WU0_EV_PAD;  //Does not work with AON_EVENT_MCUWUSEL_WU0_EV_PAD4 --> WHY??
 
@@ -285,69 +284,31 @@ void getData(void){
 
 	// set energy state from velocity
 	// ----------------------------------
-	count_max = 2;									// default (wenig Energie)
+	count_max = 2;									// default (wenig Energie => bis 15 km/h)
 	g_sensor_set = false;
-	pressure = 0;
-	temperature = 0;
+	//pressure = 0;
+	//temperature = 0;
 
-	//Problem Middle energy
-	//----------------------
-	// die Energie geht bei 20 km verloren!!! (ev. weil Sensoren mitausgelesen werden),
-	// auch wenn count auf 100 ist
-	// Lösung: bis 30 km/h nur Sensoren mit auslesen, count = 2 lassen, VSUP stellt ab
-	// Ab 30 km/h: count = 100
-
-	if(g_timediff < 0x00003E00 ){
-		//g_current_energy_state = MIDDLE_ENERGY;		// middle energy:
-		g_sensor_set = true;							// from 15 km/h - 30 km/h
-	}
-	if(g_timediff < 0x00002400 ){
-		//g_current_energy_state = HIGH_ENERGY;		// higher 30 km/h
+	// Middle energy
+	if(g_timediff < 0x00003E00 ){					// from 15 km/h - 25 km/h
 		g_sensor_set = true;
-		count_max = 50;
 	}
+	// High energy
+	if(g_timediff < 0x00002400 ){					// higher 25 km/h
+		g_sensor_set = true;
+		count_max = 10;								// LTS lädt sich, VSUP bricht nicht mehr ab
+	}												// Sensoren werden nicht mehr ausgelesen
+													// sowohl bei count = 50 wie bei count = 10
 	if(g_timediff < 0x00002080 ){
-		//g_current_energy_state = HIGH_ENERGY;		// higher 40 km/h
 		g_sensor_set = true;
 		count_max = 100;
-		}
+	}
 
 	if(g_timediff < 0x00001E80 ){
 			//g_current_energy_state = HIGH_ENERGY;		// higher 40 km/h
 			g_sensor_set = true;
 			count_max = 250;
-			}
-
-	// read sensors acording to the energy state
-	// LOW:  no sensors
-	// MIDDLE: only one sensor, but each time a new one (ringbuffer-system)
-	// HIGH: read all sensors
-/*	if(g_current_energy_state == MIDDLE_ENERGY ){
-
-		static int g_ringbuffer = 0;
-
-		if(g_ringbuffer == 0){
-
-			g_pressure_set = true;
-			g_ringbuffer ++;
-		}
-		else if (g_ringbuffer == 1){
-			g_temp_active = true;
-			g_ringbuffer = 0;
-		}
-		// not used, because of to high voltage treshold
-		else if(g_ringbuffer == 2){
-			g_humidity_active = true;
-			g_ringbuffer = 0;
-		}
-	} // end MIDDLE ENERGY
-
-	else if (g_current_energy_state == HIGH_ENERGY ){
-
-		g_pressure_set = true;
-		g_temp_active = true;
 	}
-	*/
 
 }
 
@@ -396,14 +357,9 @@ void setData(void){
 
 	     /* Wait for domains to power on */
 	     while((PRCMPowerDomainStatus(PRCM_DOMAIN_PERIPH) != PRCM_DOMAIN_POWER_ON));
+-
 
-	     // --------------------------------
-
-//////////////////////////////////////7here DELETED static pressure, temp ////////////////////////
-	     // static uint16_t humidity = 0;
-
-
-	     // for energy sparing: read sensors out only all 50 times
+	     // for energy sparing: read sensors out only all count/2-times
 	     if( count >= (count_max/2) && !readed_sensors && g_sensor_set){
 	    	 readed_sensors=true;
 			 enable_bmp_280(1);
@@ -412,41 +368,14 @@ void setData(void){
 				pressure = value_bmp_280(BMP_280_SENSOR_TYPE_PRESS);  //  read and converts in pascal (96'000 Pa)
 				temperature = value_bmp_280(BMP_280_SENSOR_TYPE_TEMP);
 			 }while((pressure == 0x80000000) );
-			 //g_pressure_set = false;
 
-/*	     }else if(false){
-
-			//Start Temp measurement
-			enable_tmp_007(1);
-
-			//start hum measurement
-			//configure_hdc_1000();
-			//start_hdc_1000();
-
-			//Wait for, read and calc temperature
-			do{
-				temperature = value_tmp_007(TMP_007_SENSOR_TYPE_AMBIENT);
-			}while( (temperature == 0x80000000)); //
-
-			//g_temp_active = false;
-			enable_tmp_007(0);
-*/
-			//Wait for, read and calc humidity
-			//while(!read_data_hdc_1000());
-			//humidity = value_hdc_1000(HDC_1000_SENSOR_TYPE_HUMIDITY);
-			//g_humidity_active = false;
 	     }
-
-	//END read sensor values
-	/*****************************************************************************************/
 
 	    powerDisablePeriph();
 		// Disable clock for GPIO in CPU run mode
 		HWREGBITW(PRCM_BASE + PRCM_O_GPIOCLKGR, PRCM_GPIOCLKGR_CLK_EN_BITN) = 0;
 		// Load clock settings
 		HWREGBITW(PRCM_BASE + PRCM_O_CLKLOADCTL, PRCM_CLKLOADCTL_LOAD_BITN) = 1;
-
-	/*****************************************************************************************/
 
 
 		uint8_t p;
@@ -518,18 +447,13 @@ void sendData(void){
 
 		//Request radio to not force on system bus any more
 		radioCmdBusRequest(false);
-
     }
-
-    //END: Transmit
-
 }
 
 
 void sleep(void){
 
 	    // Standby procedure
-	    //
 
 	    powerDisableXtal();
 
@@ -555,9 +479,7 @@ void sleep(void){
 	    // Synchronize transactions to AON domain to ensure AUX has turned off
 	    SysCtrlAonSync();
 
-	    //
 	    // Enter Standby
-	    //
 
 	    powerDisableCPU();
 	    PRCMDeepSleep();
@@ -566,9 +488,7 @@ void sleep(void){
 	    SysCtrlAdjustRechargeAfterPowerDown();
 	    SysCtrlAonSync();
 
-	    //
 		// Wakeup from RTC every 100ms, code starts execution from here
-		//
 
 	    powerEnableRFC();
 	    powerEnableAuxForceOn();
